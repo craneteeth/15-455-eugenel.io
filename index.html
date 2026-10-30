@@ -1,10 +1,459 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My GitHub Website</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grover's Algorithm — CS 15-455 Project</title>
+
+  <style>
+    :root {
+      --text: #222;
+      --muted: #666;
+      --rule: #d9d9d9;
+      --accent: #9b1c1c;
+      --link: #1f4e79;
+      --bg-soft: #f7f7f7;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: white;
+      color: var(--text);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 17px;
+      line-height: 1.62;
+    }
+
+    .page {
+      width: min(860px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 54px 0 72px;
+    }
+
+    header {
+      margin-bottom: 34px;
+    }
+
+    .course {
+      margin: 0 0 6px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.3rem, 6vw, 3.7rem);
+      font-weight: 500;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      margin: 14px 0 0;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1.06rem;
+    }
+
+    nav {
+      margin: 28px 0 0;
+      padding: 11px 0;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.92rem;
+    }
+
+    nav a {
+      color: var(--link);
+      text-decoration: none;
+      margin-right: 22px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      margin-top: 44px;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid var(--rule);
+      font-size: 1.55rem;
+      font-weight: 500;
+    }
+
+    h3 {
+      margin: 27px 0 6px;
+      font-size: 1.12rem;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 7px 0 15px;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+    }
+
+    .outline {
+      counter-reset: section;
+    }
+
+    .outline article {
+      margin-bottom: 24px;
+    }
+
+    .outline h3 {
+      margin-bottom: 5px;
+    }
+
+    .outline h3::before {
+      counter-increment: section;
+      content: counter(section) ". ";
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.93rem;
+      line-height: 1.45;
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    th {
+      background: var(--bg-soft);
+      font-weight: 700;
+    }
+
+    td:first-child {
+      width: 170px;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+
+    .note {
+      margin-top: 18px;
+      padding: 14px 16px;
+      background: var(--bg-soft);
+      border-left: 3px solid var(--accent);
+      font-size: 0.96rem;
+    }
+
+    footer {
+      margin-top: 56px;
+      padding-top: 16px;
+      border-top: 1px solid var(--rule);
+      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(92%, 860px);
+        padding-top: 34px;
+      }
+
+      nav a {
+        display: inline-block;
+        margin: 4px 16px 4px 0;
+      }
+
+      table,
+      thead,
+      tbody,
+      th,
+      td,
+      tr {
+        display: block;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tr {
+        padding: 10px 0;
+        border-bottom: 1px solid var(--rule);
+      }
+
+      td {
+        border: 0;
+        padding: 3px 0;
+      }
+
+      td:first-child {
+        width: auto;
+        white-space: normal;
+        color: var(--accent);
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Hello, World!</h1>
-    <p>Welcome to my brand new website hosted on GitHub Pages.</p>
+
+  <main class="page">
+
+    <header>
+      <p class="course">CS 15-455 · Project</p>
+
+      <h1>Grover's Algorithm</h1>
+
+      <p class="subtitle">
+        An introduction to quantum search, with an emphasis on the query
+        complexity of unstructured search and the quadratic speedup achieved
+        by Grover's algorithm.
+      </p>
+
+      <nav>
+        <a href="#overview">Overview</a>
+        <a href="#outline">Outline</a>
+        <a href="#timeline">Timeline</a>
+      </nav>
+    </header>
+
+
+    <section id="overview">
+
+      <h2>Overview</h2>
+
+      <p class="lead">
+        I plan to explain Grover's algorithm from a complexity theory perspective.
+        I will start with the classical unstructured search problem, introduce the
+        quantum ideas needed for the algorithm, and then show how repeated Grover
+        iterations increase the probability of measuring the target state.
+      </p>
+
+      <p>
+        The main goal is to understand where the
+        <strong>O(√N)</strong> query bound comes from and why it improves on the
+        <strong>O(N)</strong> classical search bound. I also plan to explain the
+        geometric view of the algorithm and briefly discuss its limits in the
+        black-box search model.
+      </p>
+
+    </section>
+
+
+    <section id="outline">
+
+      <h2>Proposed Outline</h2>
+
+      <div class="outline">
+
+        <article>
+          <h3>Unstructured Search</h3>
+
+          <p>
+            I will first define the search problem: given N possible inputs and
+            an oracle that marks one target, how many queries are needed to find
+            it? This gives the classical baseline and motivates the quantum
+            version of the problem.
+          </p>
+        </article>
+
+
+        <article>
+          <h3>Quantum Background</h3>
+
+          <p>
+            I will review the quantum concepts needed for Grover's algorithm,
+            including superposition, amplitudes, measurement, Hadamard gates,
+            and phase flips. I want to keep this section short and only cover
+            what is needed for the algorithm.
+          </p>
+        </article>
+
+
+        <article>
+          <h3>The Oracle Model</h3>
+
+          <p>
+            I will describe how the oracle identifies a solution and explain
+            what counts as a query. This will make the classical and quantum
+            query complexity comparison precise.
+          </p>
+        </article>
+
+
+        <article>
+          <h3>One Grover Iteration</h3>
+
+          <p>
+            I will break one iteration into the oracle phase flip and the
+            diffusion step. I will show how these operations gradually increase
+            the amplitude of the marked state.
+          </p>
+        </article>
+
+
+        <article>
+          <h3>Geometric View</h3>
+
+          <p>
+            I will explain Grover's algorithm using a two-dimensional space
+            containing the marked and unmarked components. In this view, each
+            Grover iteration can be interpreted as a rotation toward the marked
+            state.
+          </p>
+        </article>
+
+
+        <article>
+          <h3>Worked Example</h3>
+
+          <p>
+            I will use a small example, probably with N = 4 or N = 8, and track
+            the amplitudes through the algorithm. This will connect the formulas
+            with a concrete search example.
+          </p>
+        </article>
+
+
+        <article>
+          <h3>Query Complexity</h3>
+
+          <p>
+            I will derive why approximately π√N/4 Grover iterations are enough
+            when there is one marked item. This gives the O(√N) quantum query
+            complexity compared with O(N) classical search.
+          </p>
+        </article>
+
+
+        <article>
+          <h3>Limits and Extensions</h3>
+
+          <p>
+            I will briefly discuss multiple marked items, amplitude
+            amplification, and why Grover's quadratic speedup is essentially
+            optimal for black-box unstructured search.
+          </p>
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <section id="timeline">
+
+      <h2>Timeline</h2>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Plan</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Oct. 30</td>
+            <td>
+              Set up the website and finalize the project outline.
+            </td>
+          </tr>
+
+          <tr>
+            <td>Oct. 31 – Nov. 3</td>
+            <td>
+              Review the quantum background and oracle/query model.
+            </td>
+          </tr>
+
+          <tr>
+            <td>Nov. 4 – Nov. 7</td>
+            <td>
+              Write the main Grover algorithm section and geometric
+              interpretation.
+            </td>
+          </tr>
+
+          <tr>
+            <td>Nov. 8 – Nov. 11</td>
+            <td>
+              Build a small worked example and add useful diagrams or
+              visualizations.
+            </td>
+          </tr>
+
+          <tr>
+            <td>Nov. 12 – Nov. 14</td>
+            <td>
+              Finish the query complexity analysis and discussion of
+              optimality.
+            </td>
+          </tr>
+
+          <tr>
+            <td>Nov. 15 – Nov. 17</td>
+            <td>
+              Add extensions and references, then revise the explanations.
+            </td>
+          </tr>
+
+          <tr>
+            <td>Nov. 18 – Nov. 19</td>
+            <td>
+              Proofread the website, test everything, and prepare for the
+              20-minute discussion.
+            </td>
+          </tr>
+
+          <tr>
+            <td>Nov. 20</td>
+            <td>
+              Final submission.
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <div class="note">
+        The final site will be closer to a short set of lecture notes than a
+        general quantum computing tutorial. I want to focus specifically on
+        Grover's algorithm and its complexity-theoretic interpretation.
+      </div>
+
+    </section>
+
+
+    <footer>
+      CS 15-455 · Grover's Algorithm Project
+    </footer>
+
+  </main>
+
 </body>
 </html>
