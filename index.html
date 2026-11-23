@@ -801,6 +801,53 @@ main{min-width:0;grid-column:1;grid-row:3}
 .notes .technical-note {font-size:.93em;color:#505050;}
 .notes .result-anchor {scroll-margin-top:25px;}
 @media(max-width:620px){.notes .env.boxed{padding-left:12px;padding-right:12px}}
+
+/* Supplementary interactive exercises. Inherit the original lecture-note typography and palette. */
+.study-lab { margin: 28px 0 34px; padding: 16px 18px 18px; border: 1px solid var(--rule, #d5d5d5); border-radius: 5px; background: #fff; }
+.study-lab, .study-lab * { box-sizing: border-box; }
+.study-lab h4 { margin: 0 0 7px; font-size: 1.04em; font-family: var(--sans); font-weight: 600; color: var(--ink); }
+.study-lab .study-lead { margin: 0 0 14px; text-align: left; font-size: .96em; }
+.study-lab .study-fields { display: flex; flex-wrap: wrap; align-items: end; gap: 10px 18px; margin: 8px 0 13px; }
+.study-lab label.study-control { display: flex; flex-direction: column; gap: 3px; font: inherit; font-size: .9em; flex: 1 1 170px; }
+.study-lab input[type=range] { accent-color: var(--accent); width: 100%; min-width: 110px; }
+.study-lab select, .study-lab input[type=number] { min-height: 34px; font: inherit; border: 1px solid #aaa; border-radius: 3px; color: inherit; background: #fff; padding: 4px 6px; max-width: 100%; }
+.study-lab .study-buttons { display: flex; flex-wrap: wrap; gap: 7px; margin: 9px 0 12px; }
+.study-lab button { font-family: inherit; font-size: .87em; line-height: 1.25; padding: 6px 11px; border: 1px solid #b9b9b9; border-radius: 3px; background: #f9f9f9; color: var(--ink); cursor: pointer; }
+.study-lab button:hover { background: #ededed; }
+.study-lab button:disabled { opacity: .42; cursor: not-allowed; }
+.study-lab button[aria-pressed=true] { background: #e9e9e9; border-color: #676767; font-weight: 700; }
+.study-lab .study-readout { padding: 10px 12px; background: #f8f8f8; border: 1px solid #e1e1e1; border-radius: 3px; margin: 10px 0; text-align: left; }
+.study-lab .study-readout strong { font-variant-numeric: tabular-nums; }
+.study-lab .study-note { font-size: .87em; margin: 11px 0 0; text-align: left; color: var(--ink-2, #444); }
+.study-lab .study-two { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.study-lab .study-col { min-width: 0; }
+.study-lab .study-minihead { font-weight: bold; margin: 7px 0 8px; font-size: .91em; }
+.study-lab .study-prob-row { display: grid; grid-template-columns: minmax(105px, 1fr) minmax(90px, 2fr) 65px; gap: 8px; align-items: center; margin: 8px 0; font-size: .88em; }
+.study-lab .study-prob-track { height: 15px; background: #e9e9e9; overflow: hidden; border: 1px solid #ddd; }
+.study-lab .study-prob-fill { height: 100%; background: #555; transition: width .12s linear; }
+.study-lab .study-num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.study-lab .amp-list { margin: 12px 0; }
+.study-lab .amp-row { display: grid; grid-template-columns: 72px minmax(0,1fr) 85px; gap: 7px; align-items: center; font-size: .86em; margin: 5px 0; }
+.study-lab .amp-row.marked { font-weight: bold; }
+.study-lab .amp-track { display: flex; align-items: stretch; height: 14px; background: #f4f4f4; }
+.study-lab .amp-negative { width: 50%; border-right: 1px solid #666; display: flex; justify-content: flex-end; }
+.study-lab .amp-positive { width: 50%; display: flex; justify-content: flex-start; }
+.study-lab .amp-fill { height: 100%; background: #888; }
+.study-lab .amp-row.marked .amp-fill { background: var(--accent); }
+.study-lab .study-table { width: 100%; font-size: .82em; margin: 10px 0; }
+.study-lab .study-table td, .study-lab .study-table th { padding: 5px 6px; }
+.study-lab .study-mini-plot { display: block; width: 100%; height: auto; max-height: 200px; border: 1px solid #ddd; background: #fff; }
+.study-lab .study-muted { color: #555; font-size: .84em; }
+.study-lab .study-sr { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border:0; }
+.study-lab output { display: inline; font-weight: bold; font-variant-numeric: tabular-nums; }
+.study-lab details { margin-top: 9px; }
+.study-lab details summary { cursor: pointer; font-size: .9em; }
+.study-lab .study-step { font-size: .86em; margin: 5px 0 10px; }
+.study-lab .study-plot-key { font-size: .84em; }
+.study-lab .study-pill { border: 1px solid #c8c8c8; background: #fafafa; display: inline-block; padding: 2px 8px; margin: 2px 5px 2px 0; font-size: .86em; }
+.study-lab .study-plot-note { font-size: .88em; margin-top: 7px; }
+.study-lab .study-path-stats { font-variant-numeric: tabular-nums; }
+@media (max-width: 700px) { .notes .env-body { overflow-x: auto; } .notes .eqblock { max-width: 100%; overflow-x: auto; } .study-lab { padding: 12px 11px; } .study-lab .study-two { grid-template-columns: 1fr; gap: 9px; } .study-lab .study-prob-row { grid-template-columns: minmax(78px, 1fr) minmax(55px, 1.7fr) 52px; gap: 5px; } .study-lab .amp-row { grid-template-columns: 48px minmax(0, 1fr) 65px; gap: 5px; } }
 </style></head>
 <body><div class="page"><header class="site-header" id="top"><a class="course-mark" href="#top">CS455</a></header><nav class="nav-top"><a href="#overview">Introduction</a><a href="#search">Unstructured Search</a><a href="#quantum-basics">Quantum Basics</a><a href="#algorithm">Grover's Algorithm</a><a href="#proof-success">Success Probability</a><a href="#lower-bound">Quantum Query Lower Bound</a><a href="#complexity">Complexity Classes</a><a href="#variations">Variants and Pitfalls</a><a href="#exercises">Exercises</a><a href="#summary">Summary</a><a href="#references">References</a></nav><main class="notes" id="content"><div class="title-block">
 <h1>Grover's Algorithm</h1>
@@ -818,7 +865,8 @@ main{min-width:0;grid-column:1;grid-row:3}
 <li><a href="#proof-success">Exact analysis</a>: rotation and measurement probability.</li>
 <li><a href="#lower-bound">Lower bound</a>: the hybrid argument.</li>
 <li><a href="#complexity">Classes and oracles</a>: BQP, PSPACE, and relativization.</li>
-</ol></section>
+</ol><p class="study-practice-index"><strong>Hands-on examples.</strong> Small interactive exercises appear beside the relevant topics: <a href="#practice-qubit">qubit measurement</a>, <a href="#practice-gates">gate sequences</a>, <a href="#practice-oracle">amplitude-by-amplitude evolution</a>, <a href="#practice-hybrid">hybrid bounds</a>, <a href="#practice-paths">sum over paths</a>, <a href="#practice-scaling">query growth</a>, <a href="#practice-worlds">oracle worlds</a>, and <a href="#practice-random">randomized iterations</a>. Each exercise is illustrative; the formal results and proofs remain in the text.</p>
+</section>
 <section id="search">
 <h2>Unstructured Search</h2>
 <p>Let <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">X</mi></mrow><annotation encoding="application/x-tex">\mathcal{X}</annotation></semantics></math></span> be a set of <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span> candidate inputs. We are given <em>oracle access</em> to a function <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>:</mo><mi mathvariant="script">X</mi><mo>→</mo><mo stretchy="false">{</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">f:\mathcal{X}\to\{0,1\}</annotation></semantics></math></span>. We can ask for <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span> for a chosen <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span>, but are not told a representation of <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span> that reveals patterns among its values. An element is <em>marked</em> if <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">f(x)=1</annotation></semantics></math></span>.</p>
@@ -843,6 +891,22 @@ main{min-width:0;grid-column:1;grid-row:3}
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>ψ</mi><mo stretchy="false">⟩</mo><mo>=</mo><munder><mo>∑</mo><mrow><mi>x</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><msup><mo stretchy="false">}</mo><mi>n</mi></msup></mrow></munder><msub><mi>α</mi><mi>x</mi></msub><mi mathvariant="normal">∣</mi><mi>x</mi><mo stretchy="false">⟩</mo><mo separator="true">,</mo><mspace width="2em"></mspace><munder><mo>∑</mo><mi>x</mi></munder><mi mathvariant="normal">∣</mi><msub><mi>α</mi><mi>x</mi></msub><msup><mi mathvariant="normal">∣</mi><mn>2</mn></msup><mo>=</mo><mn>1.</mn></mrow><annotation encoding="application/x-tex">|\psi\rangle=\sum_{x\in\{0,1\}^n}\alpha_x|x\rangle,\qquad\sum_x|\alpha_x|^2=1.</annotation></semantics></math></span></div>
 <p>Although <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">2^n</annotation></semantics></math></span> amplitudes appear in this expression, one measurement returns only one string <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span>, with probability <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><msub><mi>α</mi><mi>x</mi></msub><msup><mi mathvariant="normal">∣</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">|\alpha_x|^2</annotation></semantics></math></span>. This is why simply preparing every possible input in superposition does not immediately solve search.</p>
 <div class="env unboxed"><div class="env-head">Example (Why phase matters).</div><div class="env-body"><p>The states <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mo>+</mo><mo stretchy="false">⟩</mo><mo>=</mo><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mn>0</mn><mo stretchy="false">⟩</mo><mo>+</mo><mi mathvariant="normal">∣</mi><mn>1</mn><mo stretchy="false">⟩</mo><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><msqrt><mn>2</mn></msqrt></mrow><annotation encoding="application/x-tex">|+\rangle=(|0\rangle+|1\rangle)/\sqrt2</annotation></semantics></math></span> and <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mo>−</mo><mo stretchy="false">⟩</mo><mo>=</mo><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mn>0</mn><mo stretchy="false">⟩</mo><mo>−</mo><mi mathvariant="normal">∣</mi><mn>1</mn><mo stretchy="false">⟩</mo><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><msqrt><mn>2</mn></msqrt></mrow><annotation encoding="application/x-tex">|-\rangle=(|0\rangle-|1\rangle)/\sqrt2</annotation></semantics></math></span> both give a fair coin under a direct measurement. They are not the same state. A later interference operation can distinguish them. Grover's algorithm first changes a sign (a phase) and then converts that change into a larger probability of measuring the desired input.</p></div></div>
+
+<div class="study-lab" id="practice-qubit" aria-label="Interactive qubit measurement and phase experiment">
+<h4>Try it: measurement versus phase</h4>
+<p class="study-lead">Choose the probability of measuring 1 and the relative phase. Before measurement, the phase is invisible in the basis probabilities; a Hadamard gate can reveal it through interference.</p>
+<div class="study-fields">
+<label class="study-control" for="ql-p1">Probability of measuring 1: <output id="ql-p1-label">50%</output><input id="ql-p1" type="range" min="0" max="100" value="50" step="5"/></label>
+<label class="study-control" for="ql-phase">Relative phase on |1⟩<select id="ql-phase"><option value="0">0°</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></label>
+</div>
+<div class="study-readout" id="ql-state" aria-live="polite"></div>
+<div class="study-two"><div><div class="study-minihead">Measure immediately</div><div id="ql-before"></div></div><div><div class="study-minihead">Apply H, then measure</div><div id="ql-after"></div></div></div>
+<div class="study-fields"><label class="study-control" for="ql-sample-mode">Sample from<select id="ql-sample-mode"><option value="before">Before H</option><option value="after">After H</option></select></label></div>
+<div class="study-buttons"><button type="button" id="ql-sample">Measure 20 times</button><button type="button" id="ql-reset">Reset samples</button></div>
+<div id="ql-samples" class="study-readout" aria-live="polite">No measurements sampled yet.</div>
+<p class="study-note">Compare 0° and 180° when the probability slider is at 50%. The original measurement probabilities stay 50/50, but H changes the two outcomes from |0⟩ to |1⟩. Sample frequencies may deviate because measurement is random.</p>
+</div>
+
 <h3 id="unitary">Reversible operations and basic gates</h3>
 <p>Between measurements, quantum states evolve by a <em>unitary</em> matrix <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi></mrow><annotation encoding="application/x-tex">U</annotation></semantics></math></span> satisfying <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>U</mi><mo>†</mo></msup><mi>U</mi><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">U^\dagger U=I</annotation></semantics></math></span>. Hence <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∥</mi><mi>U</mi><mi mathvariant="normal">∣</mi><mi>ψ</mi><mo stretchy="false">⟩</mo><mi mathvariant="normal">∥</mi><mo>=</mo><mi mathvariant="normal">∥</mi><mi mathvariant="normal">∣</mi><mi>ψ</mi><mo stretchy="false">⟩</mo><mi mathvariant="normal">∥</mi></mrow><annotation encoding="application/x-tex">\|U|\psi\rangle\|=\||\psi\rangle\|</annotation></semantics></math></span>: the total measurement probability remains 1. A quantum operation acts linearly, so the same gate transforms each term of a superposition and adds the results.</p>
 <div class="table-scroll"><table class="basic-table"><thead><tr><th>Gate</th><th>Effect</th><th>Role here</th></tr></thead><tbody>
@@ -856,6 +920,17 @@ main{min-width:0;grid-column:1;grid-row:3}
 <p>Applying a Hadamard gate to every qubit initialized to zero creates the <em>uniform superposition</em>:</p>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>s</mi><mo stretchy="false">⟩</mo><mo>:</mo><mo>=</mo><msup><mi>H</mi><mrow><mo>⊗</mo><mi>n</mi></mrow></msup><mi mathvariant="normal">∣</mi><msup><mn>0</mn><mi>n</mi></msup><mo stretchy="false">⟩</mo><mo>=</mo><mfrac><mn>1</mn><msqrt><mi>N</mi></msqrt></mfrac><munder><mo>∑</mo><mrow><mi>x</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><msup><mo stretchy="false">}</mo><mi>n</mi></msup></mrow></munder><mi mathvariant="normal">∣</mi><mi>x</mi><mo stretchy="false">⟩</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">|s\rangle:=H^{\otimes n}|0^n\rangle=\frac{1}{\sqrt N}\sum_{x\in\{0,1\}^n}|x\rangle.</annotation></semantics></math></span></div>
 <p>Every candidate now has equal measurement probability <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">1/N</annotation></semantics></math></span>. The useful part of the algorithm is not preparing this state, but changing its amplitudes by controlled interference.</p>
+
+<div class="study-lab" id="practice-gates" aria-label="Interactive single qubit gate sequence">
+<h4>Try it: build a one-qubit circuit</h4>
+<p class="study-lead">Start at |0⟩. Apply the same gates in different orders. The numbers displayed are signed <em>amplitudes</em>, not probabilities.</p>
+<div class="study-buttons"><button type="button" data-gate="H">Hadamard (H)</button><button type="button" data-gate="X">Bit flip (X)</button><button type="button" data-gate="Z">Phase flip (Z)</button><button type="button" id="gl-undo">Undo</button><button type="button" id="gl-reset">Reset to |0⟩</button></div>
+<div class="study-readout" id="gl-state" aria-live="polite"></div>
+<div class="study-two"><div><div class="study-minihead">Amplitudes (signed)</div><div id="gl-amps"></div></div><div><div class="study-minihead">Measurement probabilities</div><div id="gl-probs"></div></div></div>
+<p class="study-step" id="gl-sequence"></p>
+<p class="study-note">Suggested experiment: apply H, then Z. The probability stays 50/50. Apply H again: the minus sign becomes observable, yielding |1⟩. This is interference.</p>
+</div>
+
 <h3 id="oracle">How a Boolean function becomes a quantum oracle</h3>
 <p>A general Boolean function need not be reversible: different inputs can have the same output. To evaluate it coherently, we use an additional qubit and define the reversible oracle</p>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>U</mi><mi>f</mi></msub><mi mathvariant="normal">∣</mi><mi>x</mi><mo separator="true">,</mo><mi>b</mi><mo stretchy="false">⟩</mo><mo>=</mo><mi mathvariant="normal">∣</mi><mi>x</mi><mo separator="true">,</mo><mi>b</mi><mo>⊕</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">⟩</mo><mo separator="true">,</mo><mspace width="2em"></mspace><mi>b</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">}</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">U_f|x,b\rangle=|x,b\oplus f(x)\rangle,\qquad b\in\{0,1\}.</annotation></semantics></math></span></div>
@@ -904,6 +979,18 @@ Check f(x); accept x only if f(x) = 1</pre>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>α</mi><mo>ˉ</mo></mover><mo>=</mo><mfrac><mrow><mn>3</mn><mo stretchy="false">(</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">)</mo><mo>−</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn></mrow><mn>4</mn></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\bar\alpha=\frac{3(1/2)-1/2}{4}=\frac14.</annotation></semantics></math></span></div>
 <p>Reflect across that average. For the marked state, the new amplitude is <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo stretchy="false">(</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>4</mn><mo stretchy="false">)</mo><mo>−</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2(1/4)-(-1/2)=1</annotation></semantics></math></span>. For every unmarked state, it is <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo stretchy="false">(</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>4</mn><mo stretchy="false">)</mo><mo>−</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">2(1/4)-1/2=0</annotation></semantics></math></span>. The final state is exactly <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mn>11</mn><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">|11\rangle</annotation></semantics></math></span>; a single Grover iteration succeeds with probability 1.</p>
 <p>This is not a general guarantee of certainty after one round. It is a special small example. The next theorem gives the probability after any number of iterations.</p>
+
+<div class="study-lab" id="practice-oracle" aria-label="Phase oracle and diffusion amplitude walkthrough">
+<h4>Try it: follow all eight amplitudes</h4>
+<p class="study-lead">This small example makes the oracle and diffusion visible. Negative bars are negative amplitudes—not negative probabilities. Each pair of operations completes one Grover iteration.</p>
+<div class="study-fields"><label class="study-control" for="ol-marked">Marked address<select id="ol-marked"></select></label></div>
+<div class="study-buttons"><button type="button" id="ol-previous">← Previous operation</button><button type="button" id="ol-next">Next operation →</button><button type="button" id="ol-reset">Start over</button></div>
+<div id="ol-step" class="study-readout" aria-live="polite"></div>
+<div id="ol-amplitudes" class="amp-list"></div>
+<div id="ol-prob" class="study-readout" aria-live="polite"></div>
+<p class="study-note">Pay attention to the difference between the first oracle call and the first diffusion: the oracle changes only a sign and leaves all basis probabilities unchanged; diffusion uses that sign to redistribute probability.</p>
+</div>
+
 </section>
 <section id="proof-success">
 <h2>Success Probability</h2>
@@ -1022,6 +1109,17 @@ Check f(x); accept x only if f(x) = 1</pre>
 <p>Iterating this recurrence from <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">d_0=0</annotation></semantics></math></span> proves the first claim. Cauchy–Schwarz then gives</p>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi mathvariant="normal">Δ</mi><mi>j</mi><mn>2</mn></msubsup><mo>≤</mo><mn>4</mn><msup><mrow><mo fence="true">(</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>Q</mi></munderover><msqrt><msub><mi>q</mi><mrow><mi>k</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub></msqrt><mo fence="true">)</mo></mrow><mn>2</mn></msup><mo>≤</mo><mn>4</mn><mi>Q</mi><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>Q</mi></munderover><msub><mi>q</mi><mrow><mi>k</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\Delta_j^2\le4\left(\sum_{k=1}^Q\sqrt{q_{k,j}}\right)^2\le4Q\sum_{k=1}^Qq_{k,j}.</annotation></semantics></math></span></div>
 <p>Sum over <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span>. Since <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>j</mi></msub><msub><mi>q</mi><mrow><mi>k</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sum_j q_{k,j}=1</annotation></semantics></math></span> for each fixed <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span>, we obtain <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>j</mi></msub><msubsup><mi mathvariant="normal">Δ</mi><mi>j</mi><mn>2</mn></msubsup><mo>≤</mo><mn>4</mn><mi>Q</mi><mo>⋅</mo><mi>Q</mi><mo>=</mo><mn>4</mn><msup><mi>Q</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\sum_j\Delta_j^2\le4Q\cdot Q=4Q^2</annotation></semantics></math></span>. No computational assumption was made about the intervening unitaries. <span class="qed">□</span></p></div></details>
+
+<div class="study-lab" id="practice-hybrid" aria-label="Hybrid lemma query lower bound explorer">
+<h4>Try it: why few queries cannot distinguish every address</h4>
+<p class="study-lead">The hybrid argument bounds how far the final state can move on average when exactly one address changes from unmarked to marked. Test how the guarantee depends on N and the number Q of queries.</p>
+<div class="study-fields"><label class="study-control" for="hl-n">Addresses N<select id="hl-n"><option>16</option><option>64</option><option selected>256</option><option>1024</option><option>4096</option></select></label>
+<label class="study-control" for="hl-q">Oracle queries Q: <output id="hl-q-label">2</output><input type="range" min="0" max="24" step="1" value="2" id="hl-q"/></label>
+<label class="study-control" for="hl-eps">Distance threshold δ<select id="hl-eps"><option value="0.25">0.25</option><option value="0.5" selected>0.50</option><option value="0.75">0.75</option></select></label></div>
+<div id="hl-result" class="study-readout" aria-live="polite"></div><div id="hl-bars"></div>
+<p class="study-note">These are <strong>universal upper bounds</strong>, not a simulation of an optimal algorithm. The averaging step gives (1/N)Σⱼ Δⱼ² ≤ 4Q²/N. Markov's inequality then bounds the fraction of addresses with Δⱼ ≥ δ by 4Q²/(Nδ²). When this exceeds 1, the bound is simply uninformative.</p>
+</div>
+
 <h3 id="lower-bound-proof">From state distance to query complexity</h3>
 <details class="proof" open=""><summary>Proof of the quantum lower bound</summary><div class="proof-body">
 <p>Let <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">E_j</annotation></semantics></math></span> be the projection onto the final measurement outcomes in which the algorithm reports location <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span>. (A general measurement can be represented by a projective one on an extended workspace.) Write <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>j</mi></msub><mo>=</mo><mi mathvariant="normal">∥</mi><msub><mi>E</mi><mi>j</mi></msub><mi mathvariant="normal">∣</mi><msubsup><mi>ψ</mi><mi>Q</mi><mrow><mo stretchy="false">(</mo><mi>j</mi><mo stretchy="false">)</mo></mrow></msubsup><mo stretchy="false">⟩</mo><msup><mi mathvariant="normal">∥</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">p_j=\|E_j|\psi_Q^{(j)}\rangle\|^2</annotation></semantics></math></span> and <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>j</mi></msub><mo>=</mo><mi mathvariant="normal">∥</mi><msub><mi>E</mi><mi>j</mi></msub><mi mathvariant="normal">∣</mi><msubsup><mi>ψ</mi><mi>Q</mi><mrow><mo stretchy="false">(</mo><mi mathvariant="normal">∅</mi><mo stretchy="false">)</mo></mrow></msubsup><mo stretchy="false">⟩</mo><msup><mi mathvariant="normal">∥</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">r_j=\|E_j|\psi_Q^{(\varnothing)}\rangle\|^2</annotation></semantics></math></span>. Because different reports are disjoint, <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>j</mi></msub><msub><mi>r</mi><mi>j</mi></msub><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sum_j r_j\le1</annotation></semantics></math></span>. The triangle inequality and contraction of projections imply</p>
@@ -1047,6 +1145,16 @@ Check f(x); accept x only if f(x) = 1</pre>
 <p>There are exponentially many terms, but we do <em>not</em> store them. A depth-first enumeration uses polynomial space: each path has <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi></mrow><annotation encoding="application/x-tex">L</annotation></semantics></math></span> configurations of <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span> bits; gate entries and the running complex sum are stored at polynomial precision. There can be at most <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mi>m</mi><mo stretchy="false">(</mo><mi>L</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">2^{m(L-1)}</annotation></semantics></math></span> path terms, each of magnitude at most 1. Choose a per-final-amplitude error target <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mo>=</mo><msup><mn>2</mn><mrow><mo>−</mo><mi>m</mi><mo>−</mo><mn>10</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\varepsilon=2^{-m-10}</annotation></semantics></math></span>. Keeping <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mi>O</mi><mo stretchy="false">(</mo><mi>m</mi><mi>L</mi><mo>+</mo><mi>m</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">b=O(mL+m)</annotation></semantics></math></span> bits of numerical precision is enough to offset the exponentially many additions and approximate each <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>z</mi></msub></mrow><annotation encoding="application/x-tex">\alpha_z</annotation></semantics></math></span> to within <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi></mrow><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></span>, while using only polynomial space.</p>
 <p>Next enumerate accepting final configurations <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi></mrow><annotation encoding="application/x-tex">z</annotation></semantics></math></span> in that same space and sum the approximations to <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><msub><mi>α</mi><mi>z</mi></msub><msup><mi mathvariant="normal">∣</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">|\alpha_z|^2</annotation></semantics></math></span>. Since <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><msub><mi>α</mi><mi>z</mi></msub><mi mathvariant="normal">∣</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|\alpha_z|\le1</annotation></semantics></math></span>, the change in each squared magnitude is at most <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>ε</mi><mo>+</mo><msup><mi>ε</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">2\varepsilon+\varepsilon^2</annotation></semantics></math></span>. Summing over at most <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mi>m</mi></msup></mrow><annotation encoding="application/x-tex">2^m</annotation></semantics></math></span> outputs incurs less than <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>100</mn></mrow><annotation encoding="application/x-tex">1/100</annotation></semantics></math></span> total error; keep a few extra guard bits for rounding. Thus we approximate the acceptance probability with error below <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>20</mn></mrow><annotation encoding="application/x-tex">1/20</annotation></semantics></math></span>. Since the true acceptance probability is at least <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi mathvariant="normal">/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">2/3</annotation></semantics></math></span> on yes-instances and at most <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">1/3</annotation></semantics></math></span> on no-instances, comparing the approximation with <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">1/2</annotation></semantics></math></span> decides the language. The computation may take exponential time, but uses polynomial <em>space</em>.</p>
 <p>With an oracle <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span>, each queried matrix entry can be computed by asking the same oracle during this enumeration. The argument therefore relativizes. <span class="qed">□</span></p></div></details>
+
+<div class="study-lab" id="practice-paths" aria-label="Quantum sum over paths simulation">
+<h4>Try it: sum over computational paths</h4>
+<p class="study-lead">For a simple one-qubit circuit containing repeated Hadamard gates, enumerate every possible intermediate basis path. Paths contribute signed amplitudes; add them <em>before</em> squaring to obtain probabilities.</p>
+<div class="study-fields"><label class="study-control" for="pl-h">Number of H gates<select id="pl-h"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></label></div>
+<div id="pl-count" class="study-readout" aria-live="polite"></div>
+<div id="pl-stats"></div><div class="study-two"><div><div class="study-minihead">Final probabilities</div><div id="pl-probs"></div></div><div><div class="study-minihead">Example signed paths</div><div id="pl-examples" class="study-muted"></div></div></div>
+<p class="study-note">This finite circuit is an illustration, not the entire BQP ⊆ PSPACE proof. A depth-first simulation can visit exponentially many paths one by one while retaining only the current path, partial sum, and polynomial-precision arithmetic data.</p>
+</div>
+
 <h3 id="sat">What Grover does—and does not—imply for SAT</h3>
 <p>For a formula <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi></mrow><annotation encoding="application/x-tex">F</annotation></semantics></math></span> on <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span> Boolean variables, let <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>F</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">f_F(x)=1</annotation></semantics></math></span> exactly when assignment <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span> satisfies <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi></mrow><annotation encoding="application/x-tex">F</annotation></semantics></math></span>. A reversible implementation of its polynomial-time verifier gives the coherent oracle needed for Grover. Searching <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">N=2^n</annotation></semantics></math></span> assignments costs at most <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mrow><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(2^{n/2})</annotation></semantics></math></span> oracle calls and <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mrow><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup><mi mathvariant="normal">poly</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mi>F</mi><mi mathvariant="normal">∣</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(2^{n/2}\operatorname{poly}(|F|))</annotation></semantics></math></span> gates up to standard implementation overhead. If there are no solutions, every measured candidate fails classical verification. The unknown-solution-count schedule in <a href="#thm-unknown-M">Theorem 12: the variable-iteration theorem</a> provides a bounded-error decision procedure. <span class="cite">[<a href="#grover96">Grover, 1996</a>; <a href="#bbht98">BBHT, 1998</a>]</span></p>
 <p>SAT is NP-complete under polynomial-time many-one reductions. That is a statement about <em>explicit</em> instances and the ability to transfer hardness or algorithms across them. It is not the same as Grover's <em>query optimality</em> in <a href="#thm-query-lower">Theorem 6: the quantum query theorem</a>. Since <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">2^{n/2}</annotation></semantics></math></span> is still exponential in <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span>, the algorithm does <strong>not</strong> place SAT—or NP—inside BQP.</p>
@@ -1054,6 +1162,15 @@ Check f(x); accept x only if f(x) = 1</pre>
 <p>Given <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>∈</mo><mrow><mi mathvariant="normal">N</mi><mi mathvariant="normal">P</mi></mrow></mrow><annotation encoding="application/x-tex">L\in\mathrm{NP}</annotation></semantics></math></span>, let <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>w</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">V(x,w)</annotation></semantics></math></span> be its polynomial-time witness verifier with witness length at most <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">poly</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">m(n)=\operatorname{poly}(n)</annotation></semantics></math></span>, where <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mi mathvariant="normal">∣</mi><mi>x</mi><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">n=|x|</annotation></semantics></math></span>. Pad shorter witnesses to exactly <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">m(n)</annotation></semantics></math></span> bits and search over them with predicate <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>x</mi></msub><mo stretchy="false">(</mo><mi>w</mi><mo stretchy="false">)</mo><mo>=</mo><mi>V</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>w</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f_x(w)=V(x,w)</annotation></semantics></math></span>. The number of candidates is <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mi>m</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">2^{m(n)}</annotation></semantics></math></span>. By the variable-iteration search procedure below, we can find a valid witness with bounded error, or reject when there is none, within</p>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">(</mo><msup><mn>2</mn><mrow><mi>m</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup><mi mathvariant="normal">poly</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">O\bigl(2^{m(n)/2}\operatorname{poly}(n)\bigr)</annotation></semantics></math></span></div>
 <p>quantum time. This improves generic exhaustive witness enumeration quadratically in the number of candidates, but need not be polynomial in the original input length. If <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">m(n)=\Theta(n^2)</annotation></semantics></math></span>, for instance, the generic bound remains <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">2^{\Theta(n^2)}</annotation></semantics></math></span>.</p>
+
+<div class="study-lab" id="practice-scaling" aria-label="Classical and quantum search query growth explorer">
+<h4>Try it: query complexity versus input length</h4>
+<p class="study-lead">Increase the number of input bits. Classical exhaustive search uses Θ(2ⁿ) black-box calls; Grover uses Θ(2ⁿ⁄²) for a unique marked item. Both are exponential in n.</p>
+<div class="study-fields"><label class="study-control" for="sl-n">Input bits n: <output id="sl-n-label">12</output><input type="range" id="sl-n" min="2" max="30" value="12" step="1"/></label></div>
+<div id="sl-text" class="study-readout" aria-live="polite"></div><div id="sl-bars"></div>
+<p class="study-note">The bars above use a logarithmic horizontal scale so both query counts remain visible. These are <em>oracle calls</em>, not total circuit time. SAT oracles may cost more than one primitive gate to implement.</p>
+</div>
+
 <h3 id="black-box">Why a query lower bound is not a SAT lower bound</h3>
 <div class="table-scroll"><table><thead><tr><th>Problem/model</th><th>Resource counted</th><th>Conclusion</th></tr></thead><tbody>
 <tr><td>Classical unstructured search</td><td>Queries to an opaque Boolean function</td><td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(N)</annotation></semantics></math></span> for unique search</td></tr>
@@ -1097,6 +1214,16 @@ Check f(x); accept x only if f(x) = 1</pre>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="normal">P</mi><mi>B</mi></msup><mo>⊆</mo><msup><mrow><mi mathvariant="normal">N</mi><mi mathvariant="normal">P</mi></mrow><mi>B</mi></msup><mo>⊆</mo><msup><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">C</mi><mi mathvariant="normal">E</mi></mrow><mi>B</mi></msup><mo>=</mo><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">C</mi><mi mathvariant="normal">E</mi></mrow><mo>=</mo><msup><mi mathvariant="normal">P</mi><mi>B</mi></msup><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\mathrm P^B\subseteq\mathrm{NP}^B\subseteq\mathrm{PSPACE}^B=\mathrm{PSPACE}=\mathrm P^B.</annotation></semantics></math></span></div>
 <p>Finally, <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="normal">P</mi><mi>B</mi></msup><mo>⊆</mo><msup><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mi>B</mi></msup></mrow><annotation encoding="application/x-tex">\mathrm P^B\subseteq\mathrm{BQP}^B</annotation></semantics></math></span> trivially, while the relativized <a href="#thm-bqp-pspace">Theorem 8: quantum space simulation</a> gives <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mi>B</mi></msup><mo>⊆</mo><msup><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">C</mi><mi mathvariant="normal">E</mi></mrow><mi>B</mi></msup><mo>=</mo><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">C</mi><mi mathvariant="normal">E</mi></mrow></mrow><annotation encoding="application/x-tex">\mathrm{BQP}^B\subseteq\mathrm{PSPACE}^B=\mathrm{PSPACE}</annotation></semantics></math></span>. Hence all four classes coincide. <span class="qed">□</span></p></div></details>
 <p><strong>Consequence.</strong> The <a href="#thm-np-not-bqp">Theorem 10: separation oracle</a> and <a href="#thm-pspace-oracle">Theorem 11: collapse oracle</a> give incompatible relativized answers to whether NP is contained in BQP. Therefore a method that proves the same statement relative to <em>every</em> oracle cannot settle that containment one way or the other. This does <em>not</em> prove that the unrelativized question is independent or unanswerable.</p>
+
+<div class="study-lab" id="practice-worlds" aria-label="Relativized complexity oracle worlds comparison">
+<h4>Try it: compare two oracle worlds</h4>
+<p class="study-lead">Changing the oracle can change whether NP is contained in BQP. Switch between the two constructions to see what each theorem establishes—and what it does not establish.</p>
+<div class="study-buttons" role="group" aria-label="Choose oracle world"><button type="button" id="wl-a" aria-pressed="true">A: diagonalized search oracle</button><button type="button" id="wl-b" aria-pressed="false">B: PSPACE-complete oracle</button></div>
+<div id="wl-result" class="study-readout" aria-live="polite"></div>
+<div id="wl-steps"></div>
+<p class="study-note">The finite illustrations describe the proof strategy, not a finite experimental proof of an infinite language separation. The unrelativized NP-versus-BQP relationship is still unknown.</p>
+</div>
+
 </section>
 <section id="variations">
 <h2>Variants and Pitfalls</h2>
@@ -1125,6 +1252,17 @@ P_m&amp;=\frac1m\sum_{r=0}^{m-1}\sin^2((2r+1)\theta)\\
 <p>The equality follows by writing <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mi>sin</mi><mo>⁡</mo></mrow><mn>2</mn></msup><mi>u</mi><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>cos</mi><mo>⁡</mo><mn>2</mn><mi>u</mi><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\sin^2u=(1-\cos2u)/2</annotation></semantics></math></span> and summing a geometric progression of cosines. If <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>≤</mo><mi>N</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">M\le N/2</annotation></semantics></math></span> then <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>sin</mi><mo>⁡</mo><mo stretchy="false">(</mo><mn>2</mn><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><mn>2</mn><msqrt><mrow><mo stretchy="false">(</mo><mi>M</mi><mi mathvariant="normal">/</mi><mi>N</mi><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>M</mi><mi mathvariant="normal">/</mi><mi>N</mi><mo stretchy="false">)</mo></mrow></msqrt><mo>=</mo><mi mathvariant="normal">Ω</mi><mo stretchy="false">(</mo><msqrt><mrow><mi>M</mi><mi mathvariant="normal">/</mi><mi>N</mi></mrow></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\sin(2\theta)=2\sqrt{(M/N)(1-M/N)}=\Omega(\sqrt{M/N})</annotation></semantics></math></span>. Once <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>≥</mo><mn>1</mn><mi mathvariant="normal">/</mi><mi>sin</mi><mo>⁡</mo><mo stretchy="false">(</mo><mn>2</mn><mi>θ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">m\ge1/\sin(2\theta)</annotation></semantics></math></span>, the displayed formula implies <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>m</mi></msub><mo>≥</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">P_m\ge1/4</annotation></semantics></math></span>. The first such stage has <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mi>O</mi><mo stretchy="false">(</mo><msqrt><mrow><mi>N</mi><mi mathvariant="normal">/</mi><mi>M</mi></mrow></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">m=O(\sqrt{N/M})</annotation></semantics></math></span>, and the total number of oracle calls in earlier stages is a geometric sum of the same order.</p>
 <p>Beyond that stage, each independent trial succeeds with probability at least <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">1/4</annotation></semantics></math></span>. Because <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span> grows by the factor <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mi mathvariant="normal">/</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">6/5</annotation></semantics></math></span> while the chance of surviving <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span> more failed stages is at most <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>3</mn><mi mathvariant="normal">/</mi><mn>4</mn><msup><mo stretchy="false">)</mo><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">(3/4)^k</annotation></semantics></math></span>, the expected additional work is bounded by a convergent geometric series with ratio <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>6</mn><mi mathvariant="normal">/</mi><mn>5</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mn>3</mn><mi mathvariant="normal">/</mi><mn>4</mn><mo stretchy="false">)</mo><mo>=</mo><mn>9</mn><mi mathvariant="normal">/</mi><mn>10</mn><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">(6/5)(3/4)=9/10&lt;1</annotation></semantics></math></span>. Thus the expected total is <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msqrt><mrow><mi>N</mi><mi mathvariant="normal">/</mi><mi>M</mi></mrow></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(\sqrt{N/M})</annotation></semantics></math></span>. For <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>&gt;</mo><mi>N</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">M&gt;N/2</annotation></semantics></math></span>, the additional uniform classical sample at the start of <em>every</em> stage succeeds with probability greater than <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">1/2</annotation></semantics></math></span>, independently of the Grover trial. Since each failed stage costs at most a factor <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mi mathvariant="normal">/</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">6/5</annotation></semantics></math></span> more than the previous stage, expected work is again a convergent geometric sum and is constant in this case.</p>
 <p>If <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M=0</annotation></semantics></math></span>, every verified test fails and the procedure would otherwise run indefinitely. For a <em>decision</em> algorithm impose the stated <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msqrt><mi>N</mi></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(\sqrt N)</annotation></semantics></math></span> budget, including a constant number of trials at <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>≈</mo><msqrt><mi>N</mi></msqrt></mrow><annotation encoding="application/x-tex">m\approx\sqrt N</annotation></semantics></math></span>. For <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">M\ge1</annotation></semantics></math></span>, the probability of missing every marked input is then bounded below 1 by a fixed constant, and independent restarts reduce it to at most <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">1/3</annotation></semantics></math></span>. For <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M=0</annotation></semantics></math></span>, verification guarantees rejection. <span class="qed">□</span></p></div></details>
+
+<div class="study-lab" id="practice-random" aria-label="Randomized Grover iterations when witness count is unknown">
+<h4>Try it: randomize the number of iterations</h4>
+<p class="study-lead">If M is unknown, choosing a single guess for the rotation count may overshoot. Instead, choose r uniformly among 0,…,m−1, measure, verify, and increase m if needed.</p>
+<div class="study-fields"><label class="study-control" for="rl-n">Search-space size N<select id="rl-n"><option>32</option><option selected>64</option><option>128</option><option>256</option></select></label>
+<label class="study-control" for="rl-m">Marked items M: <output id="rl-m-label">1</output><input type="range" id="rl-m" min="1" max="32" value="1" step="1"/></label>
+<label class="study-control" for="rl-range">Choose r from 0,…,m−1, where m = <output id="rl-range-label">5</output><input type="range" id="rl-range" min="1" max="20" value="5" step="1"/></label></div>
+<div class="study-two"><div><div class="study-minihead">Success probability for each possible r</div><svg class="study-mini-plot" id="rl-plot" viewBox="0 0 360 176" role="img" aria-label="Probability bar chart by iteration count"></svg></div><div><div class="study-minihead">Fixed guess versus random choice</div><div id="rl-result" class="study-readout" aria-live="polite"></div><div class="study-buttons"><button type="button" id="rl-trial">Draw r and attempt measurement</button><button type="button" id="rl-clear">Clear trial</button></div><div id="rl-trial-text" class="study-muted"></div></div></div>
+<p class="study-note">The randomized average shown is the success probability of <em>one trial</em> with r sampled uniformly. The full BBHT search increases m after failure and verifies every proposed solution, yielding the expected query bound stated in the theorem.</p>
+</div>
+
 <h3>Verification and bounded error</h3>
 <p>A measurement can return an unmarked input even when solutions exist. Because <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span> can be evaluated, the proposed answer can be checked. Repeating an independent constant-success search reduces the failure probability exponentially in the number of repetitions. Repetition does not bypass the <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi><mo stretchy="false">(</mo><msqrt><mi>N</mi></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Omega(\sqrt N)</annotation></semantics></math></span> asymptotic query lower bound for constant success.</p>
 <h3>The four statements not to confuse</h3>
@@ -1259,4 +1397,233 @@ P_m&amp;=\frac1m\sum_{r=0}^{m-1}\sin^2((2r+1)\theta)\\
   $('go-peak').addEventListener('click',()=>setT(peak));
   $('go-reset').addEventListener('click',()=>setT(0));
   init();
-})();</script></body></html>
+})();</script><script>
+(function () {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  const pct = (x, digits=1) => (100*x).toFixed(digits) + '%';
+  const fmt = (x, digits=3) => Number(x).toFixed(digits);
+  const integer = x => Math.round(x).toLocaleString('en-US');
+  const set = (id, str) => { const el = $(id); if (el) el.textContent = str; };
+  const make = (tag, cls, text) => { const el = document.createElement(tag); if(cls) el.className=cls; if(text!==undefined) el.textContent=text; return el; };
+  function probRows(id, rows) {
+    const outer = $(id); outer.replaceChildren();
+    for (const [name, value] of rows) {
+      const row = make('div','study-prob-row');
+      row.append(make('span','',name));
+      const track = make('div','study-prob-track');
+      const bar = make('div','study-prob-fill');
+      bar.style.width = (clamp(value,0,1)*100).toFixed(5)+'%';
+      track.append(bar); row.append(track); row.append(make('span','study-num',pct(value)));
+      outer.append(row);
+    }
+  }
+  function signedRows(id,rows) {
+    const outer = $(id); outer.replaceChildren();
+    for(const [name, val, isMarked] of rows){
+      const row = make('div','amp-row'+(isMarked?' marked':''));
+      row.append(make('span','',name));
+      const track=make('div','amp-track'),left=make('div','amp-negative'),right=make('div','amp-positive');
+      const fill=make('div','amp-fill');fill.style.width=(100*clamp(Math.abs(val),0,1)).toFixed(5)+'%';
+      (val<0?left:right).append(fill);
+      track.append(left,right);row.append(track,make('span','study-num',(val>=0?'+':'')+fmt(val)));
+      outer.append(row);
+    }
+  }
+
+  // Qubit probability / relative phase experiment.
+  {
+    const control=$('ql-p1'),phase=$('ql-phase'),mode=$('ql-sample-mode');
+    let prior=[];
+    function probabilities(){
+      const p=Number(control.value)/100,alpha=Math.sqrt(1-p),beta=Math.sqrt(p), phi=Number(phase.value)*Math.PI/180;
+      const after0=clamp(0.5+alpha*beta*Math.cos(phi),0,1);
+      return {p,alpha,beta,phi,after0};
+    }
+    function resetSamples(){prior=[];set('ql-samples','No measurements sampled yet.');}
+    function update(){
+      const d=probabilities();set('ql-p1-label',pct(d.p,0));
+      set('ql-state','|ψ⟩ = '+fmt(d.alpha)+'|0⟩ + '+fmt(d.beta)+'·e^(i·'+phase.value+'°)|1⟩. The relative phase changes the state but not its direct measurement probabilities.');
+      probRows('ql-before',[['P(0)',1-d.p],['P(1)',d.p]]);
+      probRows('ql-after',[['P(0)',d.after0],['P(1)',1-d.after0]]);
+      resetSamples();
+    }
+    $('ql-sample').addEventListener('click',()=>{
+      const d=probabilities(),p1=mode.value==='after'?1-d.after0:d.p;
+      let n1=0;for(let i=0;i<20;i++)if(Math.random()<p1)n1++;
+      prior.push(n1);
+      const total=prior.reduce((a,b)=>a+b,0), trials=prior.length*20;
+      set('ql-samples',`Latest batch (20 measurements): 0 appeared ${20-n1} times, 1 appeared ${n1} times. All ${trials} measurements: observed P(1) ≈ ${pct(total/trials)} (theory ${pct(p1)}).`);
+    });
+    $('ql-reset').addEventListener('click',resetSamples);
+    control.addEventListener('input',update);phase.addEventListener('change',update);mode.addEventListener('change',resetSamples);
+    update();
+  }
+
+  // Real-amplitude one-qubit H/X/Z gates.
+  {
+    const root=$('practice-gates');let state=[1,0],history=[],sequence=[];
+    const transform=(g,[a,b])=>g==='H'?[(a+b)/Math.SQRT2,(a-b)/Math.SQRT2]:g==='X'?[b,a]:[a,-b];
+    function update(){
+      const [a,b]=state;
+      set('gl-state','|ψ⟩ = ('+(a>=0?'+':'')+fmt(a)+')|0⟩ + ('+(b>=0?'+':'')+fmt(b)+')|1⟩');
+      signedRows('gl-amps',[['|0⟩',a,false],['|1⟩',b,false]]);
+      probRows('gl-probs',[['P(0)',a*a],['P(1)',b*b]]);
+      set('gl-sequence','Circuit: |0⟩ '+(sequence.length?'→ '+sequence.join(' → '):'(no gates yet)'));
+      $('gl-undo').disabled=!history.length;
+    }
+    root.querySelectorAll('button[data-gate]').forEach(button=>button.addEventListener('click',()=>{
+      history.push([...state]);sequence.push(button.dataset.gate);state=transform(button.dataset.gate,state);update();
+    }));
+    $('gl-undo').addEventListener('click',()=>{if(history.length){state=history.pop();sequence.pop();update();}});
+    $('gl-reset').addEventListener('click',()=>{state=[1,0];history=[];sequence=[];update();});
+    update();
+  }
+
+  // Exact eight-amplitude O_f then D simulation.
+  {
+    const n=8, select=$('ol-marked');for(let i=0;i<n;i++){let opt=make('option','',i.toString(2).padStart(3,'0'));opt.value=String(i);select.append(opt)}
+    select.value='5';let step=0;
+    function calc(){
+      const marked=Number(select.value);let a=Array(n).fill(1/Math.sqrt(n));
+      for(let k=1;k<=step;k++){
+        if(k%2===1)a[marked]*=-1;
+        else{const avg=a.reduce((x,y)=>x+y,0)/n;a=a.map(x=>2*avg-x);}
+      }
+      const avg=a.reduce((x,y)=>x+y,0)/n,operator=step===0?'Uniform superposition':step%2?'Phase oracle O_f':'Diffusion D';
+      const prob=a[marked]**2;
+      const before=step===0?1/n:(()=>{let b=Array(n).fill(1/Math.sqrt(n));for(let k=1;k<step;k++){if(k%2)b[marked]*=-1;else{const m=b.reduce((x,y)=>x+y,0)/n;b=b.map(x=>2*m-x)}}return b[marked]**2})();
+      set('ol-step',`Operation ${step} of 12 · ${operator} · completed Grover iterations: ${Math.floor(step/2)} · current mean amplitude: ${fmt(avg)}`);
+      const entries=a.map((v,i)=>['|'+i.toString(2).padStart(3,'0')+'⟩',v,i===marked]);signedRows('ol-amplitudes',entries);
+      set('ol-prob',`P(marked) = ${pct(prob,3)}. ${step%2?'The oracle only reverses a sign, so the probability stays '+pct(before,3)+'.':step===0?'All 8 outcomes begin equally likely.':'Diffusion reflects each amplitude about the mean; measurement probabilities can now change.'}`);
+      $('ol-previous').disabled=step===0;$('ol-next').disabled=step===12;
+    }
+    $('ol-previous').addEventListener('click',()=>{step=clamp(step-1,0,12);calc()});
+    $('ol-next').addEventListener('click',()=>{step=clamp(step+1,0,12);calc()});
+    $('ol-reset').addEventListener('click',()=>{step=0;calc()});select.addEventListener('change',()=>{step=0;calc()});calc();
+  }
+
+  // Exact first Grover peak vs classical worst case (query counts).
+  {
+    const slider=$('sl-n');function update(){
+      const n=Number(slider.value),N=2**n,theta=Math.asin(1/Math.sqrt(N));
+      const t=Math.max(0,Math.round(Math.PI/(4*theta)-.5)),success=Math.sin((2*t+1)*theta)**2;
+      set('sl-n-label',String(n));set('sl-text',`N = 2^${n} = ${integer(N)} candidates. Classical worst case: ${integer(N)} queries. Grover's first-peak iteration count: ${integer(t)} oracle calls, with success probability ${pct(success,2)}.`);
+      const max=Math.log10(N),qBar=100*Math.log10(Math.max(1,t))/max;
+      probRows('sl-bars',[['Classical (worst)',1],['Quantum (log scale)',qBar/100]]);
+      // Override probability-style labels, since the bars encode log counts, not probabilities.
+      const rows=$('sl-bars').querySelectorAll('.study-prob-row');
+      if(rows.length===2){rows[0].lastElementChild.textContent=integer(N);rows[1].lastElementChild.textContent=integer(t);}
+    }
+    slider.addEventListener('input',update);update();
+  }
+
+  // Hybrid bound: average squared Euclidean distance at most 4 Q^2 / N.
+  {
+    const Ncontrol=$('hl-n'),Qcontrol=$('hl-q'),epsControl=$('hl-eps');
+    function update(){
+      const N=Number(Ncontrol.value),q=Number(Qcontrol.value),eps=Number(epsControl.value),bound=4*q*q/N;
+      const frac=bound/(eps*eps),rms=2*q/Math.sqrt(N),shown=Math.min(1,frac);
+      set('hl-q-label',String(q));
+      set('hl-result',`N = ${integer(N)}, √N = ${integer(Math.sqrt(N))}, Q = ${q}. Bound on mean squared distance: (1/N)Σ Δⱼ² ≤ ${fmt(bound,4)}. Bound on RMS distance: ≤ ${fmt(rms,3)}. Fraction of addresses with Δⱼ ≥ ${fmt(eps,2)}: ≤ ${frac>=1?'1 (trivial bound)':pct(frac,2)}.`);
+      probRows('hl-bars',[['Fraction upper bound',shown]]);
+    }
+    Ncontrol.addEventListener('change',()=>{
+      const N=Number(Ncontrol.value);Qcontrol.max=String(Math.ceil(1.5*Math.sqrt(N)));Qcontrol.value=String(Math.min(Number(Qcontrol.value),Number(Qcontrol.max)));update();
+    });Qcontrol.addEventListener('input',update);epsControl.addEventListener('change',update);update();
+  }
+
+  // Sum-over-Hadamard paths, small exact finite example.
+  {
+    function update(){
+      const h=Number($('pl-h').value),count=2**h,contribution=1/Math.sqrt(count);
+      const counts=[[0,0],[0,0]],examples=[[],[]];
+      for(let mask=0;mask<count;mask++){
+        let prev=0,minus=false,path='0';
+        for(let k=0;k<h;k++){
+          const bit=(mask>>(h-k-1))&1;
+          if(prev&&bit)minus=!minus;
+          path+=String(bit);prev=bit;
+        }
+        counts[prev][minus?1:0]++;
+        if(examples[prev].length<4)examples[prev].push((minus?'− ':'+ ')+path);
+      }
+      const amp=counts.map(c=>(c[0]-c[1])*contribution);
+      set('pl-count',`Start in |0⟩, apply ${h} Hadamard gates. There are 2^${h} = ${count} computational histories. Each history has magnitude 1/√${count} = ${fmt(contribution,5)}, but its sign varies.`);
+      const out=$('pl-stats');out.replaceChildren();
+      const tab=make('table','study-table');
+      let thead=make('thead');let hd=make('tr');['Final state','Positive paths','Negative paths','Net amplitude'].forEach(c=>hd.append(make('th','',c)));thead.append(hd);tab.append(thead);
+      const tbody=make('tbody');for(let j=0;j<2;j++){
+        let row=make('tr');[ '|'+j+'⟩',String(counts[j][0]),String(counts[j][1]),(amp[j]>=0?'+':'')+fmt(amp[j],4)].forEach(c=>row.append(make('td','',c)));tbody.append(row);
+      }tab.append(tbody);out.append(tab);
+      probRows('pl-probs',[['P(0)',amp[0]**2],['P(1)',amp[1]**2]]);
+      const eg=$('pl-examples');eg.replaceChildren();for(let j=0;j<2;j++)eg.append(make('p','',`Ends at |${j}⟩: ${examples[j].join(' · ')}${counts[j][0]+counts[j][1]>4?' · …':''}`));
+    }
+    $('pl-h').addEventListener('change',update);update();
+  }
+
+  // Relativized oracle worlds: symbolic comparison, no finite experiment claimed as proof.
+  {
+    function update(world){
+      $('wl-a').setAttribute('aria-pressed',String(world==='a'));
+      $('wl-b').setAttribute('aria-pressed',String(world==='b'));
+      const steps=$('wl-steps');steps.replaceChildren();
+      const add=message=>steps.append(make('p','study-step',message));
+      if(world==='a'){
+        set('wl-result','World A: there exists an oracle A with NP^A ⊄ BQP^A. Search is hard even for quantum machines with too few oracle queries.');
+        add('1. Enumerate explicitly clocked polynomial-time quantum oracle machines (not machines filtered by the semantic promise of bounded error).');
+        add('2. At a fresh length n, the machine has polynomially many queries but the search space contains 2ⁿ addresses. The hybrid bound leaves an address it cannot reliably distinguish from an empty oracle.');
+        add('3. Set the oracle at this length to make the machine fail. Repeat at fresh lengths. The unary language “there is a marked n-bit address” is still in NP^A.');
+      } else {
+        set('wl-result','World B: if B is PSPACE-complete under polynomial-time reductions, then P^B = NP^B = BQP^B = PSPACE. In particular NP^B ⊆ BQP^B.');
+        add('1. A deterministic polynomial-time oracle machine for B can solve every PSPACE language via a reduction to B; therefore PSPACE ⊆ P^B.');
+        add('2. Quantum and nondeterministic polynomial-time oracle computations with B can be simulated in polynomial space, because B itself is in PSPACE.');
+        add('3. All indicated classes equal PSPACE. This reverses the relativized containment answer from world A without proving anything unrelativized.');
+      }
+    }
+    $('wl-a').addEventListener('click',()=>update('a'));
+    $('wl-b').addEventListener('click',()=>update('b'));
+    update('a');
+  }
+
+  // BBHT randomized iteration count: finite trial calculation + sampling.
+  {
+    const size=$('rl-n'),marked=$('rl-m'),range=$('rl-range');
+    function model(){
+      const N=Number(size.value),M=Number(marked.value),m=Number(range.value);
+      const theta=Math.asin(Math.sqrt(M/N));
+      const P=r=>Math.sin((2*r+1)*theta)**2;
+      const vals=Array.from({length:m},(_,i)=>P(i));
+      return {N,M,m,theta,P,vals,avg:vals.reduce((a,b)=>a+b,0)/m};
+    }
+    function update(){
+      const d=model();set('rl-m-label',String(d.M));set('rl-range-label',String(d.m));
+      set('rl-result',`With a fixed choice r = ${d.m-1}, P(success) = ${pct(d.P(d.m-1),2)}. If r is uniform in {0,…,${d.m-1}}, average single-trial P(success) = ${pct(d.avg,2)}.`);
+      set('rl-trial-text','No trial drawn yet.');
+      const svg=$('rl-plot');svg.replaceChildren();
+      const ns='http://www.w3.org/2000/svg';
+      function line(tag,attrs,text){const el=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));if(text!==undefined)el.textContent=text;svg.append(el);return el;}
+      line('line',{x1:27,y1:145,x2:345,y2:145,stroke:'#888'});
+      line('line',{x1:27,y1:18,x2:27,y2:145,stroke:'#aaa'});
+      line('text',{x:3,y:23,fill:'#444','font-size':11},'1');
+      line('text',{x:3,y:148,fill:'#444','font-size':11},'0');
+      const w=312/d.m;d.vals.forEach((v,i)=>{
+        const h=123*v,x=29+i*w+2,y=145-h;
+        line('rect',{x,y,width:Math.max(2,w-4),height:h,fill:i===d.m-1?'#6d3333':'#888'});
+        if(d.m<=14 || i%Math.ceil(d.m/12)===0){line('text',{x:x+w/2-4,y:160,fill:'#444','font-size':10},String(i));}
+      });
+      line('text',{x:280,y:175,fill:'#444','font-size':11},'iterations r');
+    }
+    size.addEventListener('change',()=>{marked.max=String(Number(size.value)-1);marked.value=String(Math.min(Number(marked.value),Number(marked.max)));update()});
+    marked.addEventListener('input',update);range.addEventListener('input',update);
+    $('rl-trial').addEventListener('click',()=>{
+      const d=model(),r=Math.floor(Math.random()*d.m),success=Math.random()<d.P(r);
+      set('rl-trial-text',`Sampled r = ${r}: P(success | r) = ${pct(d.P(r),2)}. This trial ${success?'found a marked state':'did not find a marked state'}. A real algorithm verifies the candidate and tries again if necessary.`);
+    });
+    $('rl-clear').addEventListener('click',()=>set('rl-trial-text','No trial drawn yet.'));
+    update();
+  }
+})();
+
+</script></body></html>
