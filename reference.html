@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Index, Notation and References · Grover's Algorithm · CS455</title>
+  <meta name="description" content="Index of definitions and results, notation, and references for the CS455 project on Grover's algorithm.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/katex/katex.min.js"></script>
+  <script defer src="assets/katex/contrib/auto-render.min.js"></script>
+  <script defer src="assets/site-config.js"></script>
+  <script defer src="assets/notes.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="course-mark" href="index.html">CS455</a></header>
+
+<div class="layout">
+  <nav class="toolbar"></nav>
+
+  <main class="notes" id="content">
+
+    <div class="title-block">
+      <svg class="title-icon" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M8 10c8-3 16-2 24 3v44c-8-5-16-6-24-3z M56 10c-8-3-16-2-24 3v44c8-5 16-6 24-3z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+      </svg>
+      <h1>Index, Notation and References</h1>
+      <p class="meta"><span>Every numbered definition and result on the site, in one place</span></p>
+    </div>
+
+    <h2 id="index">Definitions and Results</h2>
+    <div id="global-index"></div>
+
+    <h2 id="notation">Notation</h2>
+
+    <p>Symbols are used with the same meaning on every page. The last column links to where each is introduced.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Symbol</th><th>Meaning</th><th>Introduced in</th></tr></thead>
+        <tbody>
+          <tr><td>$n$, $N = 2^n$</td><td>number of input bits; number of strings searched</td><td><a class="ref" href="lecture1.html#def-search"></a></td></tr>
+          <tr><td>$f$, $M$, $t$</td><td>the function searched, its set of marked strings, $t = \abs M$</td><td><a class="ref" href="lecture1.html#def-search"></a></td></tr>
+          <tr><td>$x^*$</td><td>the marked string when $t = 1$</td><td><a class="ref" href="lecture1.html#def-search"></a></td></tr>
+          <tr><td>$\ket x$, $\ket\psi$, $\alpha_x$</td><td>basic state, general state, amplitude of $\ket x$ (normalized)</td><td><a class="ref" href="lecture1.html#def-notation"></a></td></tr>
+          <tr><td>$\ket s$</td><td>uniform state $\frac1{\sqrt N}\sum_x\ket x$</td><td><a class="ref" href="lecture1.html#def-notation"></a></td></tr>
+          <tr><td>$\braket{\varphi}{\psi}$, $\norm{\cdot}$</td><td>inner product and length</td><td><a class="ref" href="lecture1.html#sec-states"></a></td></tr>
+          <tr><td>$O_f$</td><td>the query "if $f$ then minus"</td><td><a class="ref" href="lecture1.html#def-query"></a></td></tr>
+          <tr><td>$D$</td><td>ReflectAcrossAverage, $2\ket s\!\bra s - I$</td><td><a class="ref" href="lecture1.html#lem-reflect"></a></td></tr>
+          <tr><td>$\ket G$, $\ket B$, $\ket\varphi$</td><td>uniform over marked / unmarked strings; unit vector at angle $\varphi$ in their plane</td><td><a class="ref" href="lecture1.html#def-plane"></a></td></tr>
+          <tr><td>$\theta$</td><td>angle with $\sin\theta = \sqrt{t/N}$</td><td><a class="ref" href="lecture1.html#def-plane"></a></td></tr>
+          <tr><td>$k$, $k^*$</td><td>number of Grover iterations; the choice $\lfloor\pi/(4\theta)\rfloor$</td><td><a class="ref" href="lecture1.html#thm-grover"></a></td></tr>
+          <tr><td>$T$, $U_j$</td><td>number of queries of a general algorithm; its query-free steps</td><td><a class="ref" href="lecture2.html#def-query-alg"></a></td></tr>
+          <tr><td>$O_x$, $\Pi_x$, $\Pi_{x,1}$</td><td>query when only $x$ is marked; projections onto query register $= x$ (and control $=1$)</td><td><a class="ref" href="lecture2.html#sec-model"></a></td></tr>
+          <tr><td>$\ket{\psi^x}$, $\ket{\psi^\emptyset}$</td><td>final states with only $x$ marked / nothing marked</td><td><a class="ref" href="lecture2.html#def-hybrids"></a></td></tr>
+          <tr><td>$\ket{\varphi_t}$, $\ket{H_j}$</td><td>empty-run state before query $t$; hybrid runs</td><td><a class="ref" href="lecture2.html#def-hybrids"></a></td></tr>
+          <tr><td>$q_x(t)$, $Q_x$</td><td>query magnitude of $x$ at query $t$; total over $t$</td><td><a class="ref" href="lecture2.html#def-query-magnitude"></a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="course-lectures">Course Lectures Used</h2>
+
+    <ul>
+      <li>CS455, Lecture 7: Bias-Busting.</li>
+      <li>CS455, Lecture 8: The Hadamard Transform.</li>
+      <li>CS455, Lecture 9: Grover's Algorithm I.</li>
+      <li>CS455 notes: Reductions &amp; Completeness 1 (on why lower bounds are hard and conditional lower bounds).</li>
+    </ul>
+
+    <h2 id="references">References</h2>
+
+    <p>Research papers are cited where they are used. For background and further reading, the textbooks <a class="cite" href="#nc10"></a> and <a class="cite" href="#ab09"></a> and the lecture notes <a class="cite" href="#dew19"></a> cover both Grover's algorithm and quantum query lower bounds.</p>
+
+    <ol class="bib">
+      <li id="ab09" data-key="AB09"><span class="bib-key">[AB09]</span>S. Arora, B. Barak. <i>Computational Complexity: A Modern Approach</i>. Cambridge University Press, 2009. Chapter 10, Quantum computation.</li>
+      <li id="adh97" data-key="ADH97"><span class="bib-key">[ADH97]</span>L. M. Adleman, J. DeMarrais, M.-D. A. Huang. Quantum computability. <i>SIAM Journal on Computing</i> 26(5):1524&ndash;1540, 1997.</li>
+      <li id="amb02" data-key="Amb02"><span class="bib-key">[Amb02]</span>A. Ambainis. Quantum lower bounds by quantum arguments. <i>Journal of Computer and System Sciences</i> 64(4):750&ndash;767, 2002.</li>
+      <li id="bbbv97" data-key="BBBV97"><span class="bib-key">[BBBV97]</span>C. H. Bennett, E. Bernstein, G. Brassard, U. Vazirani. Strengths and weaknesses of quantum computing. <i>SIAM Journal on Computing</i> 26(5):1510&ndash;1523, 1997. <a href="https://arxiv.org/abs/quant-ph/9701001">arXiv:quant-ph/9701001</a>.</li>
+      <li id="bbcmw01" data-key="BBCMW01"><span class="bib-key">[BBCMW01]</span>R. Beals, H. Buhrman, R. Cleve, M. Mosca, R. de Wolf. Quantum lower bounds by polynomials. <i>Journal of the ACM</i> 48(4):778&ndash;797, 2001. <a href="https://arxiv.org/abs/quant-ph/9802049">arXiv:quant-ph/9802049</a>.</li>
+      <li id="bbht98" data-key="BBHT98"><span class="bib-key">[BBHT98]</span>M. Boyer, G. Brassard, P. H&oslash;yer, A. Tapp. Tight bounds on quantum searching. <i>Fortschritte der Physik</i> 46(4&ndash;5):493&ndash;505, 1998. <a href="https://arxiv.org/abs/quant-ph/9605034">arXiv:quant-ph/9605034</a>.</li>
+      <li id="bgs75" data-key="BGS75"><span class="bib-key">[BGS75]</span>T. Baker, J. Gill, R. Solovay. Relativizations of the P =? NP question. <i>SIAM Journal on Computing</i> 4(4):431&ndash;442, 1975.</li>
+      <li id="bhmt02" data-key="BHMT02"><span class="bib-key">[BHMT02]</span>G. Brassard, P. H&oslash;yer, M. Mosca, A. Tapp. Quantum amplitude amplification and estimation. In <i>Quantum Computation and Information</i>, Contemporary Mathematics 305, pages 53&ndash;74. AMS, 2002. <a href="https://arxiv.org/abs/quant-ph/0005055">arXiv:quant-ph/0005055</a>.</li>
+      <li id="bv97" data-key="BV97"><span class="bib-key">[BV97]</span>E. Bernstein, U. Vazirani. Quantum complexity theory. <i>SIAM Journal on Computing</i> 26(5):1411&ndash;1473, 1997.</li>
+      <li id="dew19" data-key="dW19"><span class="bib-key">[dW19]</span>R. de Wolf. Quantum Computing: Lecture Notes. <a href="https://arxiv.org/abs/1907.09415">arXiv:1907.09415</a>. Chapters on Grover's algorithm and on query lower bounds.</li>
+      <li id="gro96" data-key="Gro96"><span class="bib-key">[Gro96]</span>L. K. Grover. A fast quantum mechanical algorithm for database search. In <i>Proceedings of the 28th ACM Symposium on Theory of Computing (STOC)</i>, pages 212&ndash;219, 1996. <a href="https://arxiv.org/abs/quant-ph/9605043">arXiv:quant-ph/9605043</a>.</li>
+      <li id="nc10" data-key="NC10"><span class="bib-key">[NC10]</span>M. A. Nielsen, I. L. Chuang. <i>Quantum Computation and Quantum Information</i>, 10th anniversary edition. Cambridge University Press, 2010. Chapter 6, Quantum search algorithms (Section 6.6: optimality).</li>
+      <li id="ns94" data-key="NS94"><span class="bib-key">[NS94]</span>N. Nisan, M. Szegedy. On the degree of Boolean functions as real polynomials. <i>Computational Complexity</i> 4(4):301&ndash;313, 1994.</li>
+      <li id="rt22" data-key="RT22"><span class="bib-key">[RT22]</span>R. Raz, A. Tal. Oracle separation of BQP and PH. <i>Journal of the ACM</i> 69(4), 2022. Conference version in STOC 2019.</li>
+      <li id="sch99" data-key="Sch99"><span class="bib-key">[Sch99]</span>U. Sch&ouml;ning. A probabilistic algorithm for $k$-SAT and constraint satisfaction problems. In <i>Proceedings of the 40th IEEE Symposium on Foundations of Computer Science (FOCS)</i>, pages 410&ndash;414, 1999.</li>
+      <li id="sho97" data-key="Sho97"><span class="bib-key">[Sho97]</span>P. W. Shor. Polynomial-time algorithms for prime factorization and discrete logarithms on a quantum computer. <i>SIAM Journal on Computing</i> 26(5):1484&ndash;1509, 1997.</li>
+      <li id="sim97" data-key="Sim97"><span class="bib-key">[Sim97]</span>D. R. Simon. On the power of quantum computation. <i>SIAM Journal on Computing</i> 26(5):1474&ndash;1483, 1997.</li>
+      <li id="zal99" data-key="Zal99"><span class="bib-key">[Zal99]</span>C. Zalka. Grover's quantum searching algorithm is optimal. <i>Physical Review A</i> 60(4):2746&ndash;2751, 1999. <a href="https://arxiv.org/abs/quant-ph/9711070">arXiv:quant-ph/9711070</a>.</li>
+    </ol>
+
+    <nav class="page-nav"></nav>
+    <footer class="site-footer">CS455 Fall 2026 &middot; Grover's Algorithm project</footer>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+</body>
+</html>

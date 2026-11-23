@@ -1,459 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grover's Algorithm — CS 15-455 Project</title>
-
-  <style>
-    :root {
-      --text: #222;
-      --muted: #666;
-      --rule: #d9d9d9;
-      --accent: #9b1c1c;
-      --link: #1f4e79;
-      --bg-soft: #f7f7f7;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      background: white;
-      color: var(--text);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 17px;
-      line-height: 1.62;
-    }
-
-    .page {
-      width: min(860px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 54px 0 72px;
-    }
-
-    header {
-      margin-bottom: 34px;
-    }
-
-    .course {
-      margin: 0 0 6px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.3rem, 6vw, 3.7rem);
-      font-weight: 500;
-      line-height: 1.08;
-      letter-spacing: -0.02em;
-    }
-
-    .subtitle {
-      margin: 14px 0 0;
-      max-width: 720px;
-      color: var(--muted);
-      font-size: 1.06rem;
-    }
-
-    nav {
-      margin: 28px 0 0;
-      padding: 11px 0;
-      border-top: 1px solid var(--rule);
-      border-bottom: 1px solid var(--rule);
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.92rem;
-    }
-
-    nav a {
-      color: var(--link);
-      text-decoration: none;
-      margin-right: 22px;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    section {
-      margin-top: 44px;
-    }
-
-    h2 {
-      margin: 0 0 18px;
-      padding-bottom: 7px;
-      border-bottom: 1px solid var(--rule);
-      font-size: 1.55rem;
-      font-weight: 500;
-    }
-
-    h3 {
-      margin: 27px 0 6px;
-      font-size: 1.12rem;
-      font-weight: 700;
-    }
-
-    p {
-      margin: 7px 0 15px;
-    }
-
-    .lead {
-      font-size: 1.05rem;
-    }
-
-    .outline {
-      counter-reset: section;
-    }
-
-    .outline article {
-      margin-bottom: 24px;
-    }
-
-    .outline h3 {
-      margin-bottom: 5px;
-    }
-
-    .outline h3::before {
-      counter-increment: section;
-      content: counter(section) ". ";
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 16px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.93rem;
-      line-height: 1.45;
-    }
-
-    th,
-    td {
-      padding: 11px 12px;
-      text-align: left;
-      vertical-align: top;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    th {
-      background: var(--bg-soft);
-      font-weight: 700;
-    }
-
-    td:first-child {
-      width: 170px;
-      white-space: nowrap;
-      font-weight: 600;
-    }
-
-    .note {
-      margin-top: 18px;
-      padding: 14px 16px;
-      background: var(--bg-soft);
-      border-left: 3px solid var(--accent);
-      font-size: 0.96rem;
-    }
-
-    footer {
-      margin-top: 56px;
-      padding-top: 16px;
-      border-top: 1px solid var(--rule);
-      color: var(--muted);
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.85rem;
-    }
-
-    @media (max-width: 640px) {
-      .page {
-        width: min(92%, 860px);
-        padding-top: 34px;
-      }
-
-      nav a {
-        display: inline-block;
-        margin: 4px 16px 4px 0;
-      }
-
-      table,
-      thead,
-      tbody,
-      th,
-      td,
-      tr {
-        display: block;
-      }
-
-      thead {
-        display: none;
-      }
-
-      tr {
-        padding: 10px 0;
-        border-bottom: 1px solid var(--rule);
-      }
-
-      td {
-        border: 0;
-        padding: 3px 0;
-      }
-
-      td:first-child {
-        width: auto;
-        white-space: normal;
-        color: var(--accent);
-      }
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grover's Algorithm · CS455 Project</title>
+  <meta name="description" content="CS455 project notes on Grover's algorithm and the optimality of quantum search.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/katex/katex.min.js"></script>
+  <script defer src="assets/katex/contrib/auto-render.min.js"></script>
+  <script defer src="assets/site-config.js"></script>
+  <script defer src="assets/notes.js"></script>
+  <script defer src="assets/figures.js"></script>
 </head>
-
 <body>
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="course-mark" href="index.html">CS455</a></header>
 
-  <main class="page">
+<div class="layout">
+  <nav class="toolbar"></nav>
 
-    <header>
-      <p class="course">CS 15-455 · Project</p>
+  <main class="notes" id="content">
 
+    <div class="title-block">
+      <svg class="title-icon" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="21" y="7" width="39" height="29" rx="3" fill="none" stroke="currentColor" stroke-width="5"/>
+        <circle cx="15" cy="33" r="8" fill="currentColor"/>
+        <path d="M1 61c0-9.5 6.3-16 14-16s14 6.5 14 16z" fill="currentColor"/>
+        <path d="M25 47 38 37" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      </svg>
       <h1>Grover's Algorithm</h1>
-
-      <p class="subtitle">
-        An introduction to quantum search, with an emphasis on the query
-        complexity of unstructured search and the quadratic speedup achieved
-        by Grover's algorithm.
+      <p class="meta">
+        <span>CS455 Fall 2026 &middot; Final project</span>
+        <span>Course project notes &middot; CS455 Fall 2026</span>
       </p>
+    </div>
 
-      <nav>
-        <a href="#overview">Overview</a>
-        <a href="#outline">Outline</a>
-        <a href="#timeline">Timeline</a>
-      </nav>
-    </header>
+    <!-- ============================================================ -->
+    <h2 id="overview">Overview</h2>
 
+    <p>Suppose you must find the one input out of $N$ that makes some function $f$ output $1$, and the only thing you can do with $f$ is evaluate it. Classically there is nothing better than trying inputs one by one, which takes about $N$ evaluations. In 1996 Grover showed that a quantum computer needs only about $\frac{\pi}{4}\sqrt N$ <a class="cite" href="reference.html#gro96"></a>. A year later, Bennett, Bernstein, Brassard and Vazirani proved that no quantum algorithm can do asymptotically better <a class="cite" href="reference.html#bbbv97"></a>.</p>
 
-    <section id="overview">
+    <p>Together, these two results are one of the cleanest stories in quantum complexity theory, and the subject of this project. They give a speedup that applies to every problem in $\NP$, a matching lower bound that we can actually <em>prove</em> (rare in complexity theory, where we cannot even separate $\Ptime$ from $\NP$), and an explanation of why quantum computers are not expected to solve $\NP$-complete problems efficiently.</p>
 
-      <h2>Overview</h2>
+    <p>The notes are written for a 455 student who has seen Lectures 7&ndash;9 on quantum computation. They are the equivalent of two lectures, with most of the weight on the complexity-theoretic side.</p>
 
-      <p class="lead">
-        I plan to explain Grover's algorithm from a complexity theory perspective.
-        I will start with the classical unstructured search problem, introduce the
-        quantum ideas needed for the algorithm, and then show how repeated Grover
-        iterations increase the probability of measuring the target state.
-      </p>
+    <!-- ============================================================ -->
+    <h2 id="first-iteration">Try Grover's Key Idea</h2>
 
-      <p>
-        The main goal is to understand where the
-        <strong>O(√N)</strong> query bound comes from and why it improves on the
-        <strong>O(N)</strong> classical search bound. I also plan to explain the
-        geometric view of the algorithm and briefly discuss its limits in the
-        black-box search model.
-      </p>
+    <p>Start with eight candidates and one marked input. The <em>phase oracle</em> flips only the marked amplitude's sign; the <em>diffusion operator</em> then reflects every amplitude about their average. This changes the marked amplitude from $1$ to $5/2$ in course units after one iteration, so its probability rises from $1/8$ to $25/32$. Follow each step below and compare the bar heights.</p>
 
-    </section>
+    <figure class="fig" id="fig-quick-demo">
+      <div class="widget" data-widget="amplitudes" data-n="3" data-marked="5" data-show-formula="true"></div>
+      <figcaption>Interactive example: $n=3$, $N=8$, and marked string $101$. First click <em>if f then minus</em>, then <em>ReflectAcrossAverage</em>, or use <em>Full iteration</em>. Heights show amplitudes; measurement probabilities are their squares divided by $8$ in course units.</figcaption>
+    </figure>
 
+    <!-- ============================================================ -->
+    <h2 id="roadmap">Roadmap</h2>
 
-    <section id="outline">
-
-      <h2>Proposed Outline</h2>
-
-      <div class="outline">
-
-        <article>
-          <h3>Unstructured Search</h3>
-
-          <p>
-            I will first define the search problem: given N possible inputs and
-            an oracle that marks one target, how many queries are needed to find
-            it? This gives the classical baseline and motivates the quantum
-            version of the problem.
-          </p>
-        </article>
-
-
-        <article>
-          <h3>Quantum Background</h3>
-
-          <p>
-            I will review the quantum concepts needed for Grover's algorithm,
-            including superposition, amplitudes, measurement, Hadamard gates,
-            and phase flips. I want to keep this section short and only cover
-            what is needed for the algorithm.
-          </p>
-        </article>
-
-
-        <article>
-          <h3>The Oracle Model</h3>
-
-          <p>
-            I will describe how the oracle identifies a solution and explain
-            what counts as a query. This will make the classical and quantum
-            query complexity comparison precise.
-          </p>
-        </article>
-
-
-        <article>
-          <h3>One Grover Iteration</h3>
-
-          <p>
-            I will break one iteration into the oracle phase flip and the
-            diffusion step. I will show how these operations gradually increase
-            the amplitude of the marked state.
-          </p>
-        </article>
-
-
-        <article>
-          <h3>Geometric View</h3>
-
-          <p>
-            I will explain Grover's algorithm using a two-dimensional space
-            containing the marked and unmarked components. In this view, each
-            Grover iteration can be interpreted as a rotation toward the marked
-            state.
-          </p>
-        </article>
-
-
-        <article>
-          <h3>Worked Example</h3>
-
-          <p>
-            I will use a small example, probably with N = 4 or N = 8, and track
-            the amplitudes through the algorithm. This will connect the formulas
-            with a concrete search example.
-          </p>
-        </article>
-
-
-        <article>
-          <h3>Query Complexity</h3>
-
-          <p>
-            I will derive why approximately π√N/4 Grover iterations are enough
-            when there is one marked item. This gives the O(√N) quantum query
-            complexity compared with O(N) classical search.
-          </p>
-        </article>
-
-
-        <article>
-          <h3>Limits and Extensions</h3>
-
-          <p>
-            I will briefly discuss multiple marked items, amplitude
-            amplification, and why Grover's quadratic speedup is essentially
-            optimal for black-box unstructured search.
-          </p>
-        </article>
-
+    <div class="roadmap-cards">
+      <div class="rm-card" data-page="lecture1.html">
+        <div class="rm-kicker">Part I &middot; from quantum basics to Grover</div>
+        <div class="rm-title">From Quantum Basics to Grover</div>
+        <p>We rewrite the course's quantum instructions as vectors, define the query model, and show that Grover's algorithm is a rotation in a plane. That gives an exact success probability and the $O(\sqrt N)$ query bound.</p>
+        <div class="rm-sections-slot"></div>
+        <p><a class="rm-open" href="lecture1.html">Open Part I &rarr;</a></p>
       </div>
+      <div class="rm-card" data-page="lecture2.html">
+        <div class="rm-kicker">Part II &middot; complexity theory</div>
+        <div class="rm-title">Grover and Complexity Theory</div>
+        <p>We define $\BQP$, turn Grover's algorithm into a quantum algorithm for all of $\NP$, prove that $\Omega(\sqrt N)$ queries are necessary, and use this to build an oracle relative to which $\NP\not\subseteq\BQP$.</p>
+        <div class="rm-sections-slot"></div>
+        <p><a class="rm-open" href="lecture2.html">Open Part II &rarr;</a></p>
+      </div>
+    </div>
 
-    </section>
+    <p>Part I is the upper bound; Part II is the matching lower bound and what it means. The <a href="reference.html#index">index of results</a> lists every definition and theorem on the site, and the <a href="reference.html#notation">notation table</a> lists every symbol.</p>
 
+    <!-- ============================================================ -->
+    <h2 id="prerequisites">Prerequisites</h2>
 
-    <section id="timeline">
+    <p>We assume the following from the course:</p>
+    <ul>
+      <li><strong>Lecture 7 (Bias-Busting):</strong> qubits, amplitudes, "Add &amp; Dif" and "Avg &amp; Dev", "if $f$ then minus", "extract all", unitarity, and loading the $\pm1$ truth table of $f$.</li>
+      <li><strong>Lecture 8 (Hadamard Transform):</strong> the Hadamard transform and the MysteryToggles analysis.</li>
+      <li><strong>Lecture 9 (Grover's Algorithm I):</strong> ReflectAcrossAverage, Unique-SAT, and the first analysis of Grover's algorithm.</li>
+      <li><strong>Complexity:</strong> $\Ptime$, $\NP$ with verifiers, $\BPP$, $\PSPACE$, oracle machines and relativization.</li>
+    </ul>
+    <p>Beyond the course we use only a little linear algebra: inner products, lengths of vectors, the triangle inequality and the Cauchy&ndash;Schwarz inequality. They are reviewed where they are first needed (<a class="ref" href="lecture1.html#sec-states"></a> and <a class="ref" href="lecture2.html#sec-distance"></a>). We also mention the class $\PP$, which is defined when it appears.</p>
 
-      <h2>Timeline</h2>
+    <!-- ============================================================ -->
+    <h2 id="lecture-bridge">From the Lectures to the Main Proof</h2>
 
+    <p>The project follows the course's vocabulary and makes each mathematical jump explicit. The source-to-result map below also separates lecture material from results developed using the cited research literature.</p>
+    <div class="table-wrap">
       <table>
-
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Plan</th>
-          </tr>
-        </thead>
-
+        <thead><tr><th>Starting point</th><th>What we use</th><th>What we establish here</th></tr></thead>
         <tbody>
-
-          <tr>
-            <td>Oct. 30</td>
-            <td>
-              Set up the website and finalize the project outline.
-            </td>
-          </tr>
-
-          <tr>
-            <td>Oct. 31 – Nov. 3</td>
-            <td>
-              Review the quantum background and oracle/query model.
-            </td>
-          </tr>
-
-          <tr>
-            <td>Nov. 4 – Nov. 7</td>
-            <td>
-              Write the main Grover algorithm section and geometric
-              interpretation.
-            </td>
-          </tr>
-
-          <tr>
-            <td>Nov. 8 – Nov. 11</td>
-            <td>
-              Build a small worked example and add useful diagrams or
-              visualizations.
-            </td>
-          </tr>
-
-          <tr>
-            <td>Nov. 12 – Nov. 14</td>
-            <td>
-              Finish the query complexity analysis and discussion of
-              optimality.
-            </td>
-          </tr>
-
-          <tr>
-            <td>Nov. 15 – Nov. 17</td>
-            <td>
-              Add extensions and references, then revise the explanations.
-            </td>
-          </tr>
-
-          <tr>
-            <td>Nov. 18 – Nov. 19</td>
-            <td>
-              Proofread the website, test everything, and prepare for the
-              20-minute discussion.
-            </td>
-          </tr>
-
-          <tr>
-            <td>Nov. 20</td>
-            <td>
-              Final submission.
-            </td>
-          </tr>
-
+          <tr><td>Lecture 7, pp. 2&ndash;5</td><td>Phase signs, normalization, and Avg &amp; Dev</td><td><a class="ref" href="lecture1.html#def-notation"></a>: normalized states and measurement</td></tr>
+          <tr><td>Lecture 8, pp. 3&ndash;4</td><td>XOR sign patterns and the Hadamard transform</td><td><a class="ref" href="lecture1.html#lem-reflect"></a>: inversion about the mean</td></tr>
+          <tr><td>Lecture 9, pp. 5&ndash;11</td><td>ReflectAcrossAverage and the approximate $1,3,5,\ldots$ growth</td><td><a class="ref" href="lecture1.html#thm-angle"></a>: exact angle and success probability</td></tr>
+          <tr><td>Reductions &amp; Completeness 1, pp. 1&ndash;3</td><td>Why unconditional complexity lower bounds are difficult</td><td><a class="ref" href="lecture2.html#thm-bbbv"></a>: a provable <em>query</em> lower bound</td></tr>
+          <tr><td>Further cited literature</td><td>BBBV hybrid argument and oracle methods</td><td><a class="ref" href="lecture2.html#thm-oracle"></a>: the limits of black-box search</td></tr>
         </tbody>
-
       </table>
+    </div>
 
-      <div class="note">
-        The final site will be closer to a short set of lecture notes than a
-        general quantum computing tutorial. I want to focus specifically on
-        Grover's algorithm and its complexity-theoretic interpretation.
-      </div>
+    <!-- ============================================================ -->
+    <h2 id="landscape">Where This Fits</h2>
 
-    </section>
+    <figure class="fig" id="fig-landscape">
+      <svg viewBox="0 0 640 344" role="img" aria-label="Diagram of complexity classes: P is contained in BPP and NP; BPP in BQP; BQP and NP in PP; PP in PSPACE. The relationship between NP and BQP is unknown.">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#8f8d86"/>
+          </marker>
+        </defs>
+        <g stroke="#8f8d86" stroke-width="1.6" fill="none" marker-end="url(#arr)">
+          <line x1="304" y1="298" x2="228" y2="264"/>
+          <line x1="336" y1="298" x2="422" y2="187"/>
+          <line x1="200" y1="226" x2="200" y2="187"/>
+          <line x1="222" y1="146" x2="296" y2="114"/>
+          <line x1="418" y1="146" x2="344" y2="114"/>
+          <line x1="320" y1="76" x2="320" y2="53"/>
+        </g>
+        <line x1="246" y1="164" x2="394" y2="164" stroke="#a50000" stroke-width="1.6" stroke-dasharray="6 5"/>
+        <rect x="306" y="150" width="28" height="26" rx="5" fill="#fcfcfb"/>
+        <text x="320" y="169" text-anchor="middle" font-size="17" fill="#a50000" font-family="Open Sans, sans-serif">?</text>
+        <g font-family="Open Sans, sans-serif" font-size="15" text-anchor="middle">
+          <rect x="280" y="12" width="80" height="38" rx="7" fill="#fff" stroke="#c3c2b7"/>
+          <text x="320" y="36" fill="#212529">PSPACE</text>
+          <rect x="290" y="76" width="60" height="36" rx="7" fill="#fff" stroke="#c3c2b7"/>
+          <text x="320" y="99" fill="#212529">PP</text>
+          <rect x="158" y="146" width="84" height="38" rx="7" fill="#fff" stroke="#a50000" stroke-width="1.8"/>
+          <text x="200" y="170" fill="#a50000">BQP</text>
+          <rect x="398" y="146" width="84" height="38" rx="7" fill="#fff" stroke="#c3c2b7"/>
+          <text x="440" y="170" fill="#212529">NP</text>
+          <rect x="164" y="226" width="72" height="36" rx="7" fill="#fff" stroke="#c3c2b7"/>
+          <text x="200" y="249" fill="#212529">BPP</text>
+          <rect x="290" y="298" width="60" height="36" rx="7" fill="#fff" stroke="#c3c2b7"/>
+          <text x="320" y="321" fill="#212529">P</text>
+        </g>
+        <g font-family="Open Sans, sans-serif" font-size="12" fill="#52514e">
+          <text x="500" y="300">A &#8594; B means A &#8838; B</text>
+          <text x="500" y="318">dashed: unknown</text>
+        </g>
+      </svg>
+      <figcaption>Classes from the course and where quantum computation fits. Arrows are inclusions; all of them are known theorems. The dashed link is the question this project is about: is $\NP$ contained in $\BQP$? Part II shows that, relative to an oracle, it is not.</figcaption>
+    </figure>
 
+    <p>The course built up the classes $\Ptime\subseteq\BPP$ and $\Ptime\subseteq\NP\subseteq\PSPACE$. Efficient quantum computation, the class $\BQP$, sits above $\BPP$ and below $\PSPACE$ <a class="cite" href="reference.html#bv97"></a>, in fact below $\PP$ <a class="cite" href="reference.html#adh97"></a>. The big open question is its relation to $\NP$. Grover's algorithm is the natural attack: it speeds up exhaustive search for <em>any</em> $\NP$ problem. Part II shows the speedup is only quadratic and cannot be improved for black-box search, which yields an oracle relative to which $\NP\not\subseteq\BQP$. It also shows, by an oracle in the other direction, why such evidence can never become a proof without new, non-relativizing ideas.</p>
 
-    <footer>
-      CS 15-455 · Grover's Algorithm Project
-    </footer>
+    <!-- ============================================================ -->
+    <h2 id="how-to-read">How to Read These Notes</h2>
 
+    <ul>
+      <li>Amplitudes are normalized (squared amplitudes sum to $1$). "Course units" means normalized amplitudes times $\sqrt N$, the convention of Lectures 7&ndash;9 in which "Add &amp; Dif all" gives every string amplitude $1$.</li>
+      <li>Hover over a reference such as <a class="ref" href="lecture2.html#thm-bbbv"></a> to preview it without leaving the page; the "Back" button returns you to where you were after a jump.</li>
+      <li>Proofs can be collapsed from the toolbar for a quick read of the statements.</li>
+      <li>The figures are interactive: step through Grover's algorithm one instruction at a time.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="acknowledgements">Acknowledgements</h2>
+
+    <p>The terminology and first-pass analysis follow the supplied CS455 Lectures 7&ndash;9. The reductions notes motivate why unconditional lower bounds are difficult. The geometric derivation, lower-bound argument, and additional complexity-theory results use the scholarly references listed in the <a href="reference.html#references">bibliography</a>; these are expansions beyond the uploaded lectures. The supplied original site credited Claude (Anthropic) for drafting assistance; the present adaptation and verification also used ChatGPT (OpenAI). A student submitting this project should review the mathematical claims, source attributions, and their course's authorship policy.</p>
+
+    <nav class="page-nav"></nav>
+    <footer class="site-footer">CS455 Fall 2026 &middot; Grover's Algorithm project &middot; <a href="reference.html#references">References</a></footer>
   </main>
 
+  <aside class="toc" id="toc"></aside>
+</div>
 </body>
 </html>

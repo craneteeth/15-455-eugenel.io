@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Part I: From Quantum Basics to Grover · Grover's Algorithm · CS455</title>
+  <meta name="description" content="Part I of the CS455 project on Grover's algorithm: from the basic quantum model to an exact analysis of quantum search.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/katex/katex.min.js"></script>
+  <script defer src="assets/katex/contrib/auto-render.min.js"></script>
+  <script defer src="assets/site-config.js"></script>
+  <script defer src="assets/notes.js"></script>
+  <script defer src="assets/figures.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="course-mark" href="index.html">CS455</a></header>
+
+<div class="layout">
+  <nav class="toolbar"></nav>
+
+  <main class="notes" id="content">
+
+    <div class="title-block">
+      <svg class="title-icon" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="21" y="7" width="39" height="29" rx="3" fill="none" stroke="currentColor" stroke-width="5"/>
+        <circle cx="15" cy="33" r="8" fill="currentColor"/>
+        <path d="M1 61c0-9.5 6.3-16 14-16s14 6.5 14 16z" fill="currentColor"/>
+        <path d="M25 47 38 37" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <h1>Part I: From Quantum Basics to Grover</h1>
+      <p class="meta">
+        <span>Course project notes &middot; CS455 Fall 2026</span>
+        <span>Builds on Lectures 7&ndash;9 &middot; continues in <a href="lecture2.html">Part II</a></span>
+      </p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-intro">Introduction</h2>
+
+    <p>In Lecture 9 we met Grover's algorithm through the lens of the Hadamard transform. The key subroutine, ReflectAcrossAverage, sends every amplitude $\alpha + \delta$ to $\alpha - \delta$, where $\alpha$ is the average amplitude. Alternating it with "if $f$ then minus" made the amplitude of the hidden string grow like $1, 3, 5, 7, \dots$, and after about $\sqrt N$ rounds we could extract the answer with decent probability. That analysis was deliberately loose: every step said "basically", and we were promised a cleaner, geometric treatment later.</p>
+
+    <p>This page delivers that treatment and uses it to pin down the query complexity of search exactly. It is the first half of the project. <a href="lecture2.html">Part II</a> then asks what this algorithm means for complexity theory: where quantum computation sits among the classes we know, whether a quantum computer can solve $\NP$-complete problems efficiently, and why the answer "not by brute force" can actually be <em>proved</em>.</p>
+
+    <p>The plan for this page:</p>
+    <ol>
+      <li><a class="ref" href="#sec-background"></a> rewrites the course's quantum instructions as operations on vectors, which is the language the rest of the project needs.</li>
+      <li><a class="ref" href="#sec-search"></a> defines unstructured search, the query model, and the classical baseline of $\Theta(N)$ queries.</li>
+      <li><a class="ref" href="#sec-iteration"></a> states Grover's algorithm and shows its state is always described by just two numbers.</li>
+      <li><a class="ref" href="#sec-geometry"></a> turns those two numbers into a point on a circle and shows each iteration is a rotation (<a class="ref" href="#thm-angle"></a>).</li>
+      <li><a class="ref" href="#sec-examples"></a> works through $N = 4$ and $N = 8$ by hand.</li>
+      <li><a class="ref" href="#sec-complexity"></a> proves the main result: $O(\sqrt{N/t})$ queries suffice (<a class="ref" href="#thm-grover"></a>).</li>
+    </ol>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-background">Quantum Basics, as Vectors</h2>
+
+    <p>We only need a small slice of the quantum model from Lectures 7&ndash;9, rewritten in the vector notation used by the wider literature. Nothing here is new physics; it is bookkeeping that makes the later geometry and the lower-bound proof in Part II easy to state.</p>
+
+    <h3 id="sec-states">States</h3>
+
+    <p>An $n$-qubit state assigns an amplitude to each of the $N = 2^n$ basic states $\ket{x}$, $x \in \{0,1\}^n$. In the course we kept amplitudes <em>unnormalized</em>: after "Add &amp; Dif all" on fresh qubits every amplitude is $1$, the total squared amplitude is $N$, and "extract all" prints $x$ with probability <em>proportional</em> to the squared amplitude of $\ket x$. From now on we divide by the square root of the total, so that probabilities are the squared amplitudes themselves.</p>
+
+    <div class="env definition" id="def-notation" data-title="States as vectors">
+      <p>A state of $n$ qubits is a vector $\ket\psi = \sum_{x\in\{0,1\}^n} \alpha_x \ket x$ with $\sum_x \alpha_x^2 = 1$. "Extract all" prints $x$ with probability $\alpha_x^2$. The <em>uniform state</em> is</p>
+      $$\ket s = \frac{1}{\sqrt N}\sum_{x\in\{0,1\}^n}\ket x ,$$
+      <p>the normalized version of what "Add &amp; Dif all" produces from $\ket{0\cdots0}$.</p>
+    </div>
+
+    <p>The course only ever used real amplitudes, and so will we. Every argument on this site goes through unchanged for complex amplitudes if $\alpha_x^2$ is replaced by $\abs{\alpha_x}^2$.</p>
+
+    <p>We treat states as vectors in $\R^N$, with the usual inner product and length:</p>
+    $$\braket{\varphi}{\psi} = \sum_x \varphi_x \psi_x, \qquad \norm{\ket\psi} = \sqrt{\braket{\psi}{\psi}} .$$
+    <p>A state is just a vector of length $1$. We also use the shorthand $\ket{s}\!\bra{s}$ for the map $\ket v \mapsto \braket{s}{v}\ket s$, the projection onto the direction of $\ket s$.</p>
+
+    <h3 id="sec-unitary">Instructions are unitary</h3>
+
+    <p>Lecture 7 observed that each instruction we use preserves the total squared amplitude, once "Add &amp; Dif" and "Avg &amp; Dev" are rescaled to the Hadamard instruction. Each instruction is also linear (it acts on a superposition by acting on each basic state and superposing the results). A linear map $U$ with $\norm{U\ket v} = \norm{\ket v}$ for all $v$ is called <em>unitary</em>. Unitaries also preserve inner products, because $\braket{u}{v} = \tfrac14\left(\norm{u+v}^2 - \norm{u-v}^2\right)$, so they preserve lengths, angles and distances.</p>
+
+    <p>Here is the dictionary between the course instructions used by Grover's algorithm and their vector form. Lemma references point to where each line is justified.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Course instruction</th><th>Effect on amplitudes</th><th>Vector form</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Add &amp; Dif all, on $\ket{0\cdots0}$</td><td>every amplitude becomes $1$ (normalized: $1/\sqrt N$)</td><td>prepares $\ket s$</td></tr>
+          <tr><td>if $f$ then minus</td><td>$\alpha_x \mapsto (-1)^{f(x)}\alpha_x$</td><td>$O_f = \sum_x (-1)^{f(x)} \ket x\!\bra x$</td></tr>
+          <tr><td>ReflectAcrossAverage</td><td>$\alpha_x \mapsto 2\bar\alpha - \alpha_x$, where $\bar\alpha$ is the average</td><td>$D = 2\ket s\!\bra s - I$ (<a class="ref" href="#lem-reflect"></a>)</td></tr>
+          <tr><td>extract all</td><td>prints $x$ with probability $\alpha_x^2$</td><td>measurement in the basis $\{\ket x\}$</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="env important">
+      <p>From here on, amplitudes are normalized unless we explicitly say "in course units". Course units are the normalized amplitudes multiplied by $\sqrt N$; they are handy for hand calculations, and the figures' step logs use them.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-search">Unstructured Search and the Query Model</h2>
+
+    <p>Brute-force search is the most basic algorithm in computer science: to find a satisfying assignment of a formula on $n$ variables, try all $2^n$ of them. In Lecture 9 this was the problem Unique-SAT, where $f$ is given as AND/OR/NOT code $C$ with $L$ lines. One evaluation of $f$ costs $O(L)$ steps, so brute force costs about $L\cdot 2^n$. The question here is how much better we can do if we refuse to look inside $C$ and only <em>evaluate</em> it.</p>
+
+    <div class="env definition" id="def-search" data-title="Unstructured search">
+      <p>Let $f : \{0,1\}^n \to \{0,1\}$, let $N = 2^n$, and let $M = \{x : f(x) = 1\}$ be the set of <em>marked</em> strings, with $t = \abs{M}$. The <em>search problem</em> is: given access to $f$ with $t \ge 1$, output some $x \in M$. <em>Unique search</em> is the special case $t = 1$, where we write $x^*$ for the unique marked string.</p>
+    </div>
+
+    <div class="env definition" id="def-query" data-title="Query">
+      <p>A <em>query</em> is one application of the instruction "if $f$ then minus", that is, of $O_f$, to $n$ designated <em>query qubits</em>, while any other qubits are left alone. An algorithm in the <em>query model</em> may use any instructions it likes, but it may access $f$ only through queries. Its cost is the number of queries it makes.</p>
+    </div>
+
+    <p>A quantum query can act on a superposition of many strings at once. That is the whole source of the speedup, and also what makes lower bounds in Part II nontrivial.</p>
+
+    <div class="env remark" id="rem-why-queries" data-title="Why count queries?">
+      <p>There are two reasons. First, query bounds translate into time bounds: if $f$ is given by code with $L$ lines, each query can be implemented with $O(L)$ instructions (the course's recipe for turning classical code into "if $f$ then minus"), so an algorithm with $q$ queries and $r$ other instructions runs in time $O(qL + r)$. Second, and more important for a complexity class, in this model we can <em>prove</em> lower bounds. Proving that SAT needs exponential time is far beyond current techniques; proving that SAT needs many <em>evaluations</em> when the formula is a black box is the content of Part II.</p>
+    </div>
+
+    <div class="env remark" id="rem-toggle" data-title="Minus versus toggle">
+      <p>One can also access $f$ through "if $f$ then toggle Ans". Nothing changes: Lecture 8's analysis of MysteryToggles showed that if Ans is first prepared with amplitude $+1$ on $\ket 0$ and $-1$ on $\ket 1$, then "if $f$ then toggle Ans" acts exactly as "if $f$ then minus" on the query qubits. Conversely "if $f$ then minus" is all Grover's algorithm uses. So the two query types cost the same up to a constant.</p>
+    </div>
+
+    <h3 id="sec-classical">The classical baseline</h3>
+
+    <div class="env proposition" id="prop-classical" data-title="Classical search needs about $N$ queries">
+      <p>For unique search on $N$ strings:</p>
+      <ol>
+        <li>every deterministic algorithm makes at least $N - 1$ queries on some input;</li>
+        <li>every randomized algorithm that outputs $x^*$ with probability at least $2/3$ on every input makes at least $\tfrac23 N - 1$ queries on some input.</li>
+      </ol>
+    </div>
+
+    <div class="proof" data-of="prop-classical">
+      <p>(1) Play adversary: answer $0$ to every query. If the algorithm stops after at most $N-2$ queries, at least two strings were never queried, and it outputs at most one of them. Mark the other one. Every answer we gave is consistent with this $f$, so the algorithm is wrong on it.</p>
+      <p>(2) A randomized algorithm is a probability distribution over deterministic ones, so it suffices to show that every deterministic algorithm $A$ with $q$ queries succeeds with probability at most $(q+1)/N$ when $x^*$ is uniformly random. Run $A$ with every answer equal to $0$. This determines a fixed list of queried strings $y_1,\dots,y_q$ and a fixed output $z$. On the actual input, $A$ follows the same run until a query hits $x^*$, so it can succeed only if $x^* \in \{y_1,\dots,y_q,z\}$, which has probability at most $(q+1)/N$. Averaging over the algorithm's random choices, if every input is solved with probability $\ge 2/3$ then so is a random input, hence $(q+1)/N \ge 2/3$.</p>
+    </div>
+
+    <p>So classically, search costs $\Theta(N)$ queries, and the next sections bring this down to $O(\sqrt N)$.</p>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-iteration">Grover's Algorithm</h2>
+
+    <p>Here is the algorithm from Lecture 9, with the number of rounds left as a parameter $k$ to be chosen in <a class="ref" href="#sec-complexity"></a>.</p>
+
+    <div class="env algorithm" id="alg-grover" data-title="Grover's algorithm with $k$ iterations">
+      <ol class="algo">
+        <li>new qubit <span class="q">X<sub>1</sub></span>, …, <span class="q">X<sub>n</sub></span></li>
+        <li>Add &amp; Dif all <span class="c"># uniform superposition</span></li>
+        <li>repeat $k$ times: <span class="c"># one "Grover iteration" per round</span></li>
+        <li class="indent">if $f$(<span class="q">X<sub>1</sub></span>, …, <span class="q">X<sub>n</sub></span>) then minus <span class="c"># one query</span></li>
+        <li class="indent">ReflectAcrossAverage(<span class="q">X<sub>1</sub></span>, …, <span class="q">X<sub>n</sub></span>)</li>
+        <li>extract all</li>
+      </ol>
+      <p>In vector form, the final state is $(D\,O_f)^k \ket s$. The algorithm makes exactly $k$ queries and $O(nk)$ other instructions.</p>
+    </div>
+
+    <p>To analyze it we first describe ReflectAcrossAverage as a vector operation. Lecture 9 proved, through the Hadamard transform, that it maps each amplitude $\alpha_x$ to $2\bar\alpha - \alpha_x$, where $\bar\alpha$ is the average amplitude.</p>
+
+    <div class="env lemma" id="lem-reflect" data-title="ReflectAcrossAverage is a reflection">
+      <p>ReflectAcrossAverage acts as $D = 2\ket s\!\bra s - I$. Equivalently, $D$ fixes $\ket s$ and negates every vector orthogonal to $\ket s$.</p>
+    </div>
+
+    <div class="proof" data-of="lem-reflect">
+      <p>For $\ket\psi = \sum_x \alpha_x\ket x$ we have $\braket{s}{\psi} = \frac{1}{\sqrt N}\sum_x \alpha_x = \sqrt N\,\bar\alpha$, so the $x$-coordinate of $2\ket s\!\braket{s}{\psi}$ is $2\cdot\frac{1}{\sqrt N}\cdot\sqrt N\,\bar\alpha = 2\bar\alpha$. Hence $(2\ket s\!\bra s - I)\ket\psi$ has $x$-coordinate $2\bar\alpha - \alpha_x$, which is Lecture 9's formula. For the second sentence: $D\ket s = 2\ket s - \ket s = \ket s$, and if $\braket{s}{v} = 0$ then $D\ket v = -\ket v$.</p>
+    </div>
+
+    <p>Note what "orthogonal to $\ket s$" means concretely: a vector is orthogonal to $\ket s$ exactly when its amplitudes average to $0$. So $D$ keeps the average and flips all the deviations from it, which is Lecture 9's picture again.</p>
+
+    <p>The next lemma is the structural fact that makes the whole analysis two-dimensional.</p>
+
+    <div class="env lemma" id="lem-two-values" data-title="Two numbers suffice">
+      <p>Suppose a state gives one common amplitude $a$ to every marked string and one common amplitude $b$ to every unmarked string. Then after "if $f$ then minus" and after ReflectAcrossAverage, the state again has this form. In particular, at every point of Grover's algorithm the state is described by a pair $(a, b)$.</p>
+    </div>
+
+    <div class="proof" data-of="lem-two-values">
+      <p>"If $f$ then minus" sends $(a,b)$ to $(-a, b)$. For ReflectAcrossAverage, the average is $\bar\alpha = (ta + (N-t)b)/N$, and every amplitude $\alpha_x$ becomes $2\bar\alpha - \alpha_x$, which depends only on $\alpha_x$. So all marked strings get $2\bar\alpha - a$ and all unmarked strings get $2\bar\alpha - b$. The initial state $\ket s$ has the form with $a = b = 1/\sqrt N$, and induction finishes the proof.</p>
+    </div>
+
+    <p>Try it yourself in <a class="ref" href="#fig-amplitudes"></a> below. Press the two instructions one at a time and watch the dashed average line.</p>
+
+    <figure class="fig" id="fig-amplitudes">
+      <div class="widget" data-widget="amplitudes" data-n="3"></div>
+      <figcaption>Amplitudes of all $N = 2^n$ strings in course units (every amplitude starts at $1$). "If $f$ then minus" flips the marked bar below zero, pulling the average down only slightly. ReflectAcrossAverage then mirrors every bar across the dashed average line, so the marked bar lands far above it. The faded bars show the state before the last instruction, and the step log lists the exact fractions.</figcaption>
+    </figure>
+
+    <div class="env intuition" data-title="why the marked amplitude grows">
+      <p>Right after the phase flip, the marked amplitude sits at about $-a$ while the average is still close to $b$. It is therefore about $a + b$ <em>below</em> the average, and reflecting puts it about $a + b$ <em>above</em> it. With $N$ large and $a$ small, each round adds roughly $2b \approx 2/\sqrt N$ to the marked amplitude, which is Lecture 9's $1, 3, 5, 7, \dots$ in course units. But each round also lowers the average a little, so the gains shrink. Eventually the average becomes negative and the marked amplitude starts to <em>fall</em>. The geometric view explains both effects at once.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-geometry">The Geometric View</h2>
+
+    <p>By <a class="ref" href="#lem-two-values"></a>, the $N$-dimensional state only ever moves in a two-dimensional plane. Choosing good coordinates in that plane turns Grover's algorithm into a rotation, and rotations are easy to iterate.</p>
+
+    <div class="env definition" id="def-plane" data-title="The Grover plane">
+      <p>Assume $1 \le t \le N-1$. Define the unit vectors</p>
+      $$\ket{G} = \frac{1}{\sqrt t}\sum_{x\in M}\ket x, \qquad \ket{B} = \frac{1}{\sqrt{N-t}}\sum_{x\notin M}\ket x ,$$
+      <p>the uniform superpositions over the <em>good</em> (marked) and <em>bad</em> (unmarked) strings. They are orthogonal, and span a plane $P$. Let $\theta \in (0, \pi/2)$ be the angle with $\sin\theta = \sqrt{t/N}$. For an angle $\varphi$, write $\ket{\varphi} = \cos\varphi\,\ket B + \sin\varphi\,\ket G$ for the unit vector in $P$ at angle $\varphi$, measured from $\ket B$ towards $\ket G$.</p>
+    </div>
+
+    <p>A state with amplitudes $(a, b)$ as in <a class="ref" href="#lem-two-values"></a> is $a\sqrt t\,\ket G + b\sqrt{N-t}\,\ket B$, a vector in $P$. In particular the starting state is</p>
+    $$\ket s = \sqrt{\tfrac tN}\,\ket G + \sqrt{\tfrac{N-t}{N}}\,\ket B = \sin\theta\,\ket G + \cos\theta\,\ket B = \ket{\theta} .$$
+    <p>The probability that "extract all" prints a marked string, from the state $\ket\varphi$, is the total squared amplitude on marked strings, namely $\sin^2\varphi$. So the goal is to turn the angle from $\theta$ (tiny when $t \ll N$) to about $\pi/2$.</p>
+
+    <div class="env lemma" id="lem-oracle-mirror" data-title="The phase flip is a mirror">
+      <p>On $P$, $O_f$ is the reflection across the line through $\ket B$: $O_f\ket\varphi = \ket{-\varphi}$.</p>
+    </div>
+    <div class="proof" data-of="lem-oracle-mirror">
+      <p>$O_f$ negates every marked basic state, so $O_f\ket G = -\ket G$ and $O_f\ket B = \ket B$. Hence $O_f(\cos\varphi\ket B + \sin\varphi\ket G) = \cos\varphi\ket B - \sin\varphi\ket G = \ket{-\varphi}$.</p>
+    </div>
+
+    <div class="env lemma" id="lem-average-mirror" data-title="ReflectAcrossAverage is a mirror">
+      <p>$D$ maps $P$ to itself, and on $P$ it is the reflection across the line through $\ket s = \ket\theta$: $D\ket\varphi = \ket{2\theta - \varphi}$.</p>
+    </div>
+    <div class="proof" data-of="lem-average-mirror">
+      <p>By <a class="ref" href="#lem-reflect"></a>, $D$ fixes $\ket\theta = \ket s$ and negates everything orthogonal to $\ket s$; in particular it negates $\ket{\theta + \pi/2}$, which lies in $P$ and is orthogonal to $\ket\theta$. Write $\ket\varphi = \cos(\varphi-\theta)\ket\theta + \sin(\varphi - \theta)\ket{\theta+\pi/2}$ (a rotation of coordinates by $\theta$). Applying $D$ gives $\cos(\varphi-\theta)\ket\theta - \sin(\varphi-\theta)\ket{\theta+\pi/2}$, the vector at angle $\theta - (\varphi - \theta) = 2\theta - \varphi$.</p>
+    </div>
+
+    <div class="env lemma" id="lem-rotation" data-title="Two mirrors make a rotation">
+      <p>In a plane, let $R_\beta$ be the reflection across the line at angle $\beta$, so $R_\beta\ket\varphi = \ket{2\beta - \varphi}$. Then $R_\beta R_\gamma$ is the rotation by $2(\beta - \gamma)$: it sends $\ket\varphi$ to $\ket{\varphi + 2(\beta - \gamma)}$.</p>
+    </div>
+    <div class="proof" data-of="lem-rotation">
+      <p>$R_\beta R_\gamma \ket\varphi = R_\beta\ket{2\gamma - \varphi} = \ket{2\beta - 2\gamma + \varphi}$. (The formula $R_\beta\ket\varphi = \ket{2\beta-\varphi}$ is the computation in the proof of <a class="ref" href="#lem-average-mirror"></a> with $\theta$ replaced by $\beta$.)</p>
+    </div>
+
+    <div class="env roadmap">
+      <p>The oracle is the mirror at angle $0$ (<a class="ref" href="#lem-oracle-mirror"></a>) and ReflectAcrossAverage is the mirror at angle $\theta$ (<a class="ref" href="#lem-average-mirror"></a>). By <a class="ref" href="#lem-rotation"></a>, one Grover iteration $DO_f = R_\theta R_0$ is a rotation by $2\theta$. Starting from angle $\theta$, we simply add $2\theta$ per round.</p>
+    </div>
+
+    <div class="env theorem" id="thm-angle" data-title="Grover's algorithm is a rotation">
+      <p>Let $1 \le t \le N - 1$ and $\sin\theta = \sqrt{t/N}$. After $k$ iterations the state is</p>
+      $$(DO_f)^k\ket s \;=\; \sin\big((2k+1)\theta\big)\,\ket G + \cos\big((2k+1)\theta\big)\,\ket B ,$$
+      <p>so "extract all" prints a marked string with probability exactly $\sin^2\big((2k+1)\theta\big)$, and then each marked string is equally likely.</p>
+    </div>
+    <div class="proof" data-of="thm-angle">
+      <p>Induction on $k$. For $k = 0$ the state is $\ket s = \ket\theta$. If after $k$ iterations the state is $\ket{(2k+1)\theta}$, then one more iteration gives $R_\theta R_0\ket{(2k+1)\theta} = \ket{(2k+1)\theta + 2\theta} = \ket{(2k+3)\theta}$ by the three lemmas. The probability statement is the remark after <a class="ref" href="#def-plane"></a>, and the last claim holds because all marked strings share one amplitude.</p>
+    </div>
+
+    <figure class="fig" id="fig-rotation">
+      <div class="widget" data-widget="rotation" data-n="4" data-t="1"></div>
+      <figcaption>The Grover plane. The grey dashed line (the bad direction) is the mirror of "if $f$ then minus"; the blue dashed line through the start state is the mirror of ReflectAcrossAverage. Two reflections make a turn by $2\theta$, the angle between the mirrors doubled. The height of the arrow is the amplitude on the marked direction; its square is the success probability. Keep pressing "One iteration" past $k^*$ to see the state overshoot.</figcaption>
+    </figure>
+
+    <div class="env remark" id="rem-lecture9" data-title="Back to Lecture 9">
+      <p>With one marked string, the amplitude on $\ket{x^*}$ in course units is $\sqrt N \sin((2k+1)\theta)$, and $\theta = \arcsin(1/\sqrt N) \approx 1/\sqrt N$. While $(2k+1)\theta$ is small, $\sin((2k+1)\theta) \approx (2k+1)\theta$, so the amplitude is about $\sqrt N\cdot(2k+1)/\sqrt N = 2k+1$. That is exactly Lecture 9's "basically $1, 3, 5, 7, \dots$". The word "basically" was the small-angle approximation $\sin y \approx y$, which breaks down when the angle nears $\pi/2$: the sine curve flattens, and past $\pi/2$ it decreases.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-examples">Worked Examples</h2>
+
+    <div class="env example" id="ex-n4" data-title="$N = 4$: one iteration is perfect">
+      <p>Take $n = 2$ and one marked string. In course units:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Step</th><th class="num">each unmarked</th><th class="num">marked</th><th class="num">average</th><th class="num">Pr[marked]</th></tr></thead>
+          <tbody>
+            <tr><td>start</td><td class="num">$1$</td><td class="num">$1$</td><td class="num">$1$</td><td class="num">$1/4$</td></tr>
+            <tr><td>if $f$ then minus</td><td class="num">$1$</td><td class="num">$-1$</td><td class="num">$1/2$</td><td class="num">$1/4$</td></tr>
+            <tr><td>ReflectAcrossAverage</td><td class="num">$2\cdot\frac12 - 1 = 0$</td><td class="num">$2\cdot\frac12 + 1 = 2$</td><td class="num">$1/2$</td><td class="num">$1$</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>After one query, all of the squared amplitude ($2^2 = 4 = N$) sits on $x^*$. Geometrically, $\sin\theta = \sqrt{1/4}$ gives $\theta = \pi/6 = 30^\circ$, and one iteration moves the state to $3\theta = 90^\circ$, exactly the marked direction. A classical algorithm needs up to three queries here.</p>
+    </div>
+
+    <div class="env example" id="ex-n8" data-title="$N = 8$: the peak and the overshoot">
+      <p>Take $n = 3$, one marked string, so $\theta = \arcsin(1/\sqrt8) \approx 20.70^\circ$. In course units:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>After</th><th class="num">each unmarked</th><th class="num">marked</th><th class="num">average used</th><th class="num">Pr[marked]</th><th class="num">$\sin^2((2k+1)\theta)$</th></tr></thead>
+          <tbody>
+            <tr><td>$k=0$</td><td class="num">$1$</td><td class="num">$1$</td><td class="num">&mdash;</td><td class="num">$1/8 = 0.125$</td><td class="num">$0.125$</td></tr>
+            <tr><td>$k=1$</td><td class="num">$1/2$</td><td class="num">$5/2$</td><td class="num">$3/4$</td><td class="num">$25/32 \approx 0.781$</td><td class="num">$0.781$</td></tr>
+            <tr><td>$k=2$</td><td class="num">$-1/4$</td><td class="num">$11/4$</td><td class="num">$1/8$</td><td class="num">$121/128 \approx 0.945$</td><td class="num">$0.945$</td></tr>
+            <tr><td>$k=3$</td><td class="num">$-7/8$</td><td class="num">$13/8$</td><td class="num">$-9/16$</td><td class="num">$169/512 \approx 0.330$</td><td class="num">$0.330$</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>For instance, in the second iteration the phase flip gives the marked string $-5/2$, so the average is $\frac{7\cdot\frac12 - \frac52}{8} = \frac18$, and reflecting sends $\frac12 \mapsto \frac14 - \frac12 = -\frac14$ and $-\frac52 \mapsto \frac14 + \frac52 = \frac{11}4$. The squared amplitudes always total $8$. The last column agrees with <a class="ref" href="#thm-angle"></a>: the angles are $62.1^\circ$, $103.5^\circ$ and $144.9^\circ$. The best choice is $k = 2$; a third iteration rotates <em>past</em> the marked direction and the success probability collapses to $0.33$. Notice also that the unmarked amplitudes turn negative: in the picture, the state has crossed the vertical axis.</p>
+    </div>
+
+    <div class="env exercise" id="exer-two-marked">
+      <p>Let $N = 8$ with $t = 2$ marked strings. Show that one iteration finds a marked string with certainty, both by tracking amplitudes and from $\theta$. Then check your answer with <a class="ref" href="#fig-amplitudes"></a> by clicking a second bar.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-complexity">Query Complexity of Search</h2>
+
+    <p><a class="ref" href="#thm-angle"></a> says the success probability is $\sin^2((2k+1)\theta)$. To maximize it we want $(2k+1)\theta$ as close to $\pi/2$ as an integer $k$ allows, so $k \approx \frac{\pi}{4\theta} - \frac12$. Taking the floor of $\pi/(4\theta)$ is a clean choice that never overshoots by more than one step.</p>
+
+    <div class="env theorem" id="thm-grover" data-title="Grover search">
+      <p>Let $1 \le t \le N-1$ be known, let $\sin\theta = \sqrt{t/N}$, and run Grover's algorithm with $k^* = \lfloor \pi/(4\theta)\rfloor$ iterations. Then it outputs a marked string with probability at least $1 - t/N$, using</p>
+      $$k^* \;\le\; \frac{\pi}{4}\sqrt{\frac{N}{t}} \;=\; O\!\left(\sqrt{N/t}\right) \text{ queries.}$$
+    </div>
+    <div class="proof" data-of="thm-grover">
+      <p>By definition of the floor, $\frac{\pi}{4\theta} - 1 \lt k^* \le \frac{\pi}{4\theta}$. Multiplying by $2\theta$ and adding $\theta$:</p>
+      $$\frac\pi2 - \theta \;\lt\; (2k^*+1)\theta \;\le\; \frac\pi2 + \theta .$$
+      <p>So the final angle is within $\theta$ of $\pi/2$, and since $\sin^2$ is symmetric about $\pi/2$ and decreasing in the distance from it (on this range),</p>
+      $$\sin^2\big((2k^*+1)\theta\big) \;\ge\; \sin^2\!\Big(\frac\pi2 - \theta\Big) = \cos^2\theta = 1 - \frac tN .$$
+      <p>For the query count, $\theta \ge \sin\theta = \sqrt{t/N}$, so $k^* \le \pi/(4\theta) \le \frac\pi4\sqrt{N/t}$.</p>
+    </div>
+
+    <p>Compare with <a class="ref" href="#prop-classical"></a>: for one marked string, classical algorithms need about $N$ queries, Grover needs about $0.785\sqrt N$. For $N = 2^{40}$ that is roughly $10^{12}$ versus $8\times10^{5}$.</p>
+
+    <div class="env corollary" id="cor-unique-sat" data-title="Unique-SAT">
+      <p>Unique-SAT on $n$ variables, with $f$ given as code with $L$ lines, can be solved by a quantum algorithm in time $O(L\cdot 2^{n/2})$ with success probability at least $1 - 2^{-n}$.</p>
+    </div>
+    <div class="proof" data-of="cor-unique-sat">
+      <p>Apply <a class="ref" href="#thm-grover"></a> with $t = 1$: $O(\sqrt N) = O(2^{n/2})$ queries, each implemented in $O(L)$ instructions, plus $O(n)$ instructions per iteration for ReflectAcrossAverage. Since $n \le L$, the total is $O(L\cdot 2^{n/2})$. The success probability is at least $1 - 1/N$.</p>
+    </div>
+
+    <figure class="fig" id="fig-success">
+      <div class="widget" data-widget="success" data-n="6"></div>
+      <figcaption>Probability of a marked output after $k$ queries. Grover's algorithm (red) climbs to nearly $1$ at $k^* \approx \frac\pi4\sqrt{N/t}$ and then swings back down. The blue dashed curve is Lecture 9's small-angle estimate $(2k+1)^2 t/N$, accurate only at the start. The green line is the best classical strategy, which gains just $1/N$ per query.</figcaption>
+    </figure>
+
+    <div class="env remark" id="rem-overshoot" data-title="More is not better">
+      <p>Classically, extra queries never hurt. Here they do: the state keeps rotating, so the success probability is periodic in $k$ with period about $\pi/(2\theta)$ iterations, as <a class="ref" href="#fig-success"></a> shows. This is why the algorithm needs to know $t$ (or at least its order of magnitude) to stop at the right time. When $t$ is unknown, choosing the number of iterations <em>at random</em> fixes the problem; we prove this in <a class="ref" href="lecture2.html#lem-random-k"></a> because Part II needs it to search for $\NP$ witnesses.</p>
+    </div>
+
+    <div class="env remark" id="rem-check-lecture9" data-title="Checking Lecture 9's 80% claim">
+      <p>Lecture 9 ran $\lfloor\sqrt N\rfloor$ iterations and claimed success probability at least $80\%$. With <a class="ref" href="#thm-angle"></a> we can test this. For large $N$ the final angle is $(2\lfloor\sqrt N\rfloor + 1)\arcsin(1/\sqrt N) \approx 2$ radians, and $\sin^2 2 \approx 0.827$, so the claim holds in the limit. For small $N$ it can fail because the angle lands a little further past $\pi/2$:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th class="num">$N$</th><th class="num">4</th><th class="num">8</th><th class="num">16</th><th class="num">32</th><th class="num">64</th><th class="num">128</th><th class="num">256</th><th class="num">512</th><th class="num">1024</th></tr></thead>
+          <tbody><tr><td class="num">Pr[success]</td><td class="num">0.250</td><td class="num">0.945</td><td class="num">0.582</td><td class="num">0.860</td><td class="num">0.718</td><td class="num">0.799</td><td class="num">0.776</td><td class="num">0.835</td><td class="num">0.802</td></tr></tbody>
+        </table>
+      </div>
+      <p>The table shows that the lecture's stated $80\%$ guarantee does <em>not</em> hold for every small $N$. Its asymptotic value is $\sin^2 2\approx0.827$, so it does hold for sufficiently large $N$. For a uniform, all-$N$ guarantee, use $k^* = \lfloor\pi/(4\theta)\rfloor$ from <a class="ref" href="#thm-grover"></a> instead.</p>
+    </div>
+
+    <div class="env remark" id="rem-amplification" data-title="Amplitude amplification">
+      <p>Nothing above used the fact that the starting state was uniform. If $A$ is any quantum procedure (with no measurements) whose output is "good" with probability $p$, replace $\ket s$ by $A\ket{0\cdots0}$ and ReflectAcrossAverage by the reflection across $A\ket{0\cdots0}$, which is $A(2\ket{0\cdots0}\!\bra{0\cdots0} - I)A^{-1}$. The same two-mirror argument, with $\sin^2\theta = p$, gives a good output with high probability after $O(1/\sqrt p)$ runs of $A$ and $A^{-1}$, instead of the $O(1/p)$ repetitions needed classically <a class="cite" href="reference.html#bhmt02"></a>. Grover search is the case where $A$ is "Add &amp; Dif all" and $p = t/N$.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-summary">Summary</h2>
+
+    <div class="env takeaways">
+      <ol>
+        <li><strong>Two mirrors make a rotation.</strong> "If $f$ then minus" and ReflectAcrossAverage are reflections of one plane, with mirrors at angle $\theta$, where $\sin\theta = \sqrt{t/N}$. Each iteration turns the state by $2\theta$.</li>
+        <li><strong>Exact formula.</strong> After $k$ iterations the success probability is $\sin^2((2k+1)\theta)$; Lecture 9's $1,3,5,7$ is the small-angle view of it.</li>
+        <li><strong>Quadratic speedup.</strong> About $\frac\pi4\sqrt{N/t}$ queries find a marked string with probability $\ge 1 - t/N$, versus $\Theta(N/t)$ classically.</li>
+        <li><strong>Stop on time.</strong> Unlike classical search, iterating too long hurts, because the rotation overshoots.</li>
+      </ol>
+      <p>This leaves two questions for <a href="lecture2.html">Part II</a>. What does a quadratic speedup for search say about quantum computers and $\NP$? And could a cleverer quantum algorithm beat $\sqrt N$?</p>
+    </div>
+
+    <nav class="page-nav"></nav>
+    <footer class="site-footer">CS455 Fall 2026 &middot; Grover's Algorithm project &middot; <a href="reference.html#references">References</a></footer>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+</body>
+</html>

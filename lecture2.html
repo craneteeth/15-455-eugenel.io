@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Part II: Grover and Complexity Theory · Grover's Algorithm · CS455</title>
+  <meta name="description" content="Part II of the CS455 project on Grover's algorithm: BQP, quantum search for NP, the optimality of Grover's algorithm, and oracle separations.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/katex/katex.min.js"></script>
+  <script defer src="assets/katex/contrib/auto-render.min.js"></script>
+  <script defer src="assets/site-config.js"></script>
+  <script defer src="assets/notes.js"></script>
+  <script defer src="assets/figures.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="course-mark" href="index.html">CS455</a></header>
+
+<div class="layout">
+  <nav class="toolbar"></nav>
+
+  <main class="notes" id="content">
+
+    <div class="title-block">
+      <svg class="title-icon" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="21" y="7" width="39" height="29" rx="3" fill="none" stroke="currentColor" stroke-width="5"/>
+        <circle cx="15" cy="33" r="8" fill="currentColor"/>
+        <path d="M1 61c0-9.5 6.3-16 14-16s14 6.5 14 16z" fill="currentColor"/>
+        <path d="M25 47 38 37" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <h1>Part II: Grover and Complexity Theory</h1>
+      <p class="meta">
+        <span>Course project notes &middot; CS455 Fall 2026</span>
+        <span>Builds on <a href="lecture1.html">Part I</a></span>
+      </p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-intro">Introduction</h2>
+
+    <p><a href="lecture1.html">Part I</a> showed that a quantum computer can search $N$ possibilities with about $\frac\pi4\sqrt N$ evaluations of $f$, where any classical algorithm needs about $N$. This part asks what that means for complexity theory, along three lines.</p>
+
+    <ol>
+      <li><strong>Classes.</strong> Where does efficient quantum computation sit among the classes from this course? We define $\BQP$, place it between $\BPP$ and $\PSPACE$, and turn Grover's algorithm into a statement about $\NP$: every $\NP$ problem with witnesses of length $m$ can be solved in quantum time about $2^{m/2}$.</li>
+      <li><strong>A lower bound we can prove.</strong> A recurring theme of the course is that lower bounds are hard: we cannot even show $\text{SAT}\notin\Ptime$, which is why the reductions lectures settle for <em>conditional</em> lower bounds. In the query model, however, we <em>can</em> prove one. The centerpiece of this part, <a class="ref" href="#thm-bbbv"></a>, shows that every quantum algorithm needs $\Omega(\sqrt N)$ queries for search, so Grover's algorithm is optimal.</li>
+      <li><strong>What it says about $\NP$ versus $\BQP$.</strong> The lower bound gives an oracle relative to which $\NP\not\subseteq\BQP$, strong evidence that quantum computers cannot solve $\NP$-complete problems by brute force. We also see why this kind of evidence can never become a proof, and what else is known about the place of $\BQP$.</li>
+    </ol>
+
+    <div class="env roadmap" data-title="the lower bound">
+      <p>The proof of <a class="ref" href="#thm-bbbv"></a> compares two runs of an arbitrary algorithm: one where a string $x$ is marked and one where nothing is. To answer correctly, the two final states must be far apart (<a class="ref" href="#sec-distance"></a>). Swapping the oracle one query at a time shows the distance is at most the sum of what each query "sees" of $x$ (<a class="ref" href="#sec-hybrid"></a>). Since the algorithm's total attention is spread over $N$ strings, some $x$ gets very little of it (<a class="ref" href="#sec-magnitude"></a>), and for that $x$ the runs stay close unless $T = \Omega(\sqrt N)$.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-bqp">Quantum Computation as a Complexity Class</h2>
+
+    <p>So far we counted queries. Complexity theory instead asks which <em>languages</em> have efficient algorithms. For randomized computation the course defined $\BPP$: polynomial time, with error probability at most $1/3$ on every input. The quantum analogue is defined the same way, with quantum programs in place of randomized ones.</p>
+
+    <div class="env definition" id="def-bqp" data-title="$\BQP$">
+      <p>A language $L$ is in $\BQP$ if there are a polynomial $p$ and a polynomial-time classical algorithm that, given $1^n$, outputs a quantum program $Q_n$ with at most $p(n)$ instructions from the course's instruction set (new qubit, Hadamard, classical reversible instructions such as "if A and B then toggle C", "if A then minus", extract) such that for every $x\in\{0,1\}^n$, when $Q_n$ is run with its first $n$ qubits toggled to $x$ and a designated output qubit is extracted at the end,</p>
+      <ul>
+        <li>if $x\in L$, the output is $1$ with probability at least $2/3$;</li>
+        <li>if $x\notin L$, the output is $1$ with probability at most $1/3$.</li>
+      </ul>
+    </div>
+
+    <p>Two choices in this definition do not matter. As for $\BPP$, the constant $2/3$ can be replaced by $1 - 2^{-n^c}$ by running the program $O(n^c)$ times and taking the majority vote. And any universal instruction set gives the same class, because each can approximate the others efficiently <a class="cite" data-loc="Ch. 4" href="reference.html#nc10"></a>.</p>
+
+    <div class="env theorem" id="thm-inclusions" data-title="Where $\BQP$ sits">
+      $$\BPP \;\subseteq\; \BQP \;\subseteq\; \PP \;\subseteq\; \PSPACE .$$
+      <p>Here $\PP$ is the class of languages decided by polynomial-time randomized algorithms that are correct with probability strictly greater than $1/2$ (with no gap required).</p>
+    </div>
+
+    <div class="proof" data-of="thm-inclusions">
+      <p><strong>$\BPP\subseteq\BQP$.</strong> A $\BPP$ algorithm is a deterministic polynomial-time computation on its input and a string of random bits. A quantum program can produce a fair random bit with "new qubit, Hadamard, extract", and it can run any deterministic computation using classical reversible instructions (the same recipe the course used to turn classical code into "if $f$ then minus").</p>
+      <p><strong>$\BQP\subseteq\PSPACE$.</strong> Let $Q_n$ act on $m$ qubits with instructions $U_1,\dots,U_T$, all qubits created at the start, and extraction at the end. Write $\alpha_j(z)$ for the amplitude of $\ket z$ after $j$ instructions. Then</p>
+      $$\alpha_j(z) = \sum_{y\in\{0,1\}^m} \bra z U_j \ket y\, \alpha_{j-1}(y), \qquad \alpha_0(z) = [z = 0^m] .$$
+      <p>Every instruction touches at most three qubits and has at most two nonzero entries $\bra z U_j\ket y$ for each $z$ (a Hadamard mixes two basic states, a classical reversible instruction permutes them, a phase flip multiplies by $\pm1$), and these entries are easy to compute. So a recursive procedure $\mathrm{Amp}(j, z)$ that calls $\mathrm{Amp}(j-1,y)$ for the at most two relevant $y$ computes $\alpha_T(z)$ exactly, as an integer divided by a power of $\sqrt2$. The recursion has depth $T$ and each level stores $O(m + T)$ bits, so the space is polynomial (the time is exponential, which is fine). Finally, loop over all $z$ whose output qubit is $1$, add up $\alpha_T(z)^2$ reusing the same space, and accept if the sum exceeds $1/2$.</p>
+      <p><strong>$\BQP\subseteq\PP$ and $\PP\subseteq\PSPACE$.</strong> The first is the same "sum over paths" idea, sharpened: the acceptance probability minus $1/2$ is, up to scaling, a difference between two numbers of accepting paths of polynomial-time computations, and deciding the sign of such a difference is exactly what $\PP$ can do <a class="cite" href="reference.html#adh97"></a>. The second holds because a polynomial-space machine can count the accepting random strings of a $\PP$ algorithm one by one.</p>
+    </div>
+
+    <div class="env omitted" data-title="$\BQP\subseteq\PP$">
+      <p>We only sketched this inclusion; the full proof is in <a class="cite" href="reference.html#adh97"></a>. The inclusion $\BPP\subseteq\BQP\subseteq\PSPACE$ is due to Bernstein and Vazirani <a class="cite" href="reference.html#bv97"></a>.</p>
+    </div>
+
+    <p>The picture is in <a class="ref" href="index.html#fig-landscape"></a> on the overview page. Two facts stand out. Quantum computation is not wildly more powerful than classical: everything a quantum computer does in polynomial time can be simulated in polynomial space. And nothing in the theorem relates $\BQP$ to $\NP$. Grover's algorithm is the natural first attempt to relate them.</p>
+
+    <h3 id="sec-grover-np">Grover's algorithm for $\NP$</h3>
+
+    <p>An $\NP$ language $L$ has a polynomial-time verifier $V$: $x\in L$ if and only if $V(x,w) = 1$ for some witness $w\in\{0,1\}^m$, with $m$ polynomial in $\abs x$. Deciding $L$ is a search for a marked $w$, where $f_x(w) = V(x,w)$, so Part I applies with $N = 2^m$. One wrinkle: we do not know the number $t$ of witnesses, and <a class="ref" href="lecture1.html#rem-overshoot"></a> warned that Grover's algorithm needs to know when to stop. The fix is to stop at a <em>random</em> time.</p>
+
+    <div class="env lemma" id="lem-random-k" data-title="Random number of iterations">
+      <p>Let $1 \le t \le N-1$, $\sin\theta = \sqrt{t/N}$, and let $K\ge 1$ be an integer. If Grover's algorithm is run with $k$ iterations, where $k$ is uniform in $\{0,1,\dots,K-1\}$, then it outputs a marked string with probability</p>
+      $$P_K = \frac12 - \frac{\sin(4K\theta)}{4K\sin 2\theta} .$$
+      <p>In particular $P_K \ge 1/4$ whenever $K \ge 1/\sin 2\theta$. (This lemma and its use for unknown $t$ are due to Boyer, Brassard, H&oslash;yer and Tapp <a class="cite" href="reference.html#bbht98"></a>.)</p>
+    </div>
+
+    <div class="proof" data-of="lem-random-k">
+      <p>By <a class="ref" href="lecture1.html#thm-angle"></a> and $\sin^2 y = \frac12(1 - \cos 2y)$,</p>
+      $$P_K = \frac1K\sum_{k=0}^{K-1}\sin^2\big((2k+1)\theta\big) = \frac12 - \frac{1}{2K}\sum_{k=0}^{K-1}\cos\big((2k+1)\alpha\big), \qquad \alpha = 2\theta .$$
+      <p>The identity $2\sin\alpha\cos((2k+1)\alpha) = \sin((2k+2)\alpha) - \sin(2k\alpha)$ makes the sum telescope: $\sum_{k=0}^{K-1}\cos((2k+1)\alpha) = \frac{\sin(2K\alpha)}{2\sin\alpha}$. Substituting $\alpha = 2\theta$ gives the formula (note $\sin 2\theta \gt 0$ since $0\lt\theta\lt\pi/2$). Since $\sin(4K\theta)\le 1$, we get $P_K \ge \frac12 - \frac{1}{4K\sin2\theta} \ge \frac12 - \frac14$ when $K\sin 2\theta\ge 1$.</p>
+    </div>
+
+    <p>The intuition: a random stopping time samples the rotating state at a "random angle", and over a full turn $\sin^2$ averages to $1/2$. The condition on $K$ just says we stop at a range of times long enough to cover a good part of a turn.</p>
+
+    <div class="env theorem" id="thm-grover-np" data-title="Quantum search for $\NP$">
+      <p>Let $L\in\NP$ with verifier $V$ and witness length $m = m(n)$. There is a quantum algorithm that never accepts $x\notin L$, accepts every $x\in L$ with probability at least $2/3$, and runs in time $2^{m/2}\cdot\poly(n)$.</p>
+    </div>
+
+    <div class="proof" data-of="thm-grover-np">
+      <p>Let $N = 2^m \ge 2$ (if $m = 0$ there is nothing to search) and $K = \lceil\sqrt N\rceil$. One <em>round</em> picks $k$ uniformly from $\{0,\dots,K-1\}$, runs Grover's algorithm with $k$ iterations on $f_x$, extracts a string $w$ and accepts if $V(x,w) = 1$. The algorithm runs four rounds and accepts if any round accepts.</p>
+      <p>If $x\notin L$, no $w$ passes the check, so we never accept. If $x\in L$ with $t$ witnesses and $t = N$, every output is a witness. Otherwise $1\le t\le N-1$, and $t(N-t)\ge N-1$, so</p>
+      $$\sin 2\theta = 2\sin\theta\cos\theta = \frac{2\sqrt{t(N-t)}}{N} \;\ge\; \frac{2\sqrt{N-1}}{N} \;\ge\; \frac1{\sqrt N} \quad(N\ge 2),$$
+      <p>hence $K\ge 1/\sin2\theta$ and each round succeeds with probability at least $1/4$ by <a class="ref" href="#lem-random-k"></a>. All four rounds fail with probability at most $(3/4)^4 \lt 1/3$. Each round makes at most $K = O(2^{m/2})$ queries, and each query is a reversible run of $V$, which costs $\poly(n)$.</p>
+    </div>
+
+    <div class="env important" data-title="The question">
+      <p><a class="ref" href="#thm-grover-np"></a> is a genuine speedup, yet still exponential: for SAT on $n$ variables it gives time about $2^{n/2}$, not $\poly(n)$. So it does <em>not</em> put $\NP$ inside $\BQP$. Is $\NP\subseteq\BQP$? Nobody knows, and since $\Ptime\subseteq\BQP$, a proof that $\NP\not\subseteq\BQP$ would in particular prove $\Ptime\ne\NP$. What we <em>can</em> do is show that no algorithm that uses $f$ only as a black box beats Grover. That is the next four sections.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-model">The General Query Model</h2>
+
+    <p>To prove that every algorithm needs many queries, we first fix what "every algorithm" means. We allow anything at all between queries, at no cost.</p>
+
+    <div class="env definition" id="def-query-alg" data-title="$T$-query algorithm">
+      <p>A $T$-query algorithm works on a <em>query register</em> of $n$ qubits, one <em>control</em> qubit and any number of <em>workspace</em> qubits, all starting at $0$. It applies arbitrary unitaries $U_0, U_1, \dots, U_T$ (any instructions not involving $f$) interleaved with $T$ queries, then extracts a designated output qubit. Its final state on $f$ is</p>
+      $$\ket{\psi^f} = U_T\, O_f\, U_{T-1}\, O_f \cdots U_1\, O_f\, U_0 \ket{0\cdots0},$$
+      <p>where the query $O_f$ is "if control and $f(\text{query register})$ then minus": it multiplies the amplitude of each basic state whose query register holds $x$ and whose control is $1$ by $(-1)^{f(x)}$.</p>
+    </div>
+
+    <p>The control qubit makes this model slightly more general than Part I's (fix the control to $1$ to recover "if $f$ then minus"), which only strengthens a lower bound. It also lets an algorithm read off $f(x)$ for a known $x$: put the control in the state $\frac{1}{\sqrt2}(\ket0+\ket1)$ with a Hadamard, query, and apply a Hadamard again; the control then reads $f(x)$.</p>
+
+    <div class="env definition" id="def-or" data-title="The OR problem">
+      <p>In the problem $\OR_N$ the algorithm must decide whether $f:\{0,1\}^n\to\{0,1\}$ has at least one marked string. A $T$-query algorithm <em>decides $\OR_N$ with error at most $1/3$</em> if for every $f$ its output equals $\OR(f)$ with probability at least $2/3$.</p>
+    </div>
+
+    <div class="env remark" id="rem-search-vs-decision" data-title="Deciding is no harder than searching">
+      <p>A search algorithm with $T$ queries gives a decision algorithm with $T+1$ queries: run it, then check its output $x$ with one more query as described above, and answer "marked" exactly when $f(x) = 1$. So a lower bound of $c\sqrt N$ for $\OR_N$ is a lower bound of $c\sqrt N - 1$ for search.</p>
+    </div>
+
+    <p>Two oracles matter in the proof: the empty function $f\equiv 0$, whose query is the identity $I$, and the function $f_x$ marking only $x$, whose query we write $O_x$. Writing $\Pi_x$ for the projection onto basic states whose query register holds $x$ (whatever the other qubits hold), and $\Pi_{x,1}$ for those that also have control $1$,</p>
+    $$O_x = I - 2\,\Pi_{x,1}, \qquad \sum_{x}\Pi_x = I .$$
+
+    <div class="env important" data-title="Why this is strong">
+      <p>The unitaries $U_j$ are completely arbitrary: they may have exponential size and may encode any clever idea. The only restriction is that $f$ is used as a black box. So a lower bound in this model rules out every algorithm that does not look inside $f$.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-distance">Distances Between States</h2>
+
+    <p>We need three facts about vectors in $\R^D$ (or $\mathbb C^D$) that go slightly beyond the course; all are standard. The length is $\norm{v} = \sqrt{\sum_i v_i^2}$. The <em>triangle inequality</em> says $\norm{u + v}\le\norm u + \norm v$. The <em>Cauchy&ndash;Schwarz inequality</em> says $\abs{\sum_i u_i v_i}\le\norm u\,\norm v$; for nonnegative numbers $a_1,\dots,a_T$ it gives in particular $\sum_i a_i \le \sqrt{T}\sqrt{\sum_i a_i^2}$ (take $u = a$ and $v$ the all-ones vector).</p>
+
+    <div class="env definition" id="def-distance" data-title="Distance">
+      <p>The distance between states $\ket\psi$ and $\ket\varphi$ is $\norm{\ket\psi - \ket\varphi}$.</p>
+    </div>
+
+    <div class="env lemma" id="lem-unitary-distance" data-title="Unitaries preserve distance">
+      <p>For every unitary $U$: $\norm{U\ket\psi - U\ket\varphi} = \norm{\ket\psi - \ket\varphi}$.</p>
+    </div>
+    <div class="proof" data-of="lem-unitary-distance">
+      <p>$U\ket\psi - U\ket\varphi = U(\ket\psi - \ket\varphi)$ by linearity, and $U$ preserves lengths (Lecture 7's "unitary": total squared amplitude is unchanged).</p>
+    </div>
+
+    <div class="env lemma" id="lem-close-outcomes" data-title="Close states give close outcomes">
+      <p>Let $\ket\psi,\ket\varphi$ be states with $\norm{\ket\psi - \ket\varphi}\le\varepsilon$. For every set $S$ of outcomes of "extract all", the probabilities of $S$ under $\ket\psi$ and under $\ket\varphi$ differ by at most $\varepsilon$.</p>
+    </div>
+    <div class="proof" data-of="lem-close-outcomes">
+      <p>Let $d_z = \psi_z^2 - \varphi_z^2$ be the difference in the probability of outcome $z$. By Cauchy&ndash;Schwarz and the triangle inequality,</p>
+      $$\sum_z \abs{d_z} = \sum_z \abs{\psi_z - \varphi_z}\,\abs{\psi_z + \varphi_z} \le \norm{\psi - \varphi}\,\norm{\psi + \varphi} \le \varepsilon\cdot 2 .$$
+      <p>Both distributions sum to $1$, so $\sum_z d_z = 0$ and $\sum_{z\in S} d_z = -\sum_{z\notin S}d_z$. Hence $2\abs{\sum_{z\in S}d_z} \le \sum_z\abs{d_z}\le 2\varepsilon$.</p>
+    </div>
+
+    <div class="env intuition">
+      <p>A measurement cannot distinguish states that are close. So to prove an algorithm must make many queries, it suffices to show that with few queries, the final states on two inputs with different answers remain close. Distance is the right currency because unitaries never change it: only queries can create it.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-hybrid">The Hybrid Argument</h2>
+
+    <p>Fix a $T$-query algorithm and a string $x$. We compare the run on $f_x$, ending in $\ket{\psi^x}$, with the run on the empty function, ending in $\ket{\psi^\emptyset}$. The two runs use different oracles at all $T$ queries, which is hard to analyze at once. Instead, we change the oracle one query at a time and charge each change separately.</p>
+
+    <div class="env definition" id="def-hybrids" data-title="Hybrid runs">
+      <p>For $1\le t\le T$, let $\ket{\varphi_t} = U_{t-1}\cdots U_1U_0\ket{0\cdots0}$ be the state of the <em>empty</em> run just before its $t$-th query (in the empty run every query is $I$). For $0\le j\le T$, the hybrid $\ket{H_j}$ is the final state of the run that uses $I$ for the first $j$ queries and $O_x$ for the remaining $T-j$. Thus $\ket{H_0} = \ket{\psi^x}$ and $\ket{H_T} = \ket{\psi^\emptyset}$.</p>
+    </div>
+
+    <div class="env lemma" id="lem-hybrid" data-title="Hybrid argument">
+      $$\norm{\ket{\psi^x} - \ket{\psi^\emptyset}} \;\le\; \sum_{t=1}^T \norm{(O_x - I)\ket{\varphi_t}} .$$
+    </div>
+    <div class="proof" data-of="lem-hybrid">
+      <p>Consecutive hybrids $\ket{H_{t-1}}$ and $\ket{H_t}$ agree on the first $t-1$ queries (both use $I$), so both reach $\ket{\varphi_t}$ just before query $t$. They also agree after query $t$ (both use $O_x$ from then on), so with $V_t = U_T O_x U_{T-1}\cdots O_x U_t$,</p>
+      $$\ket{H_{t-1}} - \ket{H_t} = V_t\,O_x\ket{\varphi_t} - V_t\ket{\varphi_t} = V_t\,(O_x - I)\ket{\varphi_t}.$$
+      <p>By <a class="ref" href="#lem-unitary-distance"></a>, $\norm{\ket{H_{t-1}} - \ket{H_t}} = \norm{(O_x - I)\ket{\varphi_t}}$. Now write $\ket{\psi^x} - \ket{\psi^\emptyset} = \sum_{t=1}^T\big(\ket{H_{t-1}} - \ket{H_t}\big)$ (the sum telescopes) and apply the triangle inequality.</p>
+    </div>
+
+    <div class="env intuition">
+      <p>Notice that only the states $\ket{\varphi_t}$ of the <em>empty</em> run appear on the right. They do not depend on $x$ at all. So one fixed sequence of states controls how far <em>every</em> $f_x$-run can drift, and this is what lets us average over $x$ in the next section.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-magnitude">Query Magnitudes</h2>
+
+    <div class="env definition" id="def-query-magnitude" data-title="Query magnitude">
+      <p>The <em>query magnitude</em> of $x$ at query $t$ is $q_x(t) = \norm{\Pi_x\ket{\varphi_t}}^2$: the probability of seeing $x$ if the query register were measured just before the $t$-th query of the empty run. The <em>total</em> query magnitude of $x$ is $Q_x = \sum_{t=1}^T q_x(t)$.</p>
+    </div>
+
+    <div class="env lemma" id="lem-total-magnitude" data-title="Total attention is $T$">
+      <p>For every $t$, $\sum_x q_x(t) = 1$. Hence $\sum_x Q_x = T$.</p>
+    </div>
+    <div class="proof" data-of="lem-total-magnitude">
+      <p>The projections $\Pi_x$ pick out disjoint sets of basic states that together cover all of them, so $\sum_x\norm{\Pi_x\ket{\varphi_t}}^2 = \norm{\ket{\varphi_t}}^2 = 1$. Summing over $t = 1,\dots,T$ gives $T$.</p>
+    </div>
+
+    <div class="env corollary" id="cor-neglected" data-title="A neglected string">
+      <p>Some $x$ has $Q_x\le T/N$.</p>
+    </div>
+    <div class="proof" data-of="cor-neglected">
+      <p>The $N$ numbers $Q_x$ sum to $T$, so their minimum is at most their average $T/N$.</p>
+    </div>
+
+    <div class="env claim" id="claim-one-query" data-title="One query moves the state by an amplitude">
+      <p>$\norm{(O_x - I)\ket{\varphi_t}} \le 2\sqrt{q_x(t)}$.</p>
+    </div>
+    <div class="proof" data-of="claim-one-query">
+      <p>$O_x - I = -2\,\Pi_{x,1}$, and projecting onto fewer basic states can only shorten a vector, so $\norm{(O_x - I)\ket{\varphi_t}} = 2\norm{\Pi_{x,1}\ket{\varphi_t}}\le 2\norm{\Pi_x\ket{\varphi_t}} = 2\sqrt{q_x(t)}$.</p>
+    </div>
+
+    <div class="env intuition" data-title="where the square root comes from">
+      <p>Classically, an algorithm with fewer than $N$ queries never looks at some string, and therefore cannot know whether that string is marked. Quantumly, an algorithm can look at every string "a little" at each query. But <a class="ref" href="#lem-total-magnitude"></a> says the total amount of looking is still exactly $T$, measured in probability. The catch is that a query changes the state by an <em>amplitude</em>, the square root of that probability (<a class="ref" href="#claim-one-query"></a>). A string that gets probability $T/N$ in total, spread over $T$ queries, gets amplitude about $\sqrt{1/N}$ per query, and $T$ such changes add up to only $T/\sqrt N$. The gap between probabilities and amplitudes is precisely the gap between $N$ and $\sqrt N$.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-bound">The Lower Bound</h2>
+
+    <div class="env theorem" id="thm-bbbv" data-title="Bennett, Bernstein, Brassard, Vazirani">
+      <p>Every quantum algorithm that decides $\OR_N$ with error at most $1/3$ makes at least $\sqrt N/6$ queries. Consequently every quantum search algorithm that succeeds with probability at least $2/3$ makes at least $\sqrt N/6 - 1$ queries.</p>
+    </div>
+
+    <div class="env roadmap">
+      <p>Pick the neglected string $x$ of <a class="ref" href="#cor-neglected"></a>. Bound how far the $f_x$-run drifts from the empty run using <a class="ref" href="#lem-hybrid"></a>, <a class="ref" href="#claim-one-query"></a> and Cauchy&ndash;Schwarz: at most $2T/\sqrt N$. Correctness forces a drift of at least $1/3$ by <a class="ref" href="#lem-close-outcomes"></a>.</p>
+    </div>
+
+    <div class="proof" data-of="thm-bbbv">
+      <p>Let the algorithm make $T$ queries, and choose $x$ with $Q_x\le T/N$ (<a class="ref" href="#cor-neglected"></a>).</p>
+      <p><em>Upper bound on the drift.</em> By <a class="ref" href="#lem-hybrid"></a> and <a class="ref" href="#claim-one-query"></a>, then Cauchy&ndash;Schwarz with $a_t = \sqrt{q_x(t)}$,</p>
+      $$\begin{aligned}\norm{\ket{\psi^x} - \ket{\psi^\emptyset}} &amp;\le 2\sum_{t=1}^T\sqrt{q_x(t)} \;\le\; 2\sqrt T\sqrt{\sum_{t=1}^T q_x(t)} \\ &amp;= 2\sqrt{T\,Q_x} \;\le\; 2\sqrt{T\cdot\frac TN} \;=\; \frac{2T}{\sqrt N}.\end{aligned}$$
+      <p><em>Lower bound on the drift.</em> On the empty function the correct answer is $0$, so the output is $1$ with probability at most $1/3$. On $f_x$ the correct answer is $1$, so the output is $1$ with probability at least $2/3$. These two probabilities of the same event differ by at least $1/3$, so by <a class="ref" href="#lem-close-outcomes"></a>, $\norm{\ket{\psi^x}-\ket{\psi^\emptyset}}\ge 1/3$.</p>
+      <p>Combining, $1/3\le 2T/\sqrt N$, that is, $T\ge\sqrt N/6$. The statement about search follows from <a class="ref" href="#rem-search-vs-decision"></a>.</p>
+    </div>
+
+    <p>It is worth seeing the proof in action on Grover's algorithm itself. In the empty run, ReflectAcrossAverage fixes $\ket s$, so $\ket{\varphi_t} = \ket s$ for every $t$ and every query magnitude is exactly $1/N$: Grover spreads its attention perfectly evenly. The bound then says the two runs end at distance at most $2T/\sqrt N$. In fact, by <a class="ref" href="lecture1.html#thm-angle"></a> the $f_x$-run ends at angle $(2T+1)\theta$ and the empty run stays at angle $\theta$, so their distance is $2\sin(T\theta)\approx 2T/\sqrt N$ for small $T$.</p>
+
+    <figure class="fig" id="fig-distance">
+      <div class="widget" data-widget="distance" data-n="8"></div>
+      <figcaption>Grover's algorithm against the lower-bound argument. Red: the actual distance $2\sin(T\theta)$ between the final states with one string marked and with nothing marked. Blue: the bound $2T/\sqrt N$ from the proof. The dashed line is the distance $1/3$ that any correct algorithm must reach. Grover follows the bound almost exactly at first, so the argument wastes almost nothing.</figcaption>
+    </figure>
+
+    <div class="env remark" id="rem-tight" data-title="Tightness">
+      <p>Combined with <a class="ref" href="lecture1.html#thm-grover"></a>, the quantum query complexity of search is $\Theta(\sqrt N)$. The figure shows why the constant cannot be improved much: Grover's algorithm moves its final state away from the empty run at the maximum rate the argument allows. A finer analysis shows that even the constant $\pi/4$ is optimal <a class="cite" href="reference.html#zal99"></a>.</p>
+    </div>
+
+    <div class="env remark" id="rem-subset" data-title="Only some strings variable">
+      <p>The proof never used that the oracle is defined on all of $\{0,1\}^n$. If $f$ is fixed outside a set $S$ of $N$ strings and the algorithm must decide whether some string of $S$ is marked, the same argument works with $\Pi_x$ for $x\in S$ only: their magnitudes still sum to at most $1$ per query. Queries outside $S$ are fixed unitaries and can be absorbed into the $U_j$. We use this in the oracle construction below.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-consequences">Consequences: Oracles and $\NP$ versus $\BQP$</h2>
+
+    <div class="env corollary" id="cor-black-box-sat" data-title="Black-box SAT">
+      <p>Every quantum algorithm that decides whether a Boolean function on $n$ variables is satisfiable, using the function only through queries, needs at least $2^{n/2}/6$ queries. In particular the algorithm of <a class="ref" href="#thm-grover-np"></a> is optimal among black-box methods, up to a constant factor.</p>
+    </div>
+    <div class="proof" data-of="cor-black-box-sat">
+      <p>This is <a class="ref" href="#thm-bbbv"></a> with $N = 2^n$.</p>
+    </div>
+
+    <p>This does not rule out fast quantum algorithms for SAT that look <em>inside</em> the formula, just as classical algorithms do. Schöning's randomized algorithm for 3-SAT runs in time about $(4/3)^n$, already faster than $2^{n/2}\approx 1.414^n$ <a class="cite" href="reference.html#sch99"></a>; amplitude amplification (<a class="ref" href="lecture1.html#rem-amplification"></a>) speeds it up to about $(4/3)^{n/2}\approx 1.155^n$. Grover's speedup is a <em>layer</em> that can sit on top of clever classical algorithms, not a replacement for them.</p>
+
+    <p>To turn the query lower bound into a statement about classes, we use oracles, as in the course's study of relativization. For a language $A$, $\BQP^A$ is defined like $\BQP$ but with an extra instruction, "if control and $X_1\cdots X_\ell\in A$ then minus", for every register length $\ell$; $\NP^A$ is defined from oracle machines as usual.</p>
+
+    <div class="env theorem" id="thm-oracle" data-title="An oracle separating $\NP$ from $\BQP$">
+      <p>There is a language $A$ such that $\NP^A\not\subseteq\BQP^A$.</p>
+    </div>
+
+    <div class="proof" data-of="thm-oracle">
+      <p>Let $L_A = \{1^n : A \text{ contains some string of length } n\}$. For every $A$, $L_A\in\NP^A$: guess a string $x$ of length $n$ and check $x\in A$ with one query. We construct $A$ so that $L_A\notin\BQP^A$.</p>
+      <p>Enumerate pairs $(G_i, p_i)$ where $G_i$ is a polynomial-time program generator and $p_i(n) = n^i + i$; every $\BQP^A$ language is decided by some $G_i$ whose programs have at most $p_i(n)$ instructions. We build $A$ in stages, deciding at stage $i$ the membership of all strings of lengths up to some bound $\ell_i$, starting with $\ell_0 = 0$.</p>
+      <p><em>Stage $i$.</em> Choose $n_i\gt\ell_{i-1}$ so large that $p_i(n_i)\lt\sqrt{2^{n_i}}/6$. Put no strings of lengths in $(\ell_{i-1}, p_i(n_i)]$ other than $n_i$ into $A$. Now consider the program $Q = G_i(1^{n_i})$ on input $1^{n_i}$. It has at most $p_i(n_i)$ instructions, so it makes at most $p_i(n_i)$ queries, each to strings of length at most $p_i(n_i)$. All those lengths are already decided except $n_i$, so $Q$ is a query algorithm for $\OR$ on the $N = 2^{n_i}$ strings of length $n_i$, in the sense of <a class="ref" href="#rem-subset"></a>. Since it makes fewer than $\sqrt N/6$ queries, <a class="ref" href="#thm-bbbv"></a> says it does not decide $\OR_N$ with error at most $1/3$: either with no string of length $n_i$ in $A$, or with a single such string $x$, it gives the wrong answer with probability more than $1/3$. Fix $A$ at length $n_i$ accordingly, and set $\ell_i = p_i(n_i)$.</p>
+      <p>Later stages only decide strings longer than $\ell_i$, so the run of $Q$ is never changed. Thus for every $i$, the program family $G_i$ errs with probability more than $1/3$ on $1^{n_i}$, so no family decides $L_A$ with bounded error, and $L_A\notin\BQP^A$.</p>
+    </div>
+
+    <div class="env omitted" data-title="Random oracles">
+      <p>Bennett, Bernstein, Brassard and Vazirani prove more: for a <em>uniformly random</em> oracle $A$, with probability $1$, $\NP^A$ is not even contained in quantum time $o(2^{n/2})$ <a class="cite" href="reference.html#bbbv97"></a>. We omit that proof; it combines the same lower bound with a probabilistic argument over the choice of $A$.</p>
+    </div>
+
+    <p>How much does <a class="ref" href="#thm-oracle"></a> tell us about the real (unrelativized) question? The course met the same situation for $\Ptime$ versus $\NP$: Baker, Gill and Solovay found oracles relative to which $\Ptime = \NP$ and others relative to which $\Ptime\ne\NP$ <a class="cite" href="reference.html#bgs75"></a>, so no proof technique that works equally well relative to every oracle can settle it. The same happens here.</p>
+
+    <div class="env proposition" id="prop-pspace-oracle" data-title="An oracle in the other direction">
+      <p>If $B$ is $\PSPACE$-complete, then $\NP^B\subseteq\BQP^B$.</p>
+    </div>
+    <div class="proof" data-of="prop-pspace-oracle">
+      <p>A polynomial-space machine can answer $B$-queries itself, so $\NP^B\subseteq\PSPACE^B = \PSPACE$. Every $\PSPACE$ language reduces to $B$, so $\PSPACE\subseteq\Ptime^B$. And $\Ptime^B\subseteq\BQP^B$, because a quantum program can run a deterministic oracle computation reversibly. Chaining, $\NP^B\subseteq\PSPACE\subseteq\Ptime^B\subseteq\BQP^B$.</p>
+    </div>
+
+    <p>The key logical distinction is <em>query complexity versus time complexity</em>. The proof rules out improved <em>black-box</em> quantum search even with free computation between queries. It does <strong>not</strong> show an exponential time lower bound for an explicitly described SAT formula: an algorithm that exploits the formula's internal structure need not behave like an oracle algorithm.</p>
+
+    <div class="env important" data-title="What the oracle results do and do not show">
+      <p>Together, <a class="ref" href="#thm-oracle"></a> and <a class="ref" href="#prop-pspace-oracle"></a> show that the question "is $\NP\subseteq\BQP$?" cannot be resolved by relativizing arguments. They do not show that $\NP\not\subseteq\BQP$. What they do show is that any quantum algorithm for an $\NP$-complete problem would have to exploit the <em>structure</em> of the problem, since black-box search can only be sped up quadratically. Most complexity theorists take this as strong evidence that $\NP\not\subseteq\BQP$.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-landscape">Beyond $\NP$: Where Might $\BQP$ Sit?</h2>
+
+    <p>This section is a short survey; the results are cited, not proved. Oracle results also point in the other direction, showing what quantum computers <em>can</em> do that classical ones cannot.</p>
+
+    <ul>
+      <li><strong>Quantum beats classical, relative to oracles.</strong> Bernstein and Vazirani gave an oracle problem solvable in $\BQP$ but not in $\BPP$ <a class="cite" href="reference.html#bv97"></a>, built on the Hadamard-transform tricks of Lectures 7&ndash;8 (MysteryToggles is the one-level version). Simon made the gap exponential with an oracle problem about hidden periodicity <a class="cite" href="reference.html#sim97"></a>.</li>
+      <li><strong>Structure gives big speedups.</strong> Simon's idea led to Shor's algorithm, which factors integers in polynomial time on a quantum computer <a class="cite" href="reference.html#sho97"></a>. Factoring is in $\NP\cap\coNP$ and is not believed to be $\NP$-hard, so this is no contradiction with the evidence above: it exploits periodic structure that unstructured search lacks.</li>
+      <li><strong>$\BQP$ versus the polynomial hierarchy.</strong> Raz and Tal constructed an oracle relative to which $\BQP\not\subseteq\mathsf{PH}$ <a class="cite" href="reference.html#rt22"></a>: there are oracle problems a quantum computer solves efficiently that lie outside the entire polynomial hierarchy.</li>
+    </ul>
+
+    <p>So relative to suitable oracles, neither of $\NP$ and $\BQP$ contains the other: $\NP^A\not\subseteq\BQP^A$ for the oracle of <a class="ref" href="#thm-oracle"></a>, and $\BQP^{A'}\not\subseteq\NP^{A'}$ for the Raz&ndash;Tal oracle $A'$, since $\NP\subseteq\mathsf{PH}$. Without oracles, all of these questions are open, and none can be settled by relativizing techniques alone.</p>
+
+    <div class="env remark" id="rem-what-oracles-mean" data-title="Reading oracle results">
+      <p>An oracle separation is a statement about algorithms that treat part of their input as a black box. It identifies which <em>kind</em> of speedup is possible: Grover-type speedups for unstructured problems are at most quadratic, while exponential speedups need structure, like the periodicity in Simon's and Shor's problems.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-other-methods">Other Lower-Bound Methods</h2>
+
+    <p>The hybrid argument is the simplest route to the $\Omega(\sqrt N)$ bound, but not the only one. Both methods below are surveyed without proof.</p>
+
+    <ul>
+      <li><strong>The polynomial method.</strong> If an algorithm makes $T$ queries to $f$, its acceptance probability is a real polynomial of degree at most $2T$ in the $N$ bits $f(x)$ <a class="cite" href="reference.html#bbcmw01"></a>. An algorithm deciding $\OR_N$ with error $1/3$ therefore yields a polynomial that approximates $\OR_N$ within $1/3$ everywhere, and every such polynomial has degree $\Omega(\sqrt N)$ <a class="cite" href="reference.html#ns94"></a>. This gives the same bound, and the method extends to many other functions.</li>
+      <li><strong>The adversary method.</strong> Ambainis's method tracks how much a single query can increase the distinguishability of carefully chosen pairs of inputs <a class="cite" href="reference.html#amb02"></a>. It generalizes the hybrid argument and gives tight bounds for many problems where the polynomial method does not.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="sec-summary">Summary</h2>
+
+    <div class="env takeaways">
+      <ol>
+        <li><strong>$\BQP$ is sandwiched.</strong> $\BPP\subseteq\BQP\subseteq\PP\subseteq\PSPACE$: quantum computers are at most "polynomial-space powerful".</li>
+        <li><strong>Grover for $\NP$.</strong> Any $\NP$ problem with $m$-bit witnesses can be solved in quantum time $2^{m/2}\poly(n)$, a quadratic speedup over brute force that still does not put $\NP$ in $\BQP$.</li>
+        <li><strong>A proven lower bound.</strong> In the black-box model, $\Omega(\sqrt N)$ queries are necessary. The proof: total query attention is $T$, but queries change the state only by amplitudes, its square roots.</li>
+        <li><strong>Evidence, not proof.</strong> There is an oracle with $\NP^A\not\subseteq\BQP^A$ and another with $\NP^B\subseteq\BQP^B$, so relativizing techniques cannot decide whether quantum computers solve $\NP$-complete problems efficiently.</li>
+        <li><strong>Structure is everything.</strong> Unstructured search allows only a quadratic speedup; exponential speedups, like Shor's, need structure.</li>
+      </ol>
+      <p>Across both parts: search needs $\Theta(N)$ queries classically and $\Theta(\sqrt N)$ quantumly. Grover's algorithm achieves the upper bound with two mirrors, and the hybrid argument shows the mirrors cannot be beaten.</p>
+    </div>
+
+    <nav class="page-nav"></nav>
+    <footer class="site-footer">CS455 Fall 2026 &middot; Grover's Algorithm project &middot; <a href="reference.html#references">References</a></footer>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+</body>
+</html>
