@@ -1,5 +1,9 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Grover's Algorithm | Complexity Theory</title><meta name="description" content="Standalone notes on Grover's algorithm, quantum computation and query complexity"><style>/* =====================================================================
+<!DOCTYPE html>
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Grover's Algorithm | Complexity Theory</title><meta content="Standalone notes on Grover's algorithm, quantum computation and query complexity" name="description"/><style>/* =====================================================================
    Grover's Algorithm notes: site styles
    Modeled on the look of the CS455 course notes: dark-red accent,
    light sans headings, serif body, white theorem cards with a soft
@@ -748,8 +752,44 @@ main{min-width:0;grid-column:1;grid-row:3}
 @media(max-width:1090px){.page{display:block;max-width:860px;padding:0 18px}.toc{display:none}main{display:block}}
 @media(max-width:620px){body{font-size:16px}.title-block h1{font-size:2.2rem}.notes h2{font-size:1.65rem}.nav-top a{display:inline-block;margin:3px 10px 3px 0}.notes .env{padding:11px 12px 5px}}
 @media print{.nav-top,.toc,.plain-demo{display:none!important}.page{display:block}.notes .env{box-shadow:none}}
+
+/* Revision: identical menus, same existing academic typography; no side accent bars. */
+.nav-top { display: flex; flex-wrap: wrap; gap: 3px 16px; align-items: baseline; }
+.nav-top a { margin: 0; white-space: nowrap; padding: 2px 0; }
+.toc a { line-height: 1.5; padding: 5px 0; }
+#grover-lab { background: #fff; font-family: var(--sans); }
+#grover-lab .lab-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 24px; margin-bottom: 15px; }
+#grover-lab label { display: flex; flex-direction: column; gap: 5px; font: 14px var(--sans); }
+#grover-lab select, #grover-lab input[type=number] { height: 34px; width: 125px; border: 1px solid #bbb; border-radius: 3px; background: #fff; padding: 4px 8px; color: #222; font: 14px var(--sans); }
+#grover-lab .lab-subline { font: 14px var(--sans); color: #555; padding-bottom: 7px; }
+#grover-lab .lab-iterations { padding: 10px 0 12px; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede; }
+#grover-lab .lab-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font: 14px var(--sans); }
+#grover-lab .lab-row label { display: inline; }
+#grover-lab output { font-variant-numeric: tabular-nums; }
+#grover-lab input[type=range] { display: block; width: 100%; margin: 14px 0; accent-color: #8a171d; cursor: pointer; touch-action: pan-y; }
+#grover-lab .lab-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+#grover-lab button { border: 1px solid #bbb; border-radius: 3px; background: #f9f9f9; color: #292929; padding: 7px 12px; font: 13px var(--sans); cursor: pointer; }
+#grover-lab button:hover, #grover-lab button:focus-visible { background: #f0f0f0; }
+#grover-lab .lab-output { font: 15px/1.6 var(--sans); margin: 9px 0 5px; text-align: left; }
+#grover-lab .demo-small { font: 13px/1.6 var(--sans); color: #555; text-align: left; margin: 5px 0 6px; }
+#grover-lab .lab-viz { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin-top: 18px; }
+#grover-lab .lab-figure { margin: 0; padding: 0 5px; min-width: 0; }
+#grover-lab figcaption { font: 600 14px var(--sans); margin: 0 0 3px; color: #333; }
+#grover-lab svg { display: block; width: 100%; max-width: 390px; height: auto; font-family: var(--sans); }
+#grover-lab .prob-bars { margin: 0 0 9px; }
+#grover-lab .prob-bars .lab-row { margin: 7px 0 3px; }
+#grover-lab .prob-track { height: 9px; border: 1px solid #dedede; background: #fafafa; border-radius: 2px; overflow: hidden; }
+#grover-lab .prob-track div { height: 100%; width: 0; background: #8a171d; transition: width .12s ease; }
+#grover-lab .prob-track div.unmarked { background: #858585; }
+#grover-lab .lab-endnote { margin: 12px 0 0; font: 14px/1.65 var(--sans); text-align: left; }
+@media (max-width: 620px) { .notes table { display: block; overflow-x: auto; max-width: 100%; } }
+@media (max-width: 700px) { #grover-lab .lab-viz { grid-template-columns: 1fr; } #grover-lab svg { margin: 0 auto; } }
+@media (prefers-reduced-motion: reduce) { #grover-lab .prob-track div { transition: none; } }
+
+.notes .table-scroll { max-width: 100%; overflow-x: auto; }
+.notes .table-scroll > table { width: 100%; }
 </style></head>
-<body><div class="page"><header class="site-header" id="top"><a href="#top" class="course-mark">CS455</a></header><nav class="nav-top"><a href="#overview">Overview</a><a href="#quantum-basics">Quantum basics</a><a href="#algorithm">Algorithm</a><a href="#proof-success">Proof</a><a href="#lower-bound">Lower bound</a><a href="#complexity">Complexity</a><a href="#references">References</a></nav><main class="notes" id="content"><div class="title-block">
+<body><div class="page"><header class="site-header" id="top"><a class="course-mark" href="#top">CS455</a></header><nav class="nav-top"><a href="#overview">Introduction</a><a href="#search">Unstructured Search</a><a href="#quantum-basics">Quantum Basics</a><a href="#algorithm">Grover's Algorithm</a><a href="#proof-success">Success Probability</a><a href="#lower-bound">Quantum Query Lower Bound</a><a href="#complexity">Complexity Classes</a><a href="#variations">Variants and Pitfalls</a><a href="#exercises">Exercises</a><a href="#summary">Summary</a><a href="#references">References</a></nav><main class="notes" id="content"><div class="title-block">
 <h1>Grover's Algorithm</h1>
 <p class="meta"><span>CS455 · Complexity Theory</span><span>Quantum search, its optimality, and the limits of black-box computation</span></p>
 </div>
@@ -757,8 +797,6 @@ main{min-width:0;grid-column:1;grid-row:3}
 <h2>Introduction</h2>
 <p>Suppose we are given a Boolean function <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>:</mo><mo stretchy="false">{</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><msup><mo stretchy="false">}</mo><mi>n</mi></msup><mo>→</mo><mo stretchy="false">{</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">f:\{0,1\}^n\to\{0,1\}</annotation></semantics></math></span> and want to find an input <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span> for which <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">f(x)=1</annotation></semantics></math></span>. If we know nothing about the function besides the results of evaluating it, the obvious classical strategy is to test candidate inputs. With <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">N=2^n</annotation></semantics></math></span> possibilities, this takes <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(N)</annotation></semantics></math></span> evaluations in the worst case. Grover's algorithm finds a marked input with bounded error after only <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msqrt><mi>N</mi></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(\sqrt N)</annotation></semantics></math></span> evaluations on a quantum computer. It also comes with a rare kind of completeness result: no quantum algorithm can asymptotically improve the number of black-box evaluations.</p>
 <p>These notes develop both sides of the statement. We begin with the quantum mechanics needed to understand the algorithm, prove its exact success probability, and then prove the matching lower bound. The last part puts the result in context: why it gives a speedup for SAT, why this does <em>not</em> imply that SAT is in BQP, and exactly what an oracle lower bound can tell us.</p>
-<p><strong>Prerequisites.</strong> Familiarity with elementary linear algebra (vectors, matrices, inner products), asymptotic notation, and the definitions of P and NP. No prior background in qubits or quantum circuits is assumed.</p>
-<div class="outline"><strong>Plan.</strong> <a href="#search">The search problem</a> → <a href="#quantum-basics">Quantum foundations</a> → <a href="#algorithm">Grover's iteration</a> → <a href="#proof-success">Success theorem</a> → <a href="#lower-bound">Query lower bound</a> → <a href="#complexity">Complexity classes</a>.</div>
 </section>
 <section id="search">
 <h2>Unstructured Search</h2>
@@ -770,7 +808,7 @@ main{min-width:0;grid-column:1;grid-row:3}
 <p>We will compare the number of calls to the oracle rather than assume each call costs one elementary gate. The distinction matters when <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span> is given by a formula or program: evaluating <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span> may itself require computation.</p>
 </section>
 <section id="quantum-basics">
-<h2>Quantum Computation from First Principles</h2>
+<h2>Quantum Basics</h2>
 <h3 id="qubit">Qubits, amplitudes, and measurement</h3>
 <p>A classical bit is either 0 or 1. A <em>qubit</em> is a unit vector in a two-dimensional complex vector space, customarily written</p>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>ψ</mi><mo stretchy="false">⟩</mo><mo>=</mo><mi>α</mi><mi mathvariant="normal">∣</mi><mn>0</mn><mo stretchy="false">⟩</mo><mo>+</mo><mi>β</mi><mi mathvariant="normal">∣</mi><mn>1</mn><mo stretchy="false">⟩</mo><mo separator="true">,</mo><mspace width="2em"></mspace><mi>α</mi><mo separator="true">,</mo><mi>β</mi><mo>∈</mo><mi mathvariant="double-struck">C</mi><mo separator="true">,</mo><mspace width="1em"></mspace><mi mathvariant="normal">∣</mi><mi>α</mi><msup><mi mathvariant="normal">∣</mi><mn>2</mn></msup><mo>+</mo><mi mathvariant="normal">∣</mi><mi>β</mi><msup><mi mathvariant="normal">∣</mi><mn>2</mn></msup><mo>=</mo><mn>1.</mn></mrow><annotation encoding="application/x-tex">|\psi\rangle=\alpha|0\rangle+\beta|1\rangle,\qquad \alpha,\beta\in\mathbb C,\quad |\alpha|^2+|\beta|^2=1.</annotation></semantics></math></span></div>
@@ -781,12 +819,12 @@ main{min-width:0;grid-column:1;grid-row:3}
 <div class="env unboxed"><div class="env-head">Example (Why phase matters).</div><div class="env-body"><p>The states <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mo>+</mo><mo stretchy="false">⟩</mo><mo>=</mo><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mn>0</mn><mo stretchy="false">⟩</mo><mo>+</mo><mi mathvariant="normal">∣</mi><mn>1</mn><mo stretchy="false">⟩</mo><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><msqrt><mn>2</mn></msqrt></mrow><annotation encoding="application/x-tex">|+\rangle=(|0\rangle+|1\rangle)/\sqrt2</annotation></semantics></math></span> and <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mo>−</mo><mo stretchy="false">⟩</mo><mo>=</mo><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mn>0</mn><mo stretchy="false">⟩</mo><mo>−</mo><mi mathvariant="normal">∣</mi><mn>1</mn><mo stretchy="false">⟩</mo><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><msqrt><mn>2</mn></msqrt></mrow><annotation encoding="application/x-tex">|-\rangle=(|0\rangle-|1\rangle)/\sqrt2</annotation></semantics></math></span> both give a fair coin under a direct measurement. They are not the same state. A later interference operation can distinguish them. Grover's algorithm first changes a sign (a phase) and then converts that change into a larger probability of measuring the desired input.</p></div></div>
 <h3 id="unitary">Reversible operations and basic gates</h3>
 <p>Between measurements, quantum states evolve by a <em>unitary</em> matrix <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi></mrow><annotation encoding="application/x-tex">U</annotation></semantics></math></span> satisfying <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>U</mi><mo>†</mo></msup><mi>U</mi><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">U^\dagger U=I</annotation></semantics></math></span>. Hence <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∥</mi><mi>U</mi><mi mathvariant="normal">∣</mi><mi>ψ</mi><mo stretchy="false">⟩</mo><mi mathvariant="normal">∥</mi><mo>=</mo><mi mathvariant="normal">∥</mi><mi mathvariant="normal">∣</mi><mi>ψ</mi><mo stretchy="false">⟩</mo><mi mathvariant="normal">∥</mi></mrow><annotation encoding="application/x-tex">\|U|\psi\rangle\|=\||\psi\rangle\|</annotation></semantics></math></span>: the total measurement probability remains 1. A quantum operation acts linearly, so the same gate transforms each term of a superposition and adds the results.</p>
-<table class="basic-table"><thead><tr><th>Gate</th><th>Effect</th><th>Role here</th></tr></thead><tbody>
+<div class="table-scroll"><table class="basic-table"><thead><tr><th>Gate</th><th>Effect</th><th>Role here</th></tr></thead><tbody>
 <tr><td>Bit flip <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span></td><td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mi mathvariant="normal">∣</mi><mn>0</mn><mo stretchy="false">⟩</mo><mo>=</mo><mi mathvariant="normal">∣</mi><mn>1</mn><mo stretchy="false">⟩</mo><mo separator="true">,</mo><mtext> </mtext><mi>X</mi><mi mathvariant="normal">∣</mi><mn>1</mn><mo stretchy="false">⟩</mo><mo>=</mo><mi mathvariant="normal">∣</mi><mn>0</mn><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">X|0\rangle=|1\rangle,\ X|1\rangle=|0\rangle</annotation></semantics></math></span></td><td>Reversible computation</td></tr>
 <tr><td>Phase flip <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi></mrow><annotation encoding="application/x-tex">Z</annotation></semantics></math></span></td><td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mi mathvariant="normal">∣</mi><mn>0</mn><mo stretchy="false">⟩</mo><mo>=</mo><mi mathvariant="normal">∣</mi><mn>0</mn><mo stretchy="false">⟩</mo><mo separator="true">,</mo><mtext> </mtext><mi>Z</mi><mi mathvariant="normal">∣</mi><mn>1</mn><mo stretchy="false">⟩</mo><mo>=</mo><mo>−</mo><mi mathvariant="normal">∣</mi><mn>1</mn><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">Z|0\rangle=|0\rangle,\ Z|1\rangle=-|1\rangle</annotation></semantics></math></span></td><td>Change sign without changing the observed bit</td></tr>
 <tr><td>Hadamard <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi></mrow><annotation encoding="application/x-tex">H</annotation></semantics></math></span></td><td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi mathvariant="normal">∣</mi><mn>0</mn><mo stretchy="false">⟩</mo><mo>=</mo><mi mathvariant="normal">∣</mi><mo>+</mo><mo stretchy="false">⟩</mo><mo separator="true">,</mo><mtext> </mtext><mi>H</mi><mi mathvariant="normal">∣</mi><mn>1</mn><mo stretchy="false">⟩</mo><mo>=</mo><mi mathvariant="normal">∣</mi><mo>−</mo><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">H|0\rangle=|+\rangle,\ H|1\rangle=|-\rangle</annotation></semantics></math></span></td><td>Create and interfere with superpositions</td></tr>
 <tr><td>Controlled NOT</td><td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo stretchy="false">⟩</mo><mo>↦</mo><mi mathvariant="normal">∣</mi><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo>⊕</mo><mi>a</mi><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">|a,b\rangle\mapsto|a,b\oplus a\rangle</annotation></semantics></math></span></td><td>Build reversible Boolean circuits</td></tr>
-</tbody></table>
+</tbody></table></div>
 <p>The Hadamard matrix is</p>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mfrac><mn>1</mn><msqrt><mn>2</mn></msqrt></mfrac><mrow><mo fence="true">(</mo><mtable columnalign="center center" columnspacing="1em" rowspacing="0.16em"><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>1</mn></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>1</mn></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>1</mn></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow><mo separator="true">,</mo><mspace width="2em"></mspace><msup><mi>H</mi><mn>2</mn></msup><mo>=</mo><mi>I</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">H=\frac{1}{\sqrt2}\begin{pmatrix}1&amp;1\\1&amp;-1\end{pmatrix},\qquad H^2=I.</annotation></semantics></math></span></div>
 <p>Applying a Hadamard gate to every qubit initialized to zero creates the <em>uniform superposition</em>:</p>
@@ -802,7 +840,7 @@ main{min-width:0;grid-column:1;grid-row:3}
 <p>Importantly, the oracle changes the <em>sign</em> of marked amplitudes, not their magnitudes. Measurement immediately after the phase oracle is no more likely to find a solution than before it. The second operation in Grover's algorithm fixes this.</p>
 </section>
 <section id="algorithm">
-<h2>Grover's Search Algorithm</h2>
+<h2>Grover's Algorithm</h2>
 <h3 id="diffusion">Reflection about the uniform state</h3>
 <p>Define the <em>diffusion operator</em> <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span> by</p>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>2</mn><mi mathvariant="normal">∣</mi><mi>s</mi><mo stretchy="false">⟩</mo><mo stretchy="false">⟨</mo><mi>s</mi><mi mathvariant="normal">∣</mi><mo>−</mo><mi>I</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">D=2|s\rangle\langle s|-I.</annotation></semantics></math></span></div>
@@ -842,7 +880,7 @@ Check f(x); accept x only if f(x) = 1</pre>
 <p>This is not a general guarantee of certainty after one round. It is a special small example. The next theorem gives the probability after any number of iterations.</p>
 </section>
 <section id="proof-success">
-<h2>Exact Success Probability</h2>
+<h2>Success Probability</h2>
 <h3 id="invariant">Why the state stays two-dimensional</h3>
 <p>Suppose <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>M</mi><mo>&lt;</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">0&lt;M&lt;N</annotation></semantics></math></span>. Split the basis into marked and unmarked states and define two normalized vectors:</p>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>G</mi><mo stretchy="false">⟩</mo><mo>=</mo><mfrac><mn>1</mn><msqrt><mi>M</mi></msqrt></mfrac><munder><mo>∑</mo><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn></mrow></munder><mi mathvariant="normal">∣</mi><mi>x</mi><mo stretchy="false">⟩</mo><mo separator="true">,</mo><mspace width="2em"></mspace><mi mathvariant="normal">∣</mi><mi>B</mi><mo stretchy="false">⟩</mo><mo>=</mo><mfrac><mn>1</mn><msqrt><mrow><mi>N</mi><mo>−</mo><mi>M</mi></mrow></msqrt></mfrac><munder><mo>∑</mo><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn></mrow></munder><mi mathvariant="normal">∣</mi><mi>x</mi><mo stretchy="false">⟩</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">|G\rangle=\frac1{\sqrt M}\sum_{f(x)=1}|x\rangle,\qquad |B\rangle=\frac1{\sqrt{N-M}}\sum_{f(x)=0}|x\rangle.</annotation></semantics></math></span></div>
@@ -869,13 +907,75 @@ Check f(x); accept x only if f(x) = 1</pre>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mi mathvariant="normal">Θ</mi><mtext> ⁣</mtext><mrow><mo fence="true">(</mo><msqrt><mfrac><mi>N</mi><mi>M</mi></mfrac></msqrt><mo fence="true">)</mo></mrow><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">t=\Theta\!\left(\sqrt{\frac NM}\right).</annotation></semantics></math></span></div>
 <p>In particular, for a unique marked item <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">M=1</annotation></semantics></math></span>, the query count is <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><msqrt><mi>N</mi></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(\sqrt N)</annotation></semantics></math></span>. If <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>≤</mo><mi>N</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">M\le N/2</annotation></semantics></math></span> and we round to the nearest nonnegative integer, the angular error is at most <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span>, so the success probability is at least <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mi>cos</mi><mo>⁡</mo></mrow><mn>2</mn></msup><mi>θ</mi><mo>=</mo><mn>1</mn><mo>−</mo><mi>M</mi><mi mathvariant="normal">/</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">\cos^2\theta=1-M/N</annotation></semantics></math></span>. If <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>&gt;</mo><mi>N</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">M&gt;N/2</annotation></semantics></math></span>, simply measuring the initial state already succeeds with probability greater than <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">1/2</annotation></semantics></math></span>.</p>
 <p><strong>Why not keep iterating?</strong> After the angle passes <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\pi/2</annotation></semantics></math></span>, the probability decreases again. Grover's algorithm oscillates because all its operations are unitary; it does not monotonically amplify a state forever.</p>
-<h3 id="calculator">Exact numerical check</h3>
-<p>This small calculator evaluates the proven formula. It is numerical only; it does not simulate a quantum computer or require any external library.</p>
-<div class="plain-demo"><div class="demo-controls"><label>Number of qubits <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span> <select aria-label="Number of qubits" id="qubits"><option>2</option><option selected="">3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select></label><label>Marked inputs <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span> <input aria-label="Marked inputs" id="marked" max="7" min="1" step="1" type="number" value="1"/></label><label>Iterations <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span> <input aria-label="Iterations" id="iterations" max="1000" min="0" step="1" type="number" value="2"/></label></div><p aria-live="polite" id="demo-output"></p><p class="demo-small" id="demo-comparison"></p></div>
-<p>For example, if <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">N=8</annotation></semantics></math></span> and <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">M=1</annotation></semantics></math></span>, then <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>0</mn></msub><mo>=</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>8</mn></mrow><annotation encoding="application/x-tex">p_0=1/8</annotation></semantics></math></span>, <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><mn>25</mn><mi mathvariant="normal">/</mi><mn>32</mn></mrow><annotation encoding="application/x-tex">p_1=25/32</annotation></semantics></math></span>, and <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>2</mn></msub><mo>=</mo><mn>121</mn><mi mathvariant="normal">/</mi><mn>128</mn></mrow><annotation encoding="application/x-tex">p_2=121/128</annotation></semantics></math></span>. The best choice here is two iterations. For <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">N=4</annotation></semantics></math></span> and <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">M=1</annotation></semantics></math></span>, one iteration reaches probability 1 exactly.</p>
+<h3 id="calculator">Explore Grover iterations</h3>
+<p>The controls below use the exact formula. Move one iteration at a time, jump to the first peak, or drag the slider. The graphs and two-dimensional state vector update together; no external libraries or figures are required.</p>
+<div aria-label="Grover search interactive geometry" class="plain-demo" id="grover-lab">
+<div class="lab-controls">
+<label for="qubits">Qubits (n)
+      <select id="qubits"><option>2</option><option selected="">3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+</label>
+<label for="marked">Marked states (M)
+      <input id="marked" inputmode="numeric" max="7" min="1" step="1" type="number" value="1"/>
+</label>
+<div class="lab-subline" id="search-space">N = 8 candidates</div>
+</div>
+<div class="lab-iterations">
+<div class="lab-row"><label for="iterations">Grover iterations (t)</label><output for="iterations" id="iter-label">0</output></div>
+<input aria-label="Grover iterations" id="iterations" max="14" min="0" step="1" type="range" value="0"/>
+<div class="lab-buttons">
+<button id="go-prev" type="button">− Previous</button>
+<button id="go-next" type="button">+ Next</button>
+<button id="go-peak" type="button">First peak</button>
+<button id="go-reset" type="button">Reset</button>
+</div>
+<p aria-live="polite" class="lab-output" id="demo-output"></p>
+<p class="demo-small" id="demo-comparison"></p>
+</div>
+<div class="lab-viz">
+<figure class="lab-figure">
+<figcaption>State-vector geometry</figcaption>
+<svg aria-label="Two-dimensional Grover state-vector rotation in the bad and good state basis" id="grover-plane" role="img" viewbox="0 0 390 320">
+<defs><marker id="arr-grover" markerheight="5" markerwidth="5" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M0 0 L10 5 L0 10 z" fill="#8a171d"></path></marker></defs>
+<circle cx="177" cy="161" fill="none" r="115" stroke="#dedede" stroke-width="1.2"></circle>
+<line stroke="#8d8d8d" x1="35" x2="316" y1="161" y2="161"></line>
+<line stroke="#8d8d8d" x1="177" x2="177" y1="303" y2="19"></line>
+<text fill="#444" font-size="12" x="307" y="181">|bad⟩</text>
+<text fill="#444" font-size="12" x="184" y="25">|good⟩</text>
+<line id="initial-vector" stroke="#b9b9b9" stroke-dasharray="5 4" stroke-width="2" x1="177" x2="280" y1="161" y2="112"></line>
+<line id="prev-vector" stroke="#888" stroke-width="1.5" x1="177" x2="280" y1="161" y2="112"></line>
+<line id="current-vector" marker-end="url(#arr-grover)" stroke="#8a171d" stroke-width="3.4" x1="177" x2="280" y1="161" y2="112"></line>
+<circle cx="280" cy="112" fill="#8a171d" id="current-point" r="3.5"></circle>
+<text fill="#555" font-size="12" id="angle-label" x="10" y="313">Initial angle θ</text>
+</svg>
+<p class="demo-small">Dashed: initial state. Gray: previous iteration. Dark red: current state. Every iteration rotates by <span class="math-inline">2θ</span> toward—and eventually beyond—the marked subspace.</p>
+</figure>
+<figure class="lab-figure">
+<figcaption>Probability of measuring a marked input</figcaption>
+<svg aria-label="Success probability as the number of Grover iterations increases" id="grover-curve" role="img" viewbox="0 0 390 255">
+<line stroke="#888" x1="42" x2="42" y1="18" y2="213"></line>
+<line stroke="#888" x1="42" x2="377" y1="213" y2="213"></line>
+<text fill="#444" font-size="12" x="4" y="27">100%</text>
+<text fill="#444" font-size="12" x="22" y="217">0</text>
+<text fill="#444" font-size="12" x="292" y="246">iterations (t)</text>
+<path d="" fill="none" id="curve-path" stroke="#8a171d" stroke-width="2.1"></path>
+<line id="peak-line" stroke="#a3a3a3" stroke-dasharray="4 4" x1="42" x2="42" y1="20" y2="213"></line>
+<circle cx="42" cy="213" fill="#8a171d" id="curve-point" r="5" stroke="white" stroke-width="1.5"></circle>
+<text fill="#555" font-size="12" id="curve-max" text-anchor="end" x="369" y="229">t = 14</text>
+</svg>
+<div aria-label="Success and failure probabilities" class="prob-bars">
+<div class="lab-row"><span>Marked</span><output id="good-percent">0%</output></div>
+<div class="prob-track"><div id="good-bar"></div></div>
+<div class="lab-row"><span>Unmarked</span><output id="bad-percent">0%</output></div>
+<div class="prob-track"><div class="unmarked" id="bad-bar"></div></div>
+</div>
+</figure>
+</div>
+<p class="lab-endnote" id="lab-note">The marked-state probability is the square of the vertical component of the state vector. Unlike ordinary accumulation, quantum amplitude amplification is reversible: another iteration can reduce it.</p>
+</div>
+<p><strong>Why does the probability fall after the peak?</strong> One Grover iteration is the product of two reflections, hence a rotation by <em>twice the initial angle</em> in the plane spanned by the uniform marked and unmarked states. It does not stop at the answer: after the state vector passes the marked axis, its vertical component shrinks. Measurement depends on the square of that component, so the success probability decreases. The state is not being degraded; the unitary operation is simply <em>overshooting</em> its target. The first-peak button selects the integer iteration nearest the first maximum.</p><p>For example, if <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">N=8</annotation></semantics></math></span> and <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">M=1</annotation></semantics></math></span>, then <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>0</mn></msub><mo>=</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>8</mn></mrow><annotation encoding="application/x-tex">p_0=1/8</annotation></semantics></math></span>, <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><mn>25</mn><mi mathvariant="normal">/</mi><mn>32</mn></mrow><annotation encoding="application/x-tex">p_1=25/32</annotation></semantics></math></span>, and <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>2</mn></msub><mo>=</mo><mn>121</mn><mi mathvariant="normal">/</mi><mn>128</mn></mrow><annotation encoding="application/x-tex">p_2=121/128</annotation></semantics></math></span>. The best choice here is two iterations. For <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">N=4</annotation></semantics></math></span> and <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">M=1</annotation></semantics></math></span>, one iteration reaches probability 1 exactly.</p>
 </section>
 <section id="lower-bound">
-<h2>Why Quantum Search Cannot Be Asymptotically Faster</h2>
+<h2>Quantum Query Lower Bound</h2>
 <p>The upper bound explains why Grover's algorithm works. To establish its place in complexity theory, we also want a lower bound: can some other quantum circuit use <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>o</mi><mo stretchy="false">(</mo><msqrt><mi>N</mi></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">o(\sqrt N)</annotation></semantics></math></span> oracle calls? The answer is no. The following theorem is the standard hybrid-argument lower bound for unstructured search, associated with Bennett, Bernstein, Brassard, and Vazirani (BBBV).</p>
 <div class="env boxed"><div class="env-head">Theorem (Quantum search lower bound).</div><div class="env-body"><p>Any quantum algorithm that identifies the unique marked location among <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span> possibilities with probability at least <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi mathvariant="normal">/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">2/3</annotation></semantics></math></span> for every possible marked location uses <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi><mo stretchy="false">(</mo><msqrt><mi>N</mi></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Omega(\sqrt N)</annotation></semantics></math></span> oracle queries.</p><p>In combination with Grover's upper bound, the bounded-error quantum query complexity of unique search is <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><msqrt><mi>N</mi></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(\sqrt N)</annotation></semantics></math></span>.</p></div></div>
 <h3 id="hybrid-setup">The arbitrary quantum query algorithm</h3>
@@ -911,7 +1011,7 @@ Check f(x); accept x only if f(x) = 1</pre>
 <p><strong>What was proved?</strong> The lower bound applies to <em>all quantum algorithms that learn the function through oracle queries</em>, not merely to Grover's specific sequence of reflections. The assumptions are strong enough to allow arbitrary workspace and operations between queries. But they do not rule out using additional structure in an explicit description of <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span>.</p>
 </section>
 <section id="complexity">
-<h2>Grover's Algorithm in Complexity Theory</h2>
+<h2>Complexity Classes</h2>
 <h3 id="classes">P, NP, BPP, and BQP</h3>
 <p>The usual complexity classes describe computational resources as a function of the <em>bit length of the input</em>, not the size of the search space:</p>
 <ul>
@@ -933,19 +1033,19 @@ Check f(x); accept x only if f(x) = 1</pre>
 <div class="eqblock"><span class="katex"><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mtext> ⁣</mtext><mrow><mo fence="true">(</mo><msup><mn>2</mn><mrow><mi>m</mi><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mi>x</mi><mi mathvariant="normal">∣</mi><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup><mtext> </mtext><mi mathvariant="normal">poly</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mi>x</mi><mi mathvariant="normal">∣</mi><mo stretchy="false">)</mo><mo fence="true">)</mo></mrow><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">O\!\left(2^{m(|x|)/2}\,\operatorname{poly}(|x|)\right),</annotation></semantics></math></span></div>
 <p>assuming the verifier can be implemented reversibly with polynomial overhead. Once again, because <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span> is polynomial rather than logarithmic, this need not be polynomial time. The completeness of SAT under polynomial-time many-one reductions is a different kind of statement: it transfers algorithms and conditional hardness among explicitly represented problems. It does not turn the black-box lower bound into an unconditional lower bound for SAT.</p>
 <h3 id="black-box">Two very different notions of complexity</h3>
-<table class="basic-table"><thead><tr><th>Model</th><th>What is counted?</th><th>What can Grover establish?</th></tr></thead><tbody>
+<div class="table-scroll"><table class="basic-table"><thead><tr><th>Model</th><th>What is counted?</th><th>What can Grover establish?</th></tr></thead><tbody>
 <tr><td>Classical query model</td><td>Calls to an unknown <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span></td><td>Unique search needs <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(N)</annotation></semantics></math></span> calls</td></tr>
 <tr><td>Quantum query model</td><td>Coherent calls to <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>O</mi><mi>f</mi></msub></mrow><annotation encoding="application/x-tex">O_f</annotation></semantics></math></span></td><td>Unique search needs <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><msqrt><mi>N</mi></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(\sqrt N)</annotation></semantics></math></span> calls</td></tr>
 <tr><td>Quantum circuit model</td><td>Elementary gates as a function of input length</td><td>Grover provides an upper bound only after accounting for implementing <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>O</mi><mi>f</mi></msub></mrow><annotation encoding="application/x-tex">O_f</annotation></semantics></math></span></td></tr>
 <tr><td>Explicit SAT algorithms</td><td>Runtime on a given formula encoding</td><td>Grover speeds up brute-force witness search, but the query lower bound does not prove a SAT time lower bound</td></tr>
-</tbody></table>
+</tbody></table></div>
 <p>In a query model, the algorithm is deliberately denied any structure except black-box evaluations. By contrast, a SAT solver is given a formula and may exploit its clauses, variable interactions, or other structure. Therefore the <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi><mo stretchy="false">(</mo><msqrt><mi>N</mi></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Omega(\sqrt N)</annotation></semantics></math></span> query theorem does <strong>not</strong> prove that every quantum SAT algorithm requires exponential time. The existence of an efficient quantum algorithm for NP-complete problems remains an open question.</p>
 <h3 id="oracle-separation">Oracle evidence and its limitations</h3>
 <p>Oracle results can illuminate complexity-class relationships without resolving them. The BBBV line of work constructs an oracle relative to which NP is not contained in BQP. Informally, the oracle can hide sufficiently large unstructured search instances that polynomial-time quantum machines cannot solve all of them. This is evidence that the generic black-box route will not place NP inside BQP.</p>
 <p>However, <em>relative to an oracle</em> is not the same as <em>without an oracle</em>. A proof based on treating every input as an opaque black box cannot by itself settle the unrelativized NP-versus-BQP question. This limitation is exactly why the oracle theorem is informative but not a solution to the classical complexity-class separation problem.</p>
 </section>
 <section id="variations">
-<h2>Variants and Common Pitfalls</h2>
+<h2>Variants and Pitfalls</h2>
 <h3>More than one marked element</h3>
 <p>The exact theorem already covers <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">M&gt;1</annotation></semantics></math></span>: the angle is <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mi>arcsin</mi><mo>⁡</mo><msqrt><mrow><mi>M</mi><mi mathvariant="normal">/</mi><mi>N</mi></mrow></msqrt></mrow><annotation encoding="application/x-tex">\theta=\arcsin\sqrt{M/N}</annotation></semantics></math></span>, so fewer iterations are needed when a larger fraction of inputs are marked. When <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">M=N</annotation></semantics></math></span>, every input works and one can simply output any input. The case <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M=0</annotation></semantics></math></span> has no valid output.</p>
 <h3>Unknown number of solutions</h3>
@@ -972,12 +1072,12 @@ Check f(x); accept x only if f(x) = 1</pre>
 </ol>
 </section>
 <section id="summary">
-<h2>What to Remember</h2>
+<h2>Summary</h2>
 <p>Grover's algorithm starts with a uniform superposition, flips the phase of marked states, and reflects the resulting state about the initial superposition. Because the entire process stays in a two-dimensional subspace, one Grover iteration is a rotation by <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>θ</mi></mrow><annotation encoding="application/x-tex">2\theta</annotation></semantics></math></span>, where <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mi>sin</mi><mo>⁡</mo></mrow><mn>2</mn></msup><mi>θ</mi><mo>=</mo><mi>M</mi><mi mathvariant="normal">/</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">\sin^2\theta=M/N</annotation></semantics></math></span>. After <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span> iterations, the exact success probability is <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mi>sin</mi><mo>⁡</mo></mrow><mn>2</mn></msup><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mn>2</mn><mi>t</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\sin^2((2t+1)\theta)</annotation></semantics></math></span>. This leads to <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><msqrt><mrow><mi>N</mi><mi mathvariant="normal">/</mi><mi>M</mi></mrow></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(\sqrt{N/M})</annotation></semantics></math></span> queries when <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span> is small and known.</p>
 <p>The matching <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi><mo stretchy="false">(</mo><msqrt><mi>N</mi></msqrt><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Omega(\sqrt N)</annotation></semantics></math></span> lower bound for unique search uses a different idea: one oracle query cannot make the computations for all possible marked locations substantially different from a no-mark reference computation. Summing the indistinguishability across <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span> possibilities forces at least <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mi>N</mi></msqrt></mrow><annotation encoding="application/x-tex">\sqrt N</annotation></semantics></math></span> queries. Grover is therefore optimal <em>for black-box search</em>, but the NP-versus-BQP question remains open.</p>
 </section>
 <section id="references">
-<h2>References and Notation</h2>
+<h2>References</h2>
 <h3>Primary and supplementary sources</h3>
 <ol class="bib">
 <li id="grover96">L. K. Grover. <em>A Fast Quantum Mechanical Algorithm for Database Search.</em> STOC, 1996. <a href="https://arxiv.org/abs/quant-ph/9605043">arXiv:quant-ph/9605043</a>.</li>
@@ -985,9 +1085,9 @@ Check f(x); accept x only if f(x) = 1</pre>
 <li id="bbht98">M. Boyer, G. Brassard, P. Høyer, and A. Tapp. <em>Tight Bounds on Quantum Searching.</em> Fortschritte der Physik, 1998. <a href="https://arxiv.org/abs/quant-ph/9605034">arXiv:quant-ph/9605034</a>.</li>
 <li id="zalka99">C. Zalka. <em>Grover's Quantum Searching Algorithm Is Optimal.</em> Physical Review A, 1999. <a href="https://arxiv.org/abs/quant-ph/9711070">arXiv:quant-ph/9711070</a>.</li>
 <li id="dewolf">R. de Wolf. <em>Quantum Computing: Lecture Notes.</em> <a href="https://arxiv.org/abs/1907.09415">arXiv:1907.09415</a>. An optional text for more background on the quantum circuit model and query bounds.</li>
-</ol>
+<li id="cmu15459">R. O'Donnell, <em>15-459: Undergraduate Quantum Computation</em>, Carnegie Mellon University, Spring 2026. Spring 2026 lecture notes (background reference for the quantum circuit model and Grover’s algorithm); see the <a href="https://www.csd.cs.cmu.edu/course/15459/s26">Spring 2026 course listing</a> and <a href="https://www.cs.cmu.edu/~odonnell/">instructor's teaching resources</a>. This is supplementary background, not a separately numbered part of these notes.</li></ol>
 <h3>Notation</h3>
-<table class="basic-table"><tbody>
+<div class="table-scroll"><table class="basic-table"><tbody>
 <tr><td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span></td><td>Number of input bits / address qubits</td></tr>
 <tr><td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">N=2^n</annotation></semantics></math></span></td><td>Number of candidate inputs</td></tr>
 <tr><td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span></td><td>Number of marked inputs</td></tr>
@@ -996,26 +1096,84 @@ Check f(x); accept x only if f(x) = 1</pre>
 <tr><td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span></td><td>Diffusion / reflection operator</td></tr>
 <tr><td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo>=</mo><mi>D</mi><msub><mi>O</mi><mi>f</mi></msub></mrow><annotation encoding="application/x-tex">G=DO_f</annotation></semantics></math></span></td><td>One Grover iteration</td></tr>
 <tr><td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi></mrow><annotation encoding="application/x-tex">T</annotation></semantics></math></span></td><td>Number of queries in the lower-bound proof</td></tr>
-</tbody></table>
+</tbody></table></div>
 </section>
 <footer class="site-footer">Grover's Algorithm · CS455 · Standalone lecture notes. <a href="#top">Back to top</a>.</footer>
-</main><aside class="toc" aria-label="On this page"><strong>ON THIS PAGE</strong><a href="#overview">1. Introduction</a><a href="#search">2. Unstructured Search</a><a href="#quantum-basics">3. Quantum Computation from First Principles</a><a href="#algorithm">4. Grover&#x27;s Search Algorithm</a><a href="#proof-success">5. Exact Success Probability</a><a href="#lower-bound">6. Why Quantum Search Cannot Be Asymptotically Faster</a><a href="#complexity">7. Grover&#x27;s Algorithm in Complexity Theory</a><a href="#variations">8. Variants and Common Pitfalls</a><a href="#exercises">9. Exercises</a><a href="#summary">10. What to Remember</a><a href="#references">11. References and Notation</a></aside></div><script>
-(function(){
-  const n=document.getElementById('qubits'),m=document.getElementById('marked'),t=document.getElementById('iterations'),o=document.getElementById('demo-output'),c=document.getElementById('demo-comparison');
-  if(!n||!m||!t||!o)return;
-  function update(){
-    const count=Math.pow(2,Number(n.value));
-    const marked=Math.max(1,Math.min(count,Math.floor(Number(m.value)||1)));
-    m.max=String(count); if(Number(m.value)!==marked)m.value=marked;
-    const iter=Math.max(0,Math.min(1000,Math.floor(Number(t.value)||0)));
-    if(Number(t.value)!==iter)t.value=iter;
-    const th=Math.asin(Math.sqrt(marked/count));
-    const prob=Math.pow(Math.sin((2*iter+1)*th),2);
-    const guess=Math.max(0,Math.round(Math.PI/(4*th)-0.5));
-    const opt=Math.pow(Math.sin((2*guess+1)*th),2);
-    o.textContent='N = '+count+', M = '+marked+', theta = '+th.toFixed(5)+' radians. After '+iter+' iteration'+(iter===1?'':'s')+': success probability = '+(100*prob).toFixed(3)+'%.';
-    c.textContent='Near-optimal iteration count: '+guess+'; its exact success probability is '+(100*opt).toFixed(3)+'%. The oracle is called once per iteration.';
+</main><aside aria-label="On this page" class="toc"><strong>CONTENTS</strong><a href="#overview">Introduction</a><a href="#search">Unstructured Search</a><a href="#quantum-basics">Quantum Basics</a><a href="#algorithm">Grover's Algorithm</a><a href="#proof-success">Success Probability</a><a href="#lower-bound">Quantum Query Lower Bound</a><a href="#complexity">Complexity Classes</a><a href="#variations">Variants and Pitfalls</a><a href="#exercises">Exercises</a><a href="#summary">Summary</a><a href="#references">References</a></aside></div><script>(function(){
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const n=$('qubits'),m=$('marked'),slider=$('iterations');
+  if (!n||!m||!slider) return;
+  let count=8,good=1,theta=0,peak=0,maxT=14,t=0;
+  const fmt=(value,digits=2)=>Number(value).toFixed(digits);
+  const clamp=(x,min,max)=>Math.min(max,Math.max(min,x));
+  const prob = k=>Math.min(1,Math.max(0,Math.sin((2*k+1)*theta)**2));
+  const line = (id,x1,y1,x2,y2)=>{
+    const el=$(id); el.setAttribute('x1',x1);el.setAttribute('y1',y1);el.setAttribute('x2',x2);el.setAttribute('y2',y2);
+  };
+  const pt=(ang)=>({x:177+115*Math.cos(ang),y:161-115*Math.sin(ang)});
+  function drawPlane(){
+    const angle=(2*t+1)*theta;
+    const p=pt(angle),p0=pt(theta),prev=pt((2*Math.max(0,t-1)+1)*theta);
+    line('initial-vector',177,161,p0.x,p0.y);
+    line('prev-vector',177,161,prev.x,prev.y);
+    $('prev-vector').style.display=t===0?'none':'block';
+    line('current-vector',177,161,p.x,p.y);
+    $('current-point').setAttribute('cx',p.x);
+    $('current-point').setAttribute('cy',p.y);
+    $('angle-label').textContent='θ = '+fmt(theta,4)+' rad;  current angle = '+fmt(angle,4)+' rad';
   }
-  [n,m,t].forEach(el=>el.addEventListener('input',update));update();
-})();
-</script></body></html>
+  function drawCurve(){
+    const left=42,top=20,right=377,bottom=213;
+    const xx=k=>left+(right-left)*(k/maxT);
+    const yy=p=>bottom-(bottom-top)*p;
+    const points=[];
+    const divisions=Math.max(240,maxT*14);
+    for(let i=0;i<=divisions;i++){
+      const k=maxT*i/divisions;
+      points.push((i?'L':'M')+fmt(xx(k),2)+' '+fmt(yy(Math.sin((2*k+1)*theta)**2),2));
+    }
+    $('curve-path').setAttribute('d',points.join(' '));
+    const q=prob(t), x=xx(t), y=yy(q);
+    $('curve-point').setAttribute('cx',x);$('curve-point').setAttribute('cy',y);
+    line('peak-line',xx(peak),20,xx(peak),213);
+    $('curve-max').textContent='t = '+maxT;
+  }
+  function update(){
+    const angle=(2*t+1)*theta,p=prob(t);
+    $('iter-label').value=String(t);
+    $('demo-output').textContent='After '+t+' iteration'+(t===1?'':'s')+': success probability '+fmt(100*p,3)+'%.';
+    $('demo-comparison').textContent='N = '+count+', M = '+good+', θ = '+fmt(theta,5)+' rad. First peak near t = '+peak+' ('+fmt(100*prob(peak),3)+'%); one iteration = one oracle call.';
+    $('good-percent').value=fmt(100*p,2)+'%';
+    $('bad-percent').value=fmt(100*(1-p),2)+'%';
+    $('good-bar').style.width=(100*p)+'%';
+    $('bad-bar').style.width=(100*(1-p))+'%';
+    $('lab-note').textContent= t<peak ?
+      'Before the first peak: the marked component grows as the vector rotates toward the |good⟩ axis. Each iteration rotates the state by 2θ.':
+      t===peak ? 'At the first peak: the current state is closest to the |good⟩ axis at an integer iteration, making the marked-state measurement probability near 1.':
+      'Beyond the first peak: the same rotation continues past the |good⟩ axis. The marked component becomes smaller, so success probability decreases (overshooting). Later, probabilities oscillate.';
+    drawPlane();drawCurve();
+  }
+  function setT(x){t=clamp(Math.round(Number(x)||0),0,maxT);slider.value=String(t);update();}
+  function init(){
+    count=2**Number(n.value);
+    m.max=String(count-1);
+    good=clamp(Math.round(Number(m.value)||1),1,count-1);
+    m.value=String(good);
+    theta=Math.asin(Math.sqrt(good/count));
+    peak=Math.max(0,Math.round(Math.PI/(4*theta)-.5));
+    maxT=Math.max(12,Math.min(120,2*peak+8));
+    slider.max=String(maxT);
+    $('search-space').textContent='N = '+count.toLocaleString()+' candidates';
+    setT(0);
+  }
+  n.addEventListener('change',init);
+  m.addEventListener('input',()=>{if(m.value!=='')init()});
+  m.addEventListener('change',init);
+  slider.addEventListener('input',()=>setT(slider.value));
+  $('go-prev').addEventListener('click',()=>setT(t-1));
+  $('go-next').addEventListener('click',()=>setT(t+1));
+  $('go-peak').addEventListener('click',()=>setT(peak));
+  $('go-reset').addEventListener('click',()=>setT(0));
+  init();
+})();</script></body></html>
