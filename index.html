@@ -848,6 +848,73 @@ main{min-width:0;grid-column:1;grid-row:3}
 .study-lab .study-plot-note { font-size: .88em; margin-top: 7px; }
 .study-lab .study-path-stats { font-variant-numeric: tabular-nums; }
 @media (max-width: 700px) { .notes .env-body { overflow-x: auto; } .notes .eqblock { max-width: 100%; overflow-x: auto; } .study-lab { padding: 12px 11px; } .study-lab .study-two { grid-template-columns: 1fr; gap: 9px; } .study-lab .study-prob-row { grid-template-columns: minmax(78px, 1fr) minmax(55px, 1.7fr) 52px; gap: 5px; } .study-lab .amp-row { grid-template-columns: 48px minmax(0, 1fr) 65px; gap: 5px; } }
+
+/* Guided diagrams: intentionally retain the typography and restrained visual language of the notes. */
+.study-lab .study-lead { max-width: 68ch; }
+.study-visual { margin: 13px 0 17px; border: 1px solid #d5d5d5; border-radius: 4px; background: #fff; overflow: hidden; }
+.study-visual .visual-top { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; border-bottom:1px solid #e4e4e4; background:#f8f8f8; padding:10px 14px; font-family:var(--sans); font-size:.86em; }
+.study-visual .visual-top strong { font-size:.98em; font-weight:600; }
+.study-visual .visual-top span { color:#575757; }
+.study-visual .visual-art { padding:14px 14px 7px; }
+.study-visual svg { display:block; width:100%; height:auto; max-height:320px; font-family:var(--sans); overflow:visible; }
+.study-visual .visual-explain { border-top:1px solid #e4e4e4; padding:12px 15px 14px; background:#fcfcfc; }
+.study-visual .visual-explain strong { display:block; font-family:var(--sans); font-size:.90em; margin-bottom:3px; color:#7b2020; }
+.study-visual .visual-explain p { margin:0; text-align:left; font-size:.92em; line-height:1.48; }
+.study-visual .visual-caption { margin:8px 0 4px; text-align:left; color:#666; font-family:var(--sans); font-size:.76em; }
+.study-visual .visual-pills { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
+.study-visual .visual-pill { display:inline-flex; align-items:center; gap:6px; padding:5px 9px; border:1px solid #d8d8d8; border-radius:30px; background:#fff; font: .87em var(--sans); }
+.study-visual .visual-pill b { color:#8a1e1e; font-variant-numeric:tabular-nums; }
+.study-visual .visual-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:10px 0; }
+.study-visual .visual-cell { border:1px solid #dedede; padding:12px; background:#fff; min-width:0; }
+.study-visual .visual-cell h5 { font:600 .9em var(--sans); margin:0 0 8px; }
+.study-visual .visual-cell p { text-align:left; margin:3px 0; font-size:.84em; }
+.study-visual .visual-tiles { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+.study-visual .visual-state-tile { min-height:112px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #dedede; border-radius:4px; gap:4px; transition:background .18s, border-color .18s; }
+.study-visual .visual-state-tile.marked { border:2px solid #8b2828; background:#fff8f8; }
+.study-visual .visual-state-tile .disk { display:flex; align-items:center; justify-content:center; border:2px solid #888; border-radius:50%; transition:width .18s,height .18s; font:600 .87em var(--sans); color:#444; background:#f5f5f5; flex-shrink:0; }
+.study-visual .visual-state-tile .disk.negative { border-style:dashed; color:#8b2828; background:#fff1f1; border-color:#8b2828; }
+.study-visual .visual-state-tile .state-label { font: .81em var(--sans); }
+.study-visual .visual-state-tile .state-prob { font:.75em var(--sans); color:#666; }
+.study-visual .visual-outcome-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; margin-top:8px; }
+.study-visual .visual-outcome { border:1px solid #ddd; padding:13px; text-align:center; }
+.study-visual .visual-outcome .disc { border:2px solid #999; background:#fafafa; border-radius:50%; margin:8px auto; display:flex; justify-content:center; align-items:center; font:600 .95em var(--sans); }
+.study-visual .visual-outcome strong { font:600 .88em var(--sans); }
+.study-visual .visual-outcome small { color:#555; display:block; font:.83em var(--sans); }
+.study-visual .visual-circuit { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:8px 0 12px; }
+.study-visual .visual-circuit .gate { border:1px solid #888; padding:4px 10px; min-width:36px; text-align:center; font:600 .87em var(--sans); background:#fafafa; }
+.study-visual .visual-circuit .arrow { font:1em var(--sans); color:#777; }
+.study-visual .visual-chips { display:flex; align-items:center; justify-content:center; gap:5px; flex-wrap:wrap; margin:8px 0; }
+.study-visual .visual-chips .chip { border:1px solid #777; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font:600 .8em var(--sans); }
+.study-visual .visual-chips .chip.minus { color:#9e2929; border-style:dashed; }
+.study-visual .visual-chips .chip.cancel { opacity:.38; text-decoration:line-through; }
+.study-visual .visual-chips .extra { font:.85em var(--sans); color:#666; }
+.study-visual .visual-figure-actions {display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 5px; }
+.study-visual .visual-figure-actions button {font-family:var(--sans);}
+.study-lab details.numeric-details { margin:12px 0; border-top:1px solid #e2e2e2; padding-top:8px; }
+.study-lab details.numeric-details summary { font: .83em var(--sans); color:#505050; cursor:pointer; padding:4px 0; }
+.study-lab details.numeric-details > *:not(summary) { margin-top:10px; }
+.study-visual .world-progress { display:flex; flex-wrap:wrap; gap:7px; margin:4px 0 8px; }
+.study-visual .world-progress .world-dot { width:9px;height:9px;border-radius:50%;background:#ddd;border:1px solid #bbb; }
+.study-visual .world-progress .world-dot.active {background:#8d2828;border-color:#8d2828;}
+@media (max-width:600px) {
+ .study-visual .visual-art { padding:10px 9px 4px; }
+ .study-visual .visual-grid { grid-template-columns:1fr; }
+ .study-visual .visual-state-tile { min-height:104px; }
+ .study-visual .visual-tiles { gap:5px; }
+ .study-visual .visual-state-tile .state-prob {font-size:.7em}
+ .study-visual .visual-explain {padding:10px;}
+}
+@media (prefers-reduced-motion:reduce) { .study-visual * { animation:none!important;transition:none!important; } }
+
+.study-lab .old-empty-panel { display:none!important; }
+.study-visual .sample-strip { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
+.study-visual .sample-dot { border:1px solid #888; color:#555; background:#f6f6f6; display:inline-grid;place-items:center;width:27px;height:27px;border-radius:50%;font:.78em var(--sans); }
+.study-visual .sample-dot.one { color:#8a2727; border-color:#aa5555; background:#fff2f2; }
+.study-visual .visual-state-tile .disk { animation:visual-appear .33s ease-out both; }
+.study-visual svg { animation:visual-appear .28s ease-out both; }
+@keyframes visual-appear {from{opacity:.55;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:500px){ .study-visual .visual-state-tile .disk {max-width:53px;max-height:53px;} }
+
 </style></head>
 <body><div class="page"><header class="site-header" id="top"><a class="course-mark" href="#top">CS455</a></header><nav class="nav-top"><a href="#overview">Introduction</a><a href="#search">Unstructured Search</a><a href="#quantum-basics">Quantum Basics</a><a href="#algorithm">Grover's Algorithm</a><a href="#proof-success">Success Probability</a><a href="#lower-bound">Quantum Query Lower Bound</a><a href="#complexity">Complexity Classes</a><a href="#variations">Variants and Pitfalls</a><a href="#exercises">Exercises</a><a href="#summary">Summary</a><a href="#references">References</a></nav><main class="notes" id="content"><div class="title-block">
 <h1>Grover's Algorithm</h1>
@@ -1626,4 +1693,187 @@ P_m&amp;=\frac1m\sum_{r=0}^{m-1}\sin^2((2r+1)\theta)\\
   }
 })();
 
-</script></body></html>
+</script><script>
+/* Visual lessons are explanatory interpretations of the formulas above,
+   not numerical evidence for theorems about infinite oracle families. */
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const pct=(x)=>`${(100*x).toFixed(1)}%`;
+const fmt=(x,n=2)=>Number(x).toFixed(n);
+const C={ink:'#333',red:'#8c2727',grey:'#888',soft:'#f5f5f5',rule:'#dddddd',teal:'#396c6a'};
+const ns='http://www.w3.org/2000/svg';
+function svg(w,h,body,desc){return `<svg viewBox="0 0 ${w} ${h}" xmlns="${ns}" role="img" aria-label="${desc}">${body}</svg>`}
+function text(x,y,t,size=15,color=C.ink,anchor='middle',weight='400'){return `<text x="${x}" y="${y}" text-anchor="${anchor}" fill="${color}" font-size="${size}" font-weight="${weight}">${t}</text>`}
+function line(x1,y1,x2,y2,color=C.grey,width=2,dash=''){return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="${width}" ${dash?`stroke-dasharray="${dash}"`:''} />`}
+function circle(x,y,r,fill='white',stroke=C.grey,width=2){return `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="${width}"/>`}
+function arrow(x1,y1,x2,y2,color=C.red,w=2.5){const a=Math.atan2(y2-y1,x2-x1),u=8;return line(x1,y1,x2,y2,color,w)+`<path d="M${x2-u*Math.cos(a-.55)} ${y2-u*Math.sin(a-.55)} L${x2} ${y2} L${x2-u*Math.cos(a+.55)} ${y2-u*Math.sin(a+.55)}" fill="none" stroke="${color}" stroke-width="${w}"/>`}
+function pill(label,value){return `<span class="visual-pill">${label} <b>${value}</b></span>`}
+function makeVis(lab,title,eyebrow,placement){
+ const root=$(lab), v=document.createElement('div');v.className='study-visual';v.id='viz-'+lab;
+ v.innerHTML=`<div class="visual-top"><strong>${title}</strong><span>${eyebrow}</span></div><div class="visual-art"></div><div class="visual-explain" aria-live="polite"><strong>What to notice</strong><p></p></div>`;
+ const host=placement?root.querySelector(placement):root.querySelector('.study-readout');
+ if(host)host.before(v);else root.append(v);
+ return {root,v,art:v.querySelector('.visual-art'),info:v.querySelector('.visual-explain p'),update:(a,b)=>{v.querySelector('.visual-art').innerHTML=a;v.querySelector('.visual-explain p').innerHTML=b;}};
+}
+function tuck(root,ids){const elements=ids.map($).filter(Boolean), d=document.createElement('details');d.className='numeric-details';let s=document.createElement('summary');s.textContent='Show the exact numbers and calculations';d.append(s);elements[0]?.before(d);elements.forEach(e=>d.append(e));return d;}
+function events(root,update){['input','change','click'].forEach(type=>root.addEventListener(type,()=>requestAnimationFrame(update)));}
+
+// 1. Qubit: two outcome disks and a phase arrow, then a gate revealing interference.
+{
+ const q=makeVis('practice-qubit','A qubit is two possibilities with amplitudes','Change the phase; compare the two sides.','#ql-state');
+ const root=q.root;
+ root.querySelector('.study-lead').textContent='The size of an amplitude controls how likely an outcome is. Its phase is a direction, invisible to direct measurement—but visible after amplitudes interfere.';
+ function draw(){
+   const p=Number($('ql-p1').value)/100, a=Math.sqrt(1-p),b=Math.sqrt(p),phi=Number($('ql-phase').value)*Math.PI/180;
+   const after=clamp(.5+a*b*Math.cos(phi));
+   const disc=(prob,label)=>`<div class="visual-outcome"><strong>${label}</strong><div class="disc" style="width:${33+57*Math.sqrt(prob)}px;height:${33+57*Math.sqrt(prob)}px">${pct(prob)}</div><small>chance if measured</small></div>`;
+   const x=148+38*Math.cos(phi),y=72-38*Math.sin(phi);
+   const phase=svg(300,135, circle(148,72,46,'#fff','#aaa',1.5)+line(100,72,198,72,'#ccc',1)+line(148,22,148,122,'#ccc',1)+arrow(148,72,x,y)+text(150,15,'relative phase of |1⟩',12)+text(150,132,`${$('ql-phase').value}°`,13,C.red), 'Phase dial showing a direction, rather than an additional probability');
+   q.update(`<div class="visual-grid"><div class="visual-cell"><h5>Before H · look at the two possibilities</h5><div class="visual-outcome-pair">${disc(1-p,'|0⟩')}${disc(p,'|1⟩')}</div><p>Changing the phase does not change either circle.</p></div><div class="visual-cell"><h5>After H · the amplitudes combine</h5><div class="visual-outcome-pair">${disc(after,'|0⟩')}${disc(1-after,'|1⟩')}</div><p>The circles now depend on relative phase.</p></div></div><div class="visual-grid"><div class="visual-cell"><h5>The phase is like an arrow</h5>${phase}</div><div class="visual-cell"><h5>One operation reveals the hidden difference</h5>${svg(300,135,text(56,57,'|ψ⟩',22)+arrow(94,48,142,48,C.grey)+`<rect x="149" y="23" width="46" height="50" fill="#fff" stroke="#777" stroke-width="2"/>`+text(172,54,'H',22)+arrow(199,48,244,48,C.grey)+text(272,57,'?',21)+text(151,105,'Hadamard mixes the two amplitudes',11), 'Qubit passing through a Hadamard gate')}</div></div>`,Math.abs(p-.5)<1e-9&&($('ql-phase').value==='0'||$('ql-phase').value==='180') ? `Try switching <strong>0° ⇄ 180°</strong>. Both begin with 50%/50%, yet the H gate turns them into opposite definite outcomes. <strong>Phase changes how amplitudes add.</strong>` : `Before H, the measurement chances are ${pct(1-p)} and ${pct(p)}. After H, they are ${pct(after)} and ${pct(1-after)}. H can turn a phase difference into an observable difference.`);
+   const sample=$('ql-samples').textContent;
+   const match=sample.match(/0 appeared (\d+) times, 1 appeared (\d+) times/);
+   if(match){
+     const zero=Number(match[1]),one=Number(match[2]);
+     const tokens=Array.from({length:20},(_,i)=>`<span class="sample-dot ${i<zero?'zero':'one'}">${i<zero?'0':'1'}</span>`).join('');
+     q.art.insertAdjacentHTML('beforeend',`<div class="visual-cell sample-demo"><h5>A batch of 20 actual measurement outcomes</h5><div class="sample-strip">${tokens}</div><p>This random batch gave ${zero} zeros and ${one} ones. Repeated measurements fluctuate even when the underlying probabilities stay fixed.</p></div>`);
+   }
+ }
+ tuck(root,['ql-state','ql-before','ql-after','ql-samples']);root.querySelector('.study-two')?.classList.add('old-empty-panel');
+ const sampleControls=root.querySelectorAll('.study-fields');if(sampleControls.length>1){q.v.before(sampleControls[1]);}q.v.before(root.querySelector('.study-buttons'));
+ events(root,draw);draw();
+}
+// 2. Gates: actual gate sequence plus an amplitude vector on the unit circle.
+{
+ const q=makeVis('practice-gates','Watch the state move through a circuit','The arrow encodes the two real amplitudes.','#gl-state');
+ const root=q.root;
+ root.querySelector('.study-lead').textContent='Each gate changes one state vector. X exchanges the two amplitudes, Z reverses the sign of the |1⟩ amplitude, and H mixes them. Try H → Z → H.';
+ const action=document.createElement('div'); action.className='study-buttons';action.innerHTML='<button type="button" id="visual-gates-demo">Guided experiment: H → Z → H (one step at a time)</button>';
+ root.querySelector('.study-buttons').after(action);
+ let pos=0;const seq=['H','Z','H'];
+ $('visual-gates-demo').addEventListener('click',()=>{if(pos===0)$('gl-reset').click();let g=seq[pos];root.querySelector(`[data-gate="${g}"]`).click();pos=(pos+1)%3;});
+ $('gl-reset').addEventListener('click',()=>{pos=0;});
+ function draw(){
+   const shown=$('gl-state').textContent;
+   const m=[...shown.matchAll(/\(([+-]\d+\.\d+)\)/g)].map(x=>Number(x[1]));
+   const [a,b]=m.length===2?m:[1,0];
+   const history=$('gl-sequence').textContent.split('→').slice(1).map(x=>x.trim()).filter(x=>/^[HXZ]$/.test(x));
+   const px=157+105*b,py=144-105*a;
+   const drawing=svg(350,290,
+     circle(157,144,105,'#fff','#ddd',1.6)+line(30,144,284,144,'#ddd',1.5)+line(157,19,157,265,'#ddd',1.5)+
+     arrow(157,144,px,py,C.red,3.7)+circle(px,py,5,C.red,C.red,1)+text(157,15,'+|0⟩',13)+text(290,141,'+|1⟩',13)+text(157,281,'−|0⟩',13)+text(24,141,'−|1⟩',13,'#444')+
+     text(162,161,'0',11,'#888')+text(280,26,'a = '+fmt(a),11,C.ink,'end')+text(280,43,'b = '+fmt(b),11,C.ink,'end'),
+     'A quantum state represented as a unit vector with signed zero and one amplitudes');
+   const circuit=`<div class="visual-circuit"><span>|0⟩</span>${history.map(g=>`<span class="arrow">→</span><span class="gate">${g}</span>`).join('')}<span class="arrow">→</span><strong>current state</strong></div>`;
+   let note='Begin at |0⟩. Click H to create an even superposition.';
+   const last=history.at(-1);
+   if(last==='H'&&history.length===1)note='H turns one definite outcome into two equal possibilities: 50% each.';
+   else if(history.length===2&&history.slice(-2).join(',')==='H,Z')note='Z changes the sign of the |1⟩ amplitude. You still measure 0 and 1 equally often. The sign is hidden until the next H.';
+   else if(history.slice(-3).join(',')==='H,Z,H')note='The second H combines the amplitudes. One path cancels and the other reinforces: the state is now |1⟩ (up to a global phase).';
+   else if(last==='X')note='X swaps the two amplitudes, as a classical bit flip would swap 0 and 1.';
+   else if(last==='Z')note='Z reflects the |1⟩ component across zero. Probability depends on squared magnitude, so a sign flip alone is not detected by measurement.';
+   else if(last==='H')note='H mixes the existing amplitudes by adding and subtracting them. The result depends on their signs.';
+   q.update(circuit+`<div class="visual-grid"><div class="visual-cell"><h5>Signed amplitude vector (one unit of total length)</h5>${drawing}</div><div class="visual-cell"><h5>If you measure now…</h5><div class="visual-outcome-pair"><div class="visual-outcome"><strong>|0⟩</strong><div class="disc" style="width:${35+64*Math.abs(a)}px;height:${35+64*Math.abs(a)}px">${pct(a*a)}</div></div><div class="visual-outcome"><strong>|1⟩</strong><div class="disc" style="width:${35+64*Math.abs(b)}px;height:${35+64*Math.abs(b)}px">${pct(b*b)}</div></div></div><p>The circle sizes show probabilities; the arrow shows the signed amplitudes that produce them.</p></div></div>`,note);
+ }
+ tuck(root,['gl-state','gl-amps','gl-probs','gl-sequence']);root.querySelector('.study-two')?.classList.add('old-empty-panel');events(root,draw);draw();
+}
+// 3. Oracle and diffusion: one disk for every candidate state.
+{
+ const q=makeVis('practice-oracle','Eight candidate states: see which one grows','Dashed circle = negative amplitude; size = absolute amplitude.','#ol-step');
+ const root=q.root;root.querySelector('.study-lead').textContent='Each circle is a possible input. A dashed circle has negative amplitude. The oracle reverses the target sign; diffusion uses that sign to increase its magnitude.';
+ const stepInfo=()=>Number(($('ol-step').textContent.match(/Operation (\d+)/)||[])[1]||0);
+ function amps(step,target){let a=Array(8).fill(1/Math.sqrt(8));for(let k=1;k<=step;k++){if(k%2)a[target]*=-1;else{const avg=a.reduce((x,y)=>x+y,0)/8;a=a.map(v=>2*avg-v);}}return a;}
+ function draw(){const step=stepInfo(),target=Number($('ol-marked').value),a=amps(step,target);
+   let tiles=a.map((x,i)=>{const d=22+52*Math.abs(x);const p=x*x;return `<div class="visual-state-tile ${i===target?'marked':''}"><span class="state-label">|${i.toString(2).padStart(3,'0')}⟩${i===target?' ★':''}</span><span class="disk ${x<0?'negative':''}" style="width:${d}px;height:${d}px">${x<0?'−':'+'}</span><span class="state-prob">${pct(p)} chance</span></div>`}).join('');
+   const avg=a.reduce((x,y)=>x+y,0)/8;
+   const label=step===0?'All eight circles start the same size.':step%2?'Only the target has changed sign—no measurement probability has changed.':'Diffusion reflects the signed amplitudes across their average. The target circle now has a different size.';
+   const desc=step===0?'The oracle first marks the target by flipping its sign. Click “Next operation”.':step%2?`The oracle changed a + into a − on the marked circle, but its size stayed the same. Next, diffusion converts this sign difference into a magnitude difference.`:`The target has ${pct(a[target]**2)} measurement probability after ${Math.floor(step/2)} full Grover iteration(s). More repetitions can eventually overshoot the optimal point.`;
+   q.update(`<div class="visual-pills">${pill('Step',step===0?'Start':(step%2?'Oracle':'Diffusion'))}${pill('Marked state','|'+target.toString(2).padStart(3,'0')+'⟩')}${pill('Mean signed amplitude',fmt(avg,3))}</div><div class="visual-tiles">${tiles}</div><p class="visual-caption">${label} The ★ marks the known answer in this teaching illustration (the algorithm itself does not know its address).</p>`,desc);
+ }
+ tuck(root,['ol-step','ol-amplitudes','ol-prob']);events(root,draw);draw();
+}
+// 4. Hybrid: partition an abstract population into guaranteed-close and not-guaranteed fractions.
+{
+ const q=makeVis('practice-hybrid','How much can Q queries possibly reveal?','Each little square represents about 1% of all addresses.','#hl-result');
+ const root=q.root;root.querySelector('.study-lead').textContent='A machine that makes very few queries cannot become noticeably different for every possible marked address. This diagram shows a mathematical guarantee, not which addresses the machine has actually learned.';
+ function draw(){const N=Number($('hl-n').value),Q=Number($('hl-q').value),delta=Number($('hl-eps').value);const possible=clamp(4*Q*Q/(N*delta*delta));const guaranteed=1-possible;
+   let sq='';for(let i=0;i<100;i++){const col=i%10,row=Math.floor(i/10),x=72+col*36,y=26+row*24;const below=i<Math.floor(100*guaranteed+1e-9);sq+=`<rect x="${x}" y="${y}" width="27" height="17" rx="2" fill="${below?'#e1e7e5':'#fff4f4'}" stroke="${below?'#76918a':'#b65b5b'}" stroke-dasharray="${below?'':'3 2'}"/>`;}
+   const art=svg(510,295,text(255,16,'A population of possible hidden marked addresses',14)+sq+text(220,283,`Guaranteed-close fraction ≥ ${pct(guaranteed)}`,14,C.teal), 'One hundred schematic boxes divide marked addresses into a provably small state-distance fraction and a fraction without a guarantee');
+   q.update(art+`<div class="visual-pills">${pill('Search space','N = '+N)}${pill('Queries','Q = '+Q)}${pill('Guaranteed Δ&lt;δ','at least '+pct(guaranteed))}</div><p class="visual-caption">Solid muted boxes indicate a lower bound on the fraction with Δⱼ &lt; δ. Dashed boxes have no such guarantee. Their positions are arbitrary, not specific marked addresses.</p>`,possible>=1?'At this setting the general inequality is too weak to guarantee that any particular fraction has small state distance. This does <em>not</em> mean all addresses have been found.':`At least ${pct(guaranteed)} of marked-address choices must produce final states within distance δ=${fmt(delta,2)} of the empty-oracle state. Thus a machine using only Q=${Q} queries cannot reliably distinguish all possible marked addresses. The threshold for a nontrivial bound scales as √N.`);
+ }
+ tuck(root,['hl-result','hl-bars']);events(root,draw);draw();
+}
+// 5. Sum-over-paths: a split-and-recombine circuit and signed chips that cancel.
+{
+ const q=makeVis('practice-paths','Quantum paths split, then recombine','Follow two successive H gates.','#pl-count');
+ const root=q.root;root.querySelector('.study-lead').textContent='A quantum gate lets multiple histories contribute to the same final answer. The histories carry signs: matching signs reinforce, opposite signs cancel. Add amplitudes first, square only at the end.';
+ function compute(h){let c=[[0,0],[0,0]];for(let mask=0;mask<2**h;mask++){let prev=0,negative=false;for(let k=0;k<h;k++){let bit=(mask>>(h-k-1))&1;if(prev&&bit)negative=!negative;prev=bit;}c[prev][negative?1:0]++;}return c;}
+ function draw(){const h=Number($('pl-h').value),c=compute(h),total=2**h;
+   const amp=j=>(c[j][0]-c[j][1])/Math.sqrt(total);
+   // The branching picture intentionally isolates the final two-gate motif.
+   const visual=svg(550,236,
+   text(48,35,'start |0⟩',13)+circle(53,110,24,'#fff','#777')+text(53,115,'0',20)+
+   arrow(78,102,201,56,C.grey,1.9)+arrow(78,115,201,165,C.grey,1.9)+circle(225,55,22,'#fff','#888')+text(225,60,'0',18)+circle(225,166,22,'#fff','#888')+text(225,172,'1',18)+
+   arrow(249,55,427,55,C.teal,2)+arrow(249,65,426,159,C.teal,2)+arrow(249,160,426,65,C.teal,2)+arrow(249,166,426,166,C.red,2)+
+   circle(453,55,24,'#fff','#777')+text(453,60,'0',18)+circle(453,166,24,'#fff','#777')+text(453,171,'1',18)+
+   text(330,42,'+',17,C.teal)+text(335,110,'+',17,C.teal)+text(330,81,'+',17,C.teal)+text(333,189,'−',17,C.red)+
+   text(223,10,'after first H',12)+text(454,13,'after second H',12)+text(274,228,'Opposite-sign contributions cancel at |1⟩',12),
+   'Two Hadamard gates create four basis histories. Two positive paths contribute to zero, while a positive and negative path cancel at one.');
+   const chips=j=>{let [pos,neg]=c[j];const x=pos+neg;let pieces='';for(let z=0;z<Math.min(pos,5);z++)pieces+='<span class="chip '+(z<neg?'cancel':'')+'">+</span>';for(let z=0;z<Math.min(neg,5);z++)pieces+='<span class="chip minus '+(z<pos?'cancel':'')+'">−</span>';if(x>10)pieces+=`<span class="extra">… ${x} paths total</span>`;return pieces;};
+   let cards='<div class="visual-grid">';for(let j=0;j<2;j++)cards+=`<div class="visual-cell"><h5>All paths ending at |${j}⟩</h5><div class="visual-chips">${chips(j)}</div><p>${c[j][0]} positive and ${c[j][1]} negative contributions → net amplitude ${fmt(amp(j),3)} → probability ${pct(amp(j)**2)}</p></div>`;cards+='</div>';
+   q.update(visual+`<p class="visual-caption">The branching drawing shows the interference mechanism using two H gates; the signed chips below count <strong>all</strong> histories for the selected ${h} gates.</p>`+cards,h%2===0?`After ${h} H gates the state returns to |0⟩, because H² = I. The paths to |1⟩ cancel. A classical probability calculation would miss this sign cancellation.`:`After ${h} H gates the state is H|0⟩, so both outcomes have 50% probability. Even here, many individual histories cancel before you square the final amplitudes.`);
+ }
+ tuck(root,['pl-count','pl-stats','pl-probs','pl-examples']);root.querySelector('.study-two')?.classList.add('old-empty-panel');events(root,draw);draw();
+}
+// 6. Complexity comparison: show the area-versus-side picture, not a misleading visited-candidates diagram.
+{
+ const q=makeVis('practice-scaling','Why does square-root speedup matter?','Area = N; side length = √N (schematic).','#sl-text');
+ const root=q.root;root.querySelector('.study-lead').textContent='Imagine arranging N possible inputs into a square. The number of tiles is N, but the side length is √N. Grover’s query count grows like the side length rather than the area.';
+ function draw(){const n=Number($('sl-n').value),N=2**n,rootN=Math.sqrt(N);let cells='';const k=8;
+   for(let row=0;row<k;row++)for(let col=0;col<k;col++)cells+=`<rect x="${110+col*25}" y="${29+row*25}" width="21" height="21" fill="${(row+col)%2?'#f0f0f0':'#f8f8f8'}" stroke="#bbb"/>`;
+   const visual=svg(440,274,cells+line(105,18,307,18,C.red,2)+line(105,14,105,22,C.red,2)+line(307,14,307,22,C.red,2)+text(206,12,'side ∝ √N',12,C.red)+line(82,27,82,228,C.grey,2)+line(76,27,88,27,C.grey)+line(76,228,88,228,C.grey)+text(67,132,'N',16,C.ink)+text(210,255,'Total tiles ∝ N (area)',13), 'A square grid shows its side growing as the square root of its total area');
+   q.update(visual+`<div class="visual-pills">${pill('n',String(n)+' bits')}${pill('N','2^'+n+' inputs')}${pill('Classical worst case',N.toLocaleString()+' calls')}${pill('Quantum',`about ${Math.round(Math.PI/4*rootN).toLocaleString()} calls`)}</div><p class="visual-caption">The grid is an analogy for growth rates. Grover does <strong>not</strong> inspect one row of candidate inputs; it queries a superposition of all inputs.</p>`, `Adding two more input bits multiplies the number of candidates—and the classical worst-case query count—by 4. Grover's query count grows by only a factor of about 2. Both remain exponential in n, so this speedup alone does not make SAT polynomial-time.`);
+ }
+ tuck(root,['sl-text','sl-bars']);events(root,draw);draw();
+}
+// 7. Oracle worlds: set picture, guided proof-reveal buttons and counterexample point.
+{
+ const q=makeVis('practice-worlds','Two oracle worlds, two different answers','Press “Next proof step” to reveal the reasoning.','#wl-result');
+ const root=q.root;root.querySelector('.study-lead').textContent='An oracle is an imaginary black-box subroutine. Changing this black box can change which complexity classes contain others. The diagrams show class containment, not time evolution.';
+ let stage=0,lastWorld='a';
+ const actions=document.createElement('div');actions.className='study-buttons';actions.innerHTML='<button id="visual-world-next" type="button">Next proof step →</button><button id="visual-world-reset" type="button">Start proof over</button>';q.v.append(actions);
+ $('visual-world-next').addEventListener('click',()=>{stage++;draw()});$('visual-world-reset').addEventListener('click',()=>{stage=0;draw()});
+ const A=['List explicitly clocked polynomial-time quantum oracle machines.','For one machine, choose a fresh length n where 2ⁿ dwarfs its polynomial query budget.','The hybrid lemma leaves some marked address indistinguishable from an empty oracle at this length.','Set the oracle to defeat that machine; repeat at fresh lengths. The witness-existence language belongs to NPᴬ but not BQPᴬ.'];
+ const B=['Choose B to be PSPACE-complete under polynomial-time reductions.','A classical polynomial-time machine can decide any PSPACE language with one reduction and queries to B: PSPACE ⊆ Pᴮ.','B itself is in PSPACE, so Pᴮ, NPᴮ and BQPᴮ all lie within PSPACE.','The containments collapse: Pᴮ = NPᴮ = BQPᴮ = PSPACE.'];
+ function draw(){const world=$('wl-b').getAttribute('aria-pressed')==='true'?'b':'a';if(world!==lastWorld){stage=0;lastWorld=world;}const steps=world==='a'?A:B;stage=Math.min(stage,steps.length);
+   const graph=world==='a'?svg(510,230,`<ellipse cx="196" cy="118" rx="125" ry="82" fill="#eef1ef" stroke="#5d7772" stroke-width="2"/><ellipse cx="328" cy="118" rx="125" ry="82" fill="#fff2f2" stroke="#9d5353" stroke-width="2"/>`+text(142,85,'NPᴬ',21,C.ink)+text(390,85,'BQPᴬ',21,C.ink)+circle(143,133,7,C.red,C.red)+text(142,163,'witness language',13,C.red)+text(258,218,'The red point is in NPᴬ, but outside BQPᴬ.',13), 'Overlapping complexity class regions with a witness in NP A outside BQP A') :svg(510,230,circle(255,115,91,'#f3f5f3','#687e75',2.5)+text(255,74,'PSPACE',20)+text(255,105,'Pᴮ',18)+text(255,132,'NPᴮ',18)+text(255,159,'BQPᴮ',18)+text(255,218,'All four classes coincide in world B.',13), 'One complexity class circle labelled PSPACE, P to the B, NP to the B, and BQP to the B');
+   const done=steps.slice(0,stage).map((x,i)=>`<p><strong>${i+1}.</strong> ${x}</p>`).join('');
+   const progress=`<div class="world-progress" aria-label="${stage} of ${steps.length} proof steps completed">${steps.map((_,i)=>`<span class="world-dot ${i<stage?'active':''}"></span>`).join('')}</div>`;
+   q.update(graph+`<div class="visual-cell"><h5>${world==='a'?'A: a separation by diagonalization':'B: a collapse with a powerful oracle'}</h5>${progress}${done||'<p>No steps revealed yet. Click “Next proof step”.</p>'}</div>`,stage===steps.length?`This is a statement about <em>relativized</em> complexity classes. It does not settle the ordinary NP-versus-BQP question.`:`The diagram previews the end result. Reveal each proof step to see why a single oracle can make that relationship hold.`);
+   $('visual-world-next').disabled=stage===steps.length;
+ }
+ tuck(root,['wl-result','wl-steps']);events(root,draw);draw();
+}
+// 8. Unknown solution counts: spin-to-choose a Grover iteration count.
+{
+ const q=makeVis('practice-random','Do not guess one stopping point: draw a random one','Rotate the pointer by sampling r from 0,…,m−1.','.study-two');
+ const root=q.root;root.querySelector('.study-lead').textContent='When the number of marked answers is unknown, the best stopping time is unknown too. Instead of trusting one guess, draw a random number of Grover iterations, measure, verify, and widen the choice range after failure.';
+ function sector(cx,cy,r1,r2,start,end,fill){let p=(r,a)=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];let [x1,y1]=p(r2,start),[x2,y2]=p(r2,end),[x3,y3]=p(r1,end),[x4,y4]=p(r1,start);let large=end-start>Math.PI?1:0;return `<path d="M${x1} ${y1} A${r2} ${r2} 0 ${large} 1 ${x2} ${y2} L${x3} ${y3} A${r1} ${r1} 0 ${large} 0 ${x4} ${y4} Z" fill="${fill}" stroke="#fff" stroke-width="1.5"/>`}
+ function draw(){const N=Number($('rl-n').value),M=Number($('rl-m').value),m=Number($('rl-range').value),theta=Math.asin(Math.sqrt(M/N));const P=r=>Math.sin((2*r+1)*theta)**2;
+   const trial=$('rl-trial-text').textContent;const match=trial.match(/Sampled r = (\d+)/);const chosen=match?Number(match[1]):m-1;
+   let wheel='';for(let i=0;i<m;i++){let start=-Math.PI/2+(i/m)*2*Math.PI,end=-Math.PI/2+((i+1)/m)*2*Math.PI,val=P(i);const grey=Math.round(246-68*val);const fill=`rgb(${grey},${Math.round(grey-18*val)},${Math.round(grey-18*val)})`;wheel+=sector(180,160,51,124,start,end,fill);if(m<=12){let a=(start+end)/2;wheel+=text(180+90*Math.cos(a),164+90*Math.sin(a),i,14,C.ink)}}
+   let a=-Math.PI/2+(chosen+.5)*Math.PI*2/m;const px=180+116*Math.cos(a),py=160+116*Math.sin(a);wheel+=circle(180,160,50,'#fff','#999',1.8)+arrow(180,160,px,py,C.red,3)+text(180,149,'r = '+chosen,18,C.ink)+text(180,172,pct(P(chosen)),15,C.red);wheel+=text(180,17,'Each slice is a possible iteration count',12);
+   const drawWheel=svg(360,310,wheel,'Wheel of possible iteration counts with arrow pointing to the chosen count; wedge darkness represents success probability');
+   const alpha=(2*chosen+1)*theta,good=Math.sin(alpha),bad=Math.cos(alpha),ax=130+93*good,ay=132-93*bad;
+   const rotation=svg(300,245,circle(130,132,94,'#fff','#ddd',2)+line(130,38,130,227,'#ccc',1.2)+line(38,132,227,132,'#ccc',1.2)+arrow(130,132,ax,ay,C.red,3)+circle(ax,ay,5,C.red,C.red)+text(130,22,'|B⟩ (not marked)',12)+text(254,127,'|G⟩',13,C.red)+text(149,231,'Rotate too far → probability falls',12), 'Two dimensional Grover state vector rotated by the chosen iteration count');
+   q.update(`<div class="visual-grid"><div class="visual-cell"><h5>Random stopping wheel</h5>${drawWheel}</div><div class="visual-cell"><h5>Where does that many iterations leave the state?</h5>${rotation}<p>Marked-state chance: <strong>${pct(P(chosen))}</strong>.</p></div></div><div class="visual-pills">${pill('Candidate inputs',N)}${pill('Marked answers',M)}${pill('Chosen r',chosen)}${pill('One-trial success',pct(P(chosen)))}</div>`,match?`The wheel sampled r=${chosen}, giving ${pct(P(chosen))} success probability. <strong>${trial.includes('did not find')?'This draw did not find a marked answer.':trial.includes('found a marked')?'This draw found a marked answer!':'The measurement outcome is random.'}</strong> Verify the measured candidate; after a failure, the full algorithm tries again and widens m.`:`The pointer initially shows the fixed guess r=m−1. Click “Draw r and attempt measurement” to pick a random slice. This reduces the risk of always overshooting when M is unknown.`);
+ }
+ tuck(root,['rl-plot','rl-result','rl-trial-text']);
+ const trialButtons=root.querySelector('.study-two .study-buttons');if(trialButtons)q.v.before(trialButtons);root.querySelector('.study-two')?.classList.add('old-empty-panel');
+ events(root,draw);draw();
+}
+})();
+
+</script>
+</body></html>
